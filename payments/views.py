@@ -158,12 +158,14 @@ def success(request, transaction_id):
     transaction = get_object_or_404(Transaction, id=transaction_id)
     transaction.payment_status = True
     overview = transaction.overview
+    overview_id = Overview.objects.get(pk=overview)
     transaction.save()
-    # order = Order.objects.create(
-    #     buyer=request.user.userprofile, 
-    #     status='pending',  
-    #     transaction=transaction,
-    # )
+    order = Order.objects.create(
+        buyer=request.user.userprofile, 
+        service=overview_id,
+        status='pending',  
+        transaction=transaction,
+    )
     context = {
         'transaction_id' : transaction_id
     }
