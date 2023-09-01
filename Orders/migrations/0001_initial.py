@@ -11,7 +11,6 @@ class Migration(migrations.Migration):
     dependencies = [
         ('Services', '0011_alter_basicpackage_basic_price_and_more'),
         ('Home', '0012_alter_language_proficiency'),
-        ('payments', '0003_rename_seller_fee_transaction_service_fee_and_more'),
     ]
 
     operations = [
