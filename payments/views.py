@@ -8,6 +8,7 @@ import stripe
 from .models import Transaction
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from Orders.models import Order
 # import razorpay
 
 # client = razorpay.Client(auth=(settings.REZORPAY_PUBLISHABLE_KEY, settings.REZORPAY_SECRET_KEY))
@@ -96,7 +97,6 @@ def payments(request, overview_id):
     elif additional_data2 == '3':
         for pp in premium_packages:
 
-
             bayer_fee = pp.Premium_price * (5/100)
             seller_fee = pp.Premium_price * (20/100)
             service_fee = buyer_fee + seller_fee
@@ -157,7 +157,13 @@ def payments(request, overview_id):
 def success(request, transaction_id):
     transaction = get_object_or_404(Transaction, id=transaction_id)
     transaction.payment_status = True
+    overview = transaction.overview
     transaction.save()
+    # order = Order.objects.create(
+    #     buyer=request.user.userprofile, 
+    #     status='pending',  
+    #     transaction=transaction,
+    # )
     context = {
         'transaction_id' : transaction_id
     }
