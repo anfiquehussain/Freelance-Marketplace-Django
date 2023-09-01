@@ -26,18 +26,32 @@ def payments(request, overview_id):
 
     price = None
     transaction_id = None
+    package_name = ""
+    package_discription = ""
+    buyer_fee = 0
+    seller_fee = 0
+    service_fee = 0
+    actual_price_fee_added = 0
 
     if additional_data2 == '1':
         for bp in basic_packages:
             # data = { "amount": bp.Basic_price * 100, "currency": "INR", "receipt": "order_rcptid_11" }
-            price = bp.Basic_price * 100
+            
+            bayer_fee = bp.Basic_price * (5/100)
+            seller_fee = bp.Basic_price * (20/100)
+            service_fee = buyer_fee + seller_fee
+            
+            price = (bp.Basic_price + seller_fee) * 100
             actual_price = bp.Basic_price
+            actual_price_fee_added = bp.Basic_price + seller_fee
+
 
             payment_intent = stripe.PaymentIntent.create(
-                amount=price,
+                amount=int(actual_price_fee_added),
                 currency='inr',
             )
             payment_id = payment_intent.id
+            package_discription = bp.Basic_description
 
             transaction = Transaction.objects.create(
                 overview=overview.id,
@@ -45,39 +59,56 @@ def payments(request, overview_id):
                 receiver=user_profile.user,
                 amount=actual_price,
                 payment_id=payment_id,
-                package_name='basic_package'
+                package_name='basic_package',
+                service_fee=service_fee
             )
             transaction_id = transaction.id  
     elif additional_data2 == '2':
         for sp in standard_packages:
-            price = sp.Standard_price * 100
+
+            bayer_fee = sp.Standard_price * (5/100)
+            seller_fee = sp.Standard_price * (20/100)
+            service_fee = buyer_fee + seller_fee
+
+            price = (sp.Standard_price + seller_fee) * 100
             actual_price = sp.Standard_price
+            actual_price_fee_added = sp.Standard_price + seller_fee
 
             payment_intent = stripe.PaymentIntent.create(
-                amount=price,
+                amount=int(actual_price_fee_added),
                 currency='inr',
             )
             payment_id = payment_intent.id
+            package_discription = sp.Standard_description
 
             transaction = Transaction.objects.create(
                 overview=overview.id,
                 sender=request.user,
                 receiver=user_profile.user,
-                amount=actual_price,
+                amount=actual_price_fee_added,
                 payment_id=payment_id,
-                package_name='standard_package'
+                package_name='standard_package',
+                service_fee=service_fee
             )
             transaction_id = transaction.id
     elif additional_data2 == '3':
         for pp in premium_packages:
-            price = pp.Premium_price * 100  
+
+
+            bayer_fee = pp.Premium_price * (5/100)
+            seller_fee = pp.Premium_price * (20/100)
+            service_fee = buyer_fee + seller_fee
+
+            price = (pp.Premium_price + seller_fee) * 100
             actual_price = pp.Premium_price
+            actual_price_fee_added = pp.Premium_price + seller_fee
 
             payment_intent = stripe.PaymentIntent.create(
-                amount=price,
+                amount=int(actual_price_fee_added),
                 currency='inr',
             )
             payment_id = payment_intent.id
+            package_discription = pp.Premium_description
 
             transaction = Transaction.objects.create(
                 overview=overview.id,
@@ -85,13 +116,19 @@ def payments(request, overview_id):
                 receiver=user_profile.user,
                 amount=actual_price,
                 payment_id=payment_id,
-                package_name='premium_package'
+                package_name='premium_package',
+                service_fee=service_fee
             )
             transaction_id = transaction.id
+            
+            
 
     # payment = client.order.create(data=data)
     # API_KRY = settings.REZORPAY_PUBLISHABLE_KEY
     # order_id = payment['id']
+
+   
+    print(package_discription)
         
     context = {
         'overview': overview,
@@ -100,13 +137,15 @@ def payments(request, overview_id):
         'package_price': price,
         'user_email': request.user.email,
         'user_username': request.user.username,
-        'transaction_id': transaction_id,  # Include the transaction id in the context
+        'transaction_id': transaction_id,
+        'package_name' : transaction.package_name,
+        'package_discription':package_discription,
+        'service_fee' :  service_fee,
+        'actual_price_fee_added':actual_price_fee_added,
 
         # 'payment' : payment,
         # 'API_KRY' : API_KRY,
         # 'order_id' : order_id,
-
-
     }
     return render(request, 'payment.html', context)
 

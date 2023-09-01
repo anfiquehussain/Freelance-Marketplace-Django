@@ -4,29 +4,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title> {{transaction_id}} Payments setup</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
 
-    
+    <style>
+        .bill-details-container {
+            height: fit-content;
+            padding: 1rm;
+        }
+        tr{
+            border-bottom: 1px solid gray;
+        }
+    </style>
+
 </head>
 
 <body>
-    <h1>This is template for HomeView</h1>
 
 
-    {{ actual_price }}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>Order details</h1>
+                <hr>
+            </div>
+            <div class="col text-center mt-3">
 
-    {{transaction_id}}
-    <form action="{% url 'success' transaction_id %}" method="post">
-        {% csrf_token %}
-        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" 
-            data-key="{{ key }}"
-            data-description="A Django Charge" 
-            data-amount={{package_price}} 
-            data-currency="inr" 
-            data-locale="auto">
-        </script>
-    </form>
-<!-- 
+                <div class="row">
+                    <div class="col">
+                        <h5 class="fw-bold" style="color: #404145;">{{package_name}}</h5>
+                    </div>
+                    <div class="col">
+                        <h5 class="fw-ligh" style="color: #404145;">₹{{actual_price}}</h5>
+                    </div>
+                    <div class="col-md-12">
+                        <p>{{package_discription}}</p>
+                    </div>
+                </div>
+
+                <div class="row" >
+                    <div class="col" style="background-color: #f5f5f5;">
+                        <center>
+                                <div class="bill-details-container col">
+                                    <table width="100%">
+                                        <tr>
+                                            <td style="text-align: center; padding-top: 10px; padding-bottom: 10px;">Service fee</td>
+                                            <td style="text-align: left; padding-top: 10px; padding-bottom: 10px;">{{service_fee}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center; padding-top: 10px; padding-bottom: 10px;">package payment</td>
+                                            <td style="text-align: left; padding-top: 10px; padding-bottom: 10px;">{{actual_price}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold" style="text-align: center; padding-top: 10px; padding-bottom: 10px;">Totalpayment</td>
+                                            <td class="fw-bold" style="text-align: left; padding-top: 10px; padding-bottom: 10px;">{{actual_price_fee_added}}</td>
+                                        </tr>
+                                    </table>
+                            </div>
+                        </center>
+                    </div>
+                    <div class="col-md-12 mt-3">
+                        <form action="{% url 'success' transaction_id %}" method="post">
+                            {% csrf_token %}
+                            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="{{ key }}"
+                                data-description="A Django Charge" data-amount={{package_price}} data-currency="inr" data-locale="auto">
+                                </script>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+   
+
+
+    <!-- 
     <form action="{% url 'success' transaction_id %}" method="post">
         {% csrf_token %}
         <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
@@ -38,12 +94,12 @@
             data-panel-label-class="custom-stripe-button">
         </script>
     </form> -->
-    
 
 
 
 
-        <!-- <button id="rzp-button1">Pay</button>
+
+    <!-- <button id="rzp-button1">Pay</button>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
         var options = {
