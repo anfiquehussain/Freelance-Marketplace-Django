@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -37,7 +38,7 @@ class BasicPackage(models.Model):
     Basic_delivery_time = models.PositiveIntegerField(choices=DELIVERY_CHOICES1, default=1)
     Basic_revisions = models.PositiveIntegerField(choices=REVISION_CHOICES1, default=1)
     Basic_source_file = models.BooleanField(default=False)
-    Basic_price = models.IntegerField(default=0)
+    Basic_price = models.IntegerField(default=0,validators=[MinValueValidator(50)])
 
 class StandardPackage(models.Model):
     DELIVERY_CHOICES2 = [
@@ -56,7 +57,7 @@ class StandardPackage(models.Model):
     Standard_delivery_time = models.PositiveIntegerField(choices=DELIVERY_CHOICES2, default=1)
     Standard_revisions = models.PositiveIntegerField(choices=REVISION_CHOICES2, default=1)
     Standard_source_file = models.BooleanField(default=False)
-    Standard_price = models.IntegerField(default=0)
+    Standard_price = models.IntegerField(default=0,validators=[MinValueValidator(100)])
 
 class PremiumPackage(models.Model):
     DELIVERY_CHOICES3 = [
@@ -75,7 +76,7 @@ class PremiumPackage(models.Model):
     Premium_delivery_time = models.PositiveIntegerField(choices=DELIVERY_CHOICES3, default=1)
     Premium_revisions = models.PositiveIntegerField(choices=REVISION_CHOICES3, default=1)
     Premium_source_file = models.BooleanField(default=False)
-    Premium_price = models.IntegerField(default=0)
+    Premium_price = models.IntegerField(default=0,validators=[MinValueValidator(150)])
 
 # class ExtraService(models.Model):
 #     DELIVERY_CHOICES4 = [

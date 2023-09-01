@@ -47,8 +47,9 @@ def payments(request, overview_id):
 
 
             payment_intent = stripe.PaymentIntent.create(
-                amount=int(actual_price_fee_added),
+                amount=int(price),
                 currency='inr',
+                payment_method_types=['card']
             )
             payment_id = payment_intent.id
             package_discription = bp.Basic_description
@@ -75,8 +76,9 @@ def payments(request, overview_id):
             actual_price_fee_added = sp.Standard_price + seller_fee
 
             payment_intent = stripe.PaymentIntent.create(
-                amount=int(actual_price_fee_added),
+                amount=int(price),
                 currency='inr',
+                payment_method_types=['card']
             )
             payment_id = payment_intent.id
             package_discription = sp.Standard_description
@@ -103,9 +105,11 @@ def payments(request, overview_id):
             actual_price = pp.Premium_price
             actual_price_fee_added = pp.Premium_price + seller_fee
 
+            print(actual_price_fee_added)
             payment_intent = stripe.PaymentIntent.create(
-                amount=int(actual_price_fee_added),
+                amount=int(price),
                 currency='inr',
+                payment_method_types=['card']
             )
             payment_id = payment_intent.id
             package_discription = pp.Premium_description
