@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navbar Example</title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <!-- Include this in your template where you want the logout link -->
+    {% if user.is_authenticated %}
+    <a href="{% url 'logout' %}">Logout</a>
+    {% else %}
+    <h1>
+    Welcome!
+    <a href="{% url 'login' %}">Login</a>
+    {% endif %}
+
+
+    <p>Username: {{ user_profile.user.username }}</p>
+</html>
+
+</body>
+
+</html>

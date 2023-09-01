@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>View Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .profile-container {
+            width: 49%;
+            margin: 20px 10px 20px 20px;
+            padding: 20px;
+            border-right: 1px solid black;
+
+        }
+
+        .profile-image {
+            width: 150px;
+            border-radius: 100%;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .user-info {
+            margin: 10px 0;
+        }
+
+        .skills-list,
+        .certifications-list,
+        .languages-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .create-services-button {
+            width: 100vh;
+            height: 100%;
+            margin: 20px 20px 20px 10px;
+            padding: 20px;
+            border-radius: 10px;
+
+        }
+
+        .create-services-button a {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+            background-color: #28a745;
+            color: #fff;
+            text-decoration: none;
+
+        }
+
+        .create-services-button a:hover {
+            background-color: #3cb857;
+
+        }
+
+        .buttoncon {
+            margin-bottom: 10px;
+        }
+
+        .profile-action-button {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-right: 10px;
+        }
+
+        .profile-action-buttons {
+            text-align: right;
+        }
+
+        .profile-action-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px;
+            font-size: 10px;
+        }
+
+        .edit-button {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .home-button {
+            background-color: #6c757d;
+            color: #fff;
+        }
+
+        .profile-header {
+            text-align: center;
+        }
+
+
+
+        .centered-heading {
+            margin: 0;
+            font-size: 28px;
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            color: #333;
+        }
+
+        .create-services-button .card-link {
+            background-color: transparent;
+            color: black;
+            margin: 0px;
+            padding: 0px 0px 0px 0px;
+            text-decoration: none;
+
+        }
+
+        .create-services-button .card-link:hover {
+            background-color: transparent;
+            text-decoration: underline;
+        }
+
+        .create-services-button .menu-link {
+            color: black;
+            background-color: transparent;
+            margin-left: 10px;
+            padding: 0px 0px 0px 0px;
+            text-decoration: none;
+        }
+
+        .create-services-button .menu-link:hover {
+            background-color: transparent;
+            text-decoration: underline;
+        }
+
+
+
+
+        /* .card-img-top{
+            width:100px;
+            height: 160px;
+            object-fit: cover;
+        } */
+
+
+
+        .row {
+            background-color: #fff;
+            width: 650px;
+            height: 300px;
+        }
+    </style>
+
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+
+<body>
+    <div class="profile-container">
+        <div class="profile-action-buttons">
+            <a class="profile-action-button home-button" href="{% url 'home' user_profile.user.username %}">Home</a>
+        </div>
+
+
+        <div class="profile-header">
+            <h2 class="centered-heading">{{ user_profile.user.username }}'s Profile</h2>
+        </div>
+
+
+
+        {% if user_profile.profile_image %}
+        <img class="profile-image" src="{{ user_profile.profile_image.url }}" alt="Profile Picture">
+        {% else %}
+        <p>No profile image available.</p>
+        {% endif %}
+        <h1>User Profile</h1>
+        <p><strong>Username:</strong> {{ user_profile.user.username }}</p>
+        <p><strong>Email:</strong> {{ user_profile.user.email }}</p>
+        <p><strong>First Name:</strong> {{ user_profile.user.first_name }}</p>
+        <p><strong>Last Name:</strong> {{ user_profile.user.last_name }}</p>
+        <p><strong>Country:</strong> {{ user_profile.country }}</p>
+        <p><strong>State:</strong> {{ user_profile.state }}</p>
+        <p><strong>Website Link:</strong> {{ user_profile.website_link }}</p>
+        <p><strong>About Me:</strong> {{ user_profile.about_me }}</p>
+        <p><strong>Overall Rating:</strong> {{ user_profile.overall_rating }}</p>
+
+        <h2>Skills</h2>
+        <ul>
+            {% for skill in user_profile.skills.all %}
+            <li>{{ skill.name }}</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Certifications</h2>
+        <ul>
+            {% for certification in user_profile.certifications.all %}
+            <li><strong>Title:</strong> {{ certification.title }}</li>
+            <li><strong>Issuing Organization:</strong> {{ certification.issuing_organization }}</li>
+            <li><strong>Issue Date:</strong> {{ certification.issue_date }}</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Languages</h2>
+        <ul>
+            {% for language in user_profile.languages.all %}
+            <li><strong>Language:</strong> {{ language.language }}</li>
+            <li><strong>Proficiency:</strong> {{ language.proficiency }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="create-services-button">
+        <div class="row">
+            {% for service_profile in user_service_profiles %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+
+                    {% for gallery in service_profile.gallery_set.all %}
+                    {% if gallery.image1 %}
+                    <img src="{{ gallery.image1.url }}" style="width:100%;height:160px;object-fit: cover;"
+                        class="card-img-top" alt="...">
+                    {% endif %}
+                    {% endfor %}
+                    <div class="card-body">
+                        <a class="card-link" href="{% url 'view_service_profile' service_profile.id %}"><p class="card-title">{{ service_profile.titleOverview}}</p></a>
+                        <p class="card-text">★<span style="font-size: smaller;"
+                                class="fw-bold">{{service_profile.rating}}</span></p>
+                        {% for basic_package in service_profile.basicpackage_set.all %}
+                        <p class="card-text text-end"><small>Starting at</small> 
+                            <strong>₹{{ basic_package.Basic_price}}</strong></p>
+                        {% endfor %}
+
+                    </div>
+                    <!-- <div class="btn-group dropup">
+                        <p class="dropdown-toggle ms-3" data-bs-toggle="dropdown" aria-expanded="false">
+                            <strong>⁝</strong>
+                        </p>
+                        <ul class="dropdown-menu">
+                            <li class="menu-items-links">
+                                <a class="menu-link" href="{% url 'delete_service' service_profile.id %}">Delete</a>
+                            </li>
+                            <hr>
+                            <li>
+                            <a href="{% url 'edit_service' service_profile.id %}" class="menu-link">Edit Service</a>
+                        </ul>
+                    </div> -->
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+
+    </div>
+
+
+
+    <script>
+        function showProfileIncompleteMessage(message) {
+            alert(message);
+        }
+
+        const cardTitles = document.getElementsByClassName('card-title');
+        const maxCharacters = 40; // Adjust this to your desired character limit
+
+        Array.from(cardTitles).forEach(cardTitle => {
+            if (cardTitle.textContent.length > maxCharacters) {
+                const truncatedText = cardTitle.textContent.substring(0, maxCharacters) + '...';
+                cardTitle.textContent = truncatedText;
+            }
+        });
+
+    </script>
+</body>
+
+</html>

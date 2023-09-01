@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+
+
+<html>
+
+<head>
+  <title>Create Service</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .step {
+      display: none;
+      width: 100%;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    th,
+    td {
+      border: 1px solid black;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    input[type="text"],
+    input[type="file"] {
+      width: fit-content;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus,
+    input[type="file"]:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+
+    .next-step {
+      padding: 10px 20px;
+      background-color: #222325;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .next-step:hover {
+      background-color: #343435;
+    }
+
+    .prev-step {
+      background: transparent;
+      border: 0;
+      color: #1dbf73;
+      margin-right: 20px;
+    }
+
+    .prev-step:hover {
+      text-decoration: underline;
+    }
+
+    .publish-btn {
+      padding: 10px 20px;
+      background-color: #222325;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .publish-btn:hover {
+      background-color: #343435;
+    }
+
+    select {
+      width: 65%;
+      padding: 8px;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+  </style>
+<script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
+</head>
+
+<body>
+  <center>
+    <form method="post" enctype="multipart/form-data">
+      <h1>Create Job Profile</h1>
+      <div class="step active">
+        <h3>Overview</h3>
+        <!-- Overview form fields -->
+        {{ overview_form.as_p }}
+        <button class="next-step">Save & Continue</button>
+      </div>
+
+      <div class="step">
+        <h3>Pricing</h3>
+        <table>
+          <tr>
+            <th>Package</th>
+            <th>BASIC</th>
+            <th>STANDARD</th>
+            <th>PREMIUM</th>
+          </tr>
+          <tr>
+            <td>Title:</td>
+            <td>{{ basic_package_form.Basic_title }}</td>
+            <td>{{ standard_package_form.Standard_title }}</td>
+            <td>{{ premium_package_form.Premium_title }}</td>
+          </tr>
+          <tr>
+            <td>description:</td>
+            <td> {{ basic_package_form.Basic_description }}</td>
+            <td>{{ standard_package_form.Standard_description }}</td>
+            <td>{{ premium_package_form.Premium_description }}</td>
+          </tr>
+
+          <tr>
+            <td>deliverytime</td>
+            <td> {{ basic_package_form.Basic_delivery_time }}</td>
+            <td>{{ standard_package_form.Standard_delivery_time }}</td>
+            <td>{{ premium_package_form.Premium_delivery_time }}</td>
+          </tr>
+
+          <tr>
+            <td>revisions</td>
+            <td> {{ basic_package_form.Basic_revisions }}</td>
+            <td>{{ standard_package_form.Standard_revisions }}</td>
+            <td>{{ premium_package_form.Premium_revisions }}</td>
+          </tr>
+
+          <tr>
+            <td>source_file</td>
+            <td> {{ basic_package_form.Basic_source_file }}</td>
+            <td>{{ standard_package_form.Standard_source_file }}</td>
+            <td>{{ premium_package_form.Premium_source_file }}</td>
+          </tr>
+
+          <tr>
+            <td>price</td>
+            <td>{{ basic_package_form.Basic_price }}</td>
+            <td>{{ standard_package_form.Standard_price }}</td>
+            <td>{{ premium_package_form.Premium_price }}</td>
+          </tr>
+          <!-- <tr>
+            <td colspan="4">extra_service</td>
+          </tr>
+          <tr>
+            <td>{{ extra_service_form.title }}</td>
+            <td>{{ extra_service_form.delivery_time }}</td>
+            <td colspan="2">{{ extra_service_form.pricing }}</td>
+          </tr> -->
+        </table>
+
+        <br>
+        <br>
+
+        <button class="prev-step">Previous</button>
+        <button class="next-step">Save & Continue</button>
+      </div>
+
+      <div class="step">
+        <h2>Description Package Form</h2>
+        <textarea class="dis-editor" name="{{ description_form.description.name }}"id="editor">
+          &lt;p&gt;{{ description_form.description.value }}&lt;/p&gt;
+        </textarea>
+
+        <br>
+        <button class="prev-step">Previous</button>
+        <button class="next-step">Save & Continue</button>
+      </div>
+
+      <div class="step">
+        <h2>Question Package Form</h2>
+        {{ question_form.as_p }}
+        <button class="prev-step">Previous</button>
+        <button class="next-step">Save & Continue</button>
+      </div>
+
+      <div class="step">
+        <h2>Image and Video Upload</h2>
+        {{ gallery_form.as_p }}
+        <button class="prev-step">Previous</button>
+        <button class="publish-btn" type="submit">Publish</button>
+      </div>
+    </form>
+  </center>
+
+  
+  <script>
+    ClassicEditor
+        .create( document.querySelector( '#editor' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+</script>
+  <script>
+
+    const steps = document.querySelectorAll('.step');
+    const nextBtns = document.querySelectorAll('.next-step');
+    const prevBtns = document.querySelectorAll('.prev-step');
+    let currentStep = 0;
+
+    function showStep(stepIndex) {
+      steps.forEach((step, index) => {
+        if (index === stepIndex) {
+          step.classList.add('active');
+        } else {
+          step.classList.remove('active');
+        }
+      });
+    }
+
+    nextBtns.forEach((btn, index) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        currentStep++;
+        showStep(currentStep);
+      });
+    });
+
+    prevBtns.forEach((btn, index) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        currentStep--;
+        showStep(currentStep);
+      });
+    });
+
+    showStep(currentStep);
+  </script>
+</body>
+
+</html>

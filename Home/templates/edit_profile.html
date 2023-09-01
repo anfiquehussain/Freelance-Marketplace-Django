@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Profile</title>
+    <style>
+       /* Reset default margin and padding for all elements */
+       * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Set a background color for the body */
+        body {
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Center the form on the page */
+        form {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Style for headings */
+        h1,
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        /* Style for labels */
+        label {
+            font-weight: bold;
+        }
+
+        /* Style for input fields */
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Style for buttons */
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        /* Style for error messages */
+        .error {
+            color: red;
+            background-color: #ffebeb;
+            padding: 5px;
+            border: 1px solid #ff8080;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        /* Style for profile images */
+        #current-profile-preview {
+            width: 100px; 
+            border-radius: 100%; 
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); 
+            margin-bottom: 10px; 
+            height: 100px; 
+            object-fit: cover;
+        }
+
+        #new-profile-preview {
+            width: 100px; 
+            border-radius: 100%; 
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); 
+            margin-bottom: 10px; 
+            height: 100px; 
+            object-fit: cover;
+        }
+
+        /* Style for add button */
+        #add-certification-btn,
+        #add-language-btn {
+            background-color: #4CAF50;
+        }
+
+        /* Style for forms within containers */
+        #certifications-forms,
+        #languages-forms {
+            margin-top: 10px;
+        }
+        .certification-form,
+        .language-form,
+        .skill-form {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        /* Add hover effect to buttons */
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Rest of your template -->
+
+    <h1 style="text-align: center; margin-top: 20px;">Edit Your Profile</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% if username_message %}
+        <p class="error">{{ username_message }}</p>
+        {% endif %}
+
+        {% if email_message %}
+        <p class="error">{{ email_message }}</p>
+        {% endif %}
+
+        <div style="display: flex; gap: 20px; justify-content: center;">
+            <div>
+                <h3>Current Profile Image</h3>
+                {% if user_profile.profile_image %}
+                <img src="{{ user_profile.profile_image.url }}" alt="Profile Picture" id="new-profile-preview">
+                {% else %}
+                <p>No profile image available.</p>
+                {% endif %}
+            </div>
+            <div>
+                <h3>New Profile Image</h3>
+                <img src="#" alt="Profile Image" id="current-profile-preview">
+            </div>
+        </div>
+
+
+        <h2>Authentication Information</h2>
+        <label for="id_username">Username:</label>
+        <input type="text" id="id_username" name="username" value="{{ user.username }}" required>
+        <label for="id_email">Email:</label>
+        <input type="email" id="id_email" name="email" value="{{ user.email }}" required>
+        <label for="id_first_name">First Name:</label>
+        <input type="text" id="id_first_name" name="first_name" value="{{ user.first_name }}" required>
+        <label for="id_last_name">Last Name:</label>
+        <input type="text" id="id_last_name" name="last_name" value="{{ user.last_name }}" required>
+
+
+        <h2>User Profile</h2>
+        {{ user_form.as_p }}
+        <h2>Certifications</h2>
+        <!-- Certifications Container -->
+        <div id="certifications-container">
+            {{ certification_formset.management_form }}
+
+            <div id="certifications-forms">
+                <!-- Display existing forms -->
+                {% for form in certification_formset %}
+                {{ form.as_p }}
+                {% endfor %}
+                <!-- Add New Certification button -->
+
+            </div>
+        </div>
+        <button type="button" id="add-certification-btn">Add New Certification</button>
+
+        <h2>Languages</h2>
+        <!-- Languages Container -->
+        <div id="languages-container">
+            {{ language_formset.management_form }}
+            <div id="languages-forms">
+                <!-- Display existing forms -->
+                {% for form in language_formset %}
+                {{ form.as_p }}
+                {% endfor %}
+                <!-- Add New Language button -->
+
+            </div>
+        </div>
+        <button type="button" id="add-language-btn">Add New Language</button>
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add New Certification button
+            var addCertificationButton = document.getElementById('add-certification-btn');
+    var certificationsContainer = document.getElementById('certifications-forms');
+    var certificationEmptyForm = "{{ certification_formset.empty_form|escapejs }}";
+    var certificationTotalFormsInput = document.getElementById('id_certifications-TOTAL_FORMS');
+    var certificationFormIndex = {{ certification_formset.total_form_count }};
+
+    addCertificationButton.addEventListener('click', function () {
+        var newCertificationForm = document.createElement('div');
+        newCertificationForm.innerHTML = certificationEmptyForm.replace(/__prefix__/g, certificationFormIndex);
+        certificationsContainer.appendChild(newCertificationForm);
+        certificationFormIndex++;
+        certificationTotalFormsInput.value = certificationFormIndex;
+    });
+
+        // Add New Language button
+        var addLanguageButton = document.getElementById('add-language-btn')
+        var languagesContainer = document.getElementById('languages-forms')
+        var languageEmptyForm = "{{ language_formset.empty_form|escapejs }}"
+        var languageTotalFormsInput = document.getElementById('id_languages-TOTAL_FORMS')
+        var languageFormIndex = {{ language_formset.total_form_count }}
+
+        addLanguageButton.addEventListener('click', function () {
+            var newLanguageForm = document.createElement('div');
+            newLanguageForm.innerHTML = languageEmptyForm.replace(/__prefix__/g, languageFormIndex);
+            languagesContainer.appendChild(newLanguageForm);
+            languageFormIndex++;
+            languageTotalFormsInput.value = languageFormIndex;
+        });
+
+        var profileImageInput = document.getElementById('id_profile_image')
+
+        var profileImagePreview = document.getElementById('current-profile-preview')
+
+        profileImageInput.addEventListener('change', function (event) {
+            var selectedImage = event.target.files[0]
+            if (selectedImage) {
+                profileImagePreview.src = URL.createObjectURL(selectedImage)
+            }
+        });
+});
+
+    </script>
+</body>
+
+</html>

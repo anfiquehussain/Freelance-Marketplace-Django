@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home {{ user.username }} </title>
+    <style>
+        /* Add your CSS styling here */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .user-name-card:hover {
+            text-decoration: underline;
+        }
+        .card-link{
+            text-decoration: none;
+            color: black;
+        }
+        .card-link:hover{
+            text-decoration: underline;
+            color: black;
+        }
+        .card-title:hover{
+            text-decoration: underline;
+            color: black;
+        }
+
+    </style>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+
+<body>
+
+    <!-- <div class="navbar">
+        <a href="#home">Home Page</a>
+        {% if user.is_authenticated %}
+        <div class="dropdown">
+            <button class="dropbtn">Profile</button>
+            <div class="dropdown-content">
+                <a href="{% url 'profile' user.username %}">View Profile</a> 
+                <a href="{% url 'edit_profile' user.username %}">Edit Profile</a>
+                <a href="#">Become Seller</a>
+                <a href="#">Settings</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            </div>
+        </div>
+        {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+        <a href="#explore">Explore</a>
+    </div> -->
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'home' user.username %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' user.username %}">View Profile</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Profile
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'profile' user.username %}">View Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'edit_profile' user.username %}">Edit Profile</a>
+                            </li>
+                            <li><a class="dropdown-item" href="#">Become Seller</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                        </ul>
+                    </li>
+                    <!-- <li class="nav-item">
+                <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+              </li> -->
+                </ul>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <h1>Welcome, {{ user.username }}!</h1>
+
+
+    <!-- {% for user_ids in user_id %}
+    {% for service_profile in user_service_profiles %}
+        {% if service_profile.user == user_ids %}
+            <li>{{ user_ids }}</li>
+        {% endif %}
+    {% endfor %}
+{% endfor %} -->
+
+
+
+
+
+
+    {% for service_profile in user_service_profiles %}
+
+
+
+    {% for user_profile in user_profile %}
+    {% if user_profile.profile_image %}
+    {% if user_profile.user == service_profile.user%}
+
+    <div class="service_profile_list_all" style="display: inline-block;">
+
+        <div class="card ms-5" style="width: 18rem;">
+            <div class="card-body">
+                {% for gallery in service_profile.gallery_set.all %}
+                {% if gallery.image1 %}
+                <img src="{{ gallery.image1.url }}" style="width:100%;height:160px;object-fit: cover;"
+                    class="card-img-top" alt="...">
+                {% endif %}
+                {% endfor %}
+                <div class="mt-1">
+                    <img class="rounded-circle mt-1" src="{{ user_profile.profile_image.url }}"
+                        style="width: 20px;height:20px;object-fit: cover;float: left;" alt="...">
+                    <a class="card-link" href="{% url 'view_profile_public' service_profile.user %}"><p class="user-name-card text-lowercase ms-4 fw-bold">{{service_profile.user}}</p></a>
+                </div>
+
+                <a class="card-link" href="{% url 'view_service_profile' service_profile.id %}"><p class="card-title">{{ service_profile.titleOverview}}</p></a>
+                
+                <p class="card-text">★<span style="font-size: smaller;"
+                        class="fw-bold">{{service_profile.rating}}</span></p>
+                {% for basic_package in service_profile.basicpackage_set.all %}
+                <p class="card-text text-start"><strong>From<span class="ms-1">₹{{basic_package.Basic_price}}</span></strong>
+                </p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+
+
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+
+    {% endfor %}
+
+    <script>
+        const cardTitles = document.getElementsByClassName('card-title');
+        const maxCharacters = 50; // Adjust this to your desired character limit
+
+        Array.from(cardTitles).forEach(cardTitle => {
+            if (cardTitle.textContent.length > maxCharacters) {
+                const truncatedText = cardTitle.textContent.substring(0, maxCharacters) + '...';
+                cardTitle.textContent = truncatedText;
+            }
+        });
+    </script>
+
+
+
+</body>
+
+</html>
