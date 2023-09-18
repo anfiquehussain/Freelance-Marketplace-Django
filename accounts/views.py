@@ -24,7 +24,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('home', identifier=user.username)  # Replace 'home' with the desired URL after login
+            return redirect('home', identifier=user.username)  
     else:
         form = LoginForm()
     return render(request, 'registration/login.html', {'form': form})

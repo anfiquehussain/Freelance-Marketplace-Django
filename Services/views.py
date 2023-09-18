@@ -96,23 +96,13 @@ def create_job_profile(request, identifier):
 @login_required()
 def delete_service(request, overview_id):
     overview = get_object_or_404(Overview, pk=overview_id, user=request.user)
-
     if request.method == 'POST':
         if 'confirm_delete' in request.POST:
             overview.delete()
-            return redirect('IntroHome')  # Redirect to a success page or overview list
+            return redirect('IntroHome')
         else:
-            return redirect('IntroHome')  # Redirect to overview details
-
+            return redirect('IntroHome')
     return render(request, 'delete_service.html', {'overview': overview})
-
-
-
-
-
-
-
-
 
 
 @login_required()

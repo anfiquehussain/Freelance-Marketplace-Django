@@ -66,7 +66,7 @@
                         </center>
                     </div>
                     <div class="col-md-12 mt-3">
-                        <form action="{% url 'success' transaction_id %}" method="post">
+                        <form action="{% url 'success' transaction_id request.user.username %}" method="post">
                             {% csrf_token %}
                             <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="{{ key }}"
                                 data-description="A Django Charge" data-amount={{package_price}} data-currency="inr" data-locale="auto">
@@ -82,18 +82,7 @@
    
 
 
-    <!-- 
-    <form action="{% url 'success' transaction_id %}" method="post">
-        {% csrf_token %}
-        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-            data-key="{{ key }}"
-            data-description="A Django Charge"
-            data-amount="{{ package_price }}"
-            data-currency="inr"
-            data-locale="auto"
-            data-panel-label-class="custom-stripe-button">
-        </script>
-    </form> -->
+
 
 
 

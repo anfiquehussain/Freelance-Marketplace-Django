@@ -1,6 +1,7 @@
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+from django.http import HttpResponseForbidden
 from .forms import UserProfileForm, CertificationForm, LanguageForm
 from Services.models import Overview
 from django.shortcuts import render, redirect, get_object_or_404
@@ -26,6 +27,12 @@ def home(request, identifier):
     user_profile = UserProfile.objects.all()
     user_service_profiles = Overview.objects.all()
 
+    current_user = request.user
+    if identifier == current_user.username:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
+
     context = {
         'user': user,
         'user_id': user_id,
@@ -36,12 +43,18 @@ def home(request, identifier):
     return render(request, 'home.html', context)
 
 
-@login_required
+@login_required()
 def edit_profile(request, identifier):
     user = get_object_or_404(User, username=identifier)
     user_profile, created = UserProfile.objects.get_or_create(user=user)
 
     # Initialize context with common values
+    current_user = request.user
+    if identifier == current_user.username:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
+    
     context = {
         'user': user,
         'user_profile': user_profile,
@@ -136,7 +149,14 @@ def view_profile(request, username):
     user = get_object_or_404(User, username=username)
     user_profile, created = UserProfile.objects.get_or_create(user=user)
     user_service_profiles = Overview.objects.filter(user=user)
-    print(user_service_profiles)
+    # print(user_service_profiles)
+
+    current_user = request.user
+    if username == current_user.username:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
+    
     context = {
         'user_profile': user_profile,
         'user_service_profiles': user_service_profiles,

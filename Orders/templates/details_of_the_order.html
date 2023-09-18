@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Orders</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <style>
+        .order-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            /* Make the card a flex container */
+            justify-content: space-between;
+            /* Align items horizontally */
+            align-items: center;
+            /* Center items vertically */
+        }
+
+        .order-card .order-details {
+            flex: 1;
+            /* Allow the details to grow and take available space */
+            display: flex;
+            /* Make the details a flex container */
+            flex-direction: column;
+            /* Stack details vertically */
+        }
+
+        .order-card .order-details h5 {
+            margin: 0;
+        }
+
+        .order-card .order-status {
+            font-weight: bold;
+        }
+
+        .order-status.pending {
+            color: #f39c12;
+        }
+
+        .order-status.completed {
+            color: #27ae60;
+        }
+
+        .order-type.basic_package {
+            color: #27ae60;
+        }
+
+        .order-type.standard_package {
+            color: #3498db;
+        }
+
+        .order-type.premium_package {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Orders for {{ user.username }}</h1>
+        <div class="row">
+            {% for order, service, transactions in orders_services_transactions %}
+                <div class="col-md-12 mb-4">
+                    <div class="order-card">
+                        <div class="order-details">
+                            <h5>{{ service.titleOverview }}</h5>
+                            <div class="order-status {{ order.status }}">
+                                {{ order.status }}
+                                {{ order.id }}
+                            </div>
+                            <p>Ordered Date: {{ order.created_at }}</p>
+                        
+                            {% for transaction in transactions %}
+                            {% if  transaction.id == order.transaction_id %}
+                                <p>Transaction Amount: {{ transaction.amount }}</p>
+                                <p class="order-type {{ transaction.package_name }}">Package: {{transaction.package_name}}</p>
+                        
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col">
+                    <h3>No orders found for this user.</h3>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

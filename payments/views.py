@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from Services.models import Overview, BasicPackage, StandardPackage, PremiumPackage
 from Home.models import UserProfile
-from django.http import JsonResponse
+from django.http import HttpResponseForbidden, JsonResponse
 from django.contrib.auth.models import User
 from django.conf import settings
 import stripe
@@ -16,8 +16,16 @@ from Orders.models import Order
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 @login_required
-def payments(request, overview_id):
+def payments(request, overview_id,username):
     overview = get_object_or_404(Overview, pk=overview_id)
+    user = get_object_or_404(User, username=username)
+
+    current_user = request.user
+    if username == current_user.username:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
+    
     additional_data = request.GET.get('additional_data')
     additional_data2 = request.GET.get('additional_data2')
     user_profile = UserProfile.objects.get(user=overview.user.id)
@@ -88,7 +96,7 @@ def payments(request, overview_id):
                 overview=overview.id,
                 sender=request.user,
                 receiver=user_profile.user,
-                amount=actual_price_fee_added,
+                amount=actual_price,
                 payment_id=payment_id,
                 package_name='standard_package',
                 service_fee=service_fee
@@ -135,6 +143,7 @@ def payments(request, overview_id):
     print(package_discription)
         
     context = {
+        'user':user,
         'overview': overview,
         'key': settings.STRIPE_PUBLISHABLE_KEY,
         'actual_price': actual_price,
@@ -154,8 +163,16 @@ def payments(request, overview_id):
     return render(request, 'payment.html', context)
 
 @login_required()
-def success(request, transaction_id):
+def success(request, transaction_id,username):
     transaction = get_object_or_404(Transaction, id=transaction_id)
+    user = get_object_or_404(User, username=username)
+
+    current_user = request.user
+    if username == current_user.username:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
+    
     transaction.payment_status = True
     overview = transaction.overview
     overview_id = Overview.objects.get(pk=overview)
@@ -166,8 +183,10 @@ def success(request, transaction_id):
         status='pending',  
         transaction=transaction,
     )
+   
     context = {
-        'transaction_id' : transaction_id
+        'transaction_id' : transaction_id,
     }
     return render(request, 'package_selection.html',context)
+
 

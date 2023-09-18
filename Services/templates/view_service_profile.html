@@ -303,8 +303,9 @@
                   <p><i class="fa-solid fa-x fa-rotate-90" style="color: #74767e"></i><span style="color: #74767e"
                       class="ms-2">source_file include</span></p>
                   {% endif %}
-                  <a href="{% url 'payments' service_profile.id %}?additional_data={{ basic_pack.overview.id }}&additional_data2=1"
-                    class="package-continue-btn">
+                  <a href="{% url 'payments' overview_id=service_profile.id username=request.user.username %}?additional_data={{ basic_pack.overview.id }}&additional_data2=1" class="package-continue-btn">
+
+                    
                     <button style="width: 100%;" type="button" class="btn btn-dark btn-lg">
                       Continue<i class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i>
                     </button>
@@ -355,8 +356,9 @@
                   
 
 
-                  <a href="{% url 'payments' service_profile.id %}?additional_data={{ standard_pack.overview.id }}&additional_data2=2"
-                    class="package-continue-btn">
+                  
+                    <a href="{% url 'payments' overview_id=service_profile.id username=request.user.username %}?additional_data={{ standard_pack.overview.id }}&additional_data2=2" class="package-continue-btn">
+
                     <button style="width: 100%;" type="button" class="btn btn-dark btn-lg">Continue<i
                         class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i></button>
                     </button></a>
@@ -402,8 +404,9 @@
 
            
 
-                  <a href="{% url 'payments' service_profile.id %}?additional_data={{ premium_pack.overview.id }}&additional_data2=3"
-                    class="package-continue-btn">
+
+                    <a href="{% url 'payments' overview_id=service_profile.id username=request.user.username %}?additional_data={{ premium_pack.overview.id }}&additional_data2=3" class="package-continue-btn">
+
                     <button style="width: 100%;" type="button" class="btn btn-dark btn-lg">Continue<i
                         class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i></button>
                     </button></a>

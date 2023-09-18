@@ -7,7 +7,33 @@
 </head>
 
 <body>
-    <h1>Submit Requirements</h1>
+    <h1>Order management</h1>
+
+ 
+
+
+    {% for order in orders %}
+    {{order.id}}
+    <a href="{% url 'submit_requirements' order.id request.user.username %}">submit Requirements</a>
+
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for form in forms %}
+        <p>About the work you want (provide the Requirements)</p>
+        {{ form.description }} <br>
+        {{ service_provide_question_1 }}  <br>
+        {{ form.answer_1 }}
+        <p>Provide the example images{{ form.example_image.label_tag }}</p>
+        {{ form.example_image }}
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+    
+    {% endfor %}
+    
+    
+    <h1>hallo </h1>
 </body>
 
 </html>
