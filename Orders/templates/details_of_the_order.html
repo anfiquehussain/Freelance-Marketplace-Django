@@ -67,32 +67,167 @@
         <h1 class="mb-4">Orders for {{ user.username }}</h1>
         <div class="row">
             {% for order, service, transactions in orders_services_transactions %}
-                <div class="col-md-12 mb-4">
-                    <div class="order-card">
-                        <div class="order-details">
-                            <h5>{{ service.titleOverview }}</h5>
-                            <div class="order-status {{ order.status }}">
-                                {{ order.status }}
-                                {{ order.id }}
-                            </div>
-                            <p>Ordered Date: {{ order.created_at }}</p>
-                        
-                            {% for transaction in transactions %}
-                            {% if  transaction.id == order.transaction_id %}
-                                <p>Transaction Amount: {{ transaction.amount }}</p>
-                                <p class="order-type {{ transaction.package_name }}">Package: {{transaction.package_name}}</p>
-                        
-                                {% endif %}
-                            {% endfor %}
+            <div class="col-md-12 mb-4">
+                <div class="order-card">
+                    <div class="order-details">
+                        <h5>{{ service.titleOverview }}</h5>
+                        <div class="order-status {{ order.status }}">
+                            {{ order.status }}
+                            {{ order.id }}
                         </div>
+                        <p>Ordered Date: {{ order.created_at }}</p>
+                        <p>Delivary Date: {{ order.delivery_date }}</p>
+                        
+                        {% for transaction in transactions %}
+                        {% if transaction.id == order.transaction_id %}
+                        <p>Transaction Amount: {{ transaction.amount }}</p>
+                        <p class="order-type {{ transaction.package_name }}">Package: {{transaction.package_name}}</p>
+
+                        {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
+            </div>
             {% empty %}
-                <div class="col">
-                    <h3>No orders found for this user.</h3>
-                </div>
+            <div class="col">
+                <h3>No orders found for this user.</h3>
+            </div>
             {% endfor %}
         </div>
     </div>
 </body>
+
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Order Details</title>
+    <style>
+        
+        body,
+        h1,
+        h2,
+        h3,
+        p {
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .order-details {
+            flex: 2;
+            margin-right: 20px;
+        }
+        .order-overview {
+            background-color: #f7f7f7;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+
+        .order-requirements {
+            background-color: #f7f7f7;
+            padding: 20px;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+
+        .messages {
+            background-color: #f7f7f7;
+            padding: 20px;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+        .order-details-sidebar {
+            flex: 1;
+            background-color: #f7f7f7;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        .order-status {
+            font-size: 24px;
+            color: #ff9900;
+        }
+
+        .delivery-time,
+        .order-price {
+            font-weight: bold;
+        }
+
+        .order-extras {
+            list-style: none;
+            padding-left: 0;
+        }
+        .order-extras li::before {
+            content: "•";
+            margin-right: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Order Details</h1>
+    </header>
+    <main>
+        <section class="order-details">
+            <!-- Order Overview -->
+            <div class="order-overview">
+                <div class="order-status">In Progress</div>
+                <h2>Order #12345</h2>
+                <p>Order Date: September 18, 2023</p>
+                <p>Due Date: September 25, 2023</p>
+            </div>
+
+            <!-- Order Requirements -->
+            <div class="order-requirements">
+                <h2>Order Requirements</h2>
+                <p>Design a logo for a company. Include company name and tagline. Use a modern and minimalist style.</p>
+            </div>
+
+            <!-- Messages -->
+            <div class="messages">
+                <h2>Messages</h2>
+                <div class="message">
+                    <p><strong>Buyer:</strong> Hi, can you provide a sample of your previous logo designs?</p>
+                </div>
+                <div class="message">
+                    <p><strong>Seller:</strong> Sure, here are some samples of my work...</p>
+                </div>
+                <!-- More messages can be added here -->
+            </div>
+        </section>
+
+        <!-- Delivery Time, Order Files, Order Extras, and Order Actions -->
+        <aside class="order-details-sidebar">
+            <h2>Order Details</h2>
+            <p class="delivery-time">Delivery Time: 7 days</p>
+            <p class="order-price">Price: $50.00</p>
+            <h3>Extras</h3>
+            <ul class="order-extras">
+                <li>Additional Revision: $10.00</li>
+                <li>Source File: $20.00</li>
+            </ul>
+            <button class="deliver-button">Deliver Work</button>
+        </aside>
+    </main>
+    <footer>
+    </footer>
+</body>
+
 </html>

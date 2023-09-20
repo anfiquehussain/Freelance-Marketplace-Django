@@ -9,6 +9,8 @@ from .models import Transaction
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from Orders.models import Order
+from datetime import timedelta
+from django.utils import timezone
 # import razorpay
 
 # client = razorpay.Client(auth=(settings.REZORPAY_PUBLISHABLE_KEY, settings.REZORPAY_SECRET_KEY))
@@ -167,21 +169,38 @@ def success(request, transaction_id,username):
     transaction = get_object_or_404(Transaction, id=transaction_id)
     user = get_object_or_404(User, username=username)
 
+
     current_user = request.user
     if username == current_user.username:
         pass
     else:
         return HttpResponseForbidden("Access Denied")
-    
     transaction.payment_status = True
     overview = transaction.overview
     overview_id = Overview.objects.get(pk=overview)
     transaction.save()
+    if transaction.package_name == "basic_package":
+        basic_package = BasicPackage.objects.get(overview=overview_id)
+        Basic_delivery_time = basic_package.Basic_delivery_time
+        delivery_date = timezone.now() + timedelta(days=Basic_delivery_time)
+    
+    elif transaction.package_name == "standard_package":
+        standard_package = StandardPackage.objects.get(overview=overview_id)
+        Standard_delivery_time = standard_package.Standard_delivery_time
+        delivery_date = timezone.now() + timedelta(Standard_delivery_time)
+    
+    elif transaction.package_name == "premium_package":
+        premium_package = PremiumPackage.objects.get(overview=overview_id)
+        Premium_delivery_time = premium_package.Premium_delivery_time
+        delivery_date = timezone.now() + timedelta(Premium_delivery_time)
+    
+
     order = Order.objects.create(
-        buyer=request.user.userprofile, 
+        buyer=request.user.userprofile,
         service=overview_id,
-        status='pending',  
+        status='pending',
         transaction=transaction,
+        delivery_date=delivery_date
     )
    
     context = {

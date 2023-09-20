@@ -10,6 +10,9 @@ class Order(models.Model):
     transaction = models.ForeignKey(Transaction, on_delete=models.SET_NULL, blank=True, null=True)
     status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('completed', 'Completed')], default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
+    delivery_date = models.DateField(null=True, blank=True)
+
+
 
     def __str__(self):
         return f"Order #{self.pk} - {self.service.title}"
