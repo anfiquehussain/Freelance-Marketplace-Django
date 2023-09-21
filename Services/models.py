@@ -23,14 +23,19 @@ class Overview(models.Model):
 
 class BasicPackage(models.Model):
     DELIVERY_CHOICES1 = [
-        (1, "1 day"),
-        (2, "2 days"),
-        (3, "3 days"),
+       (i, f"{i} days") for i in range(1, 91)
     ]
     REVISION_CHOICES1 = [
         (1, "1"),
         (2, "2"),
         (3, "3"),
+        (4, "4"),
+        (5, "5"),
+        (6, "6"),
+        (7, "7"),
+        (8, "8"),
+        (9, "9"),
+        ("unlimited", "unlimited"),
     ]
     overview = models.ForeignKey(Overview, on_delete=models.CASCADE)
     Basic_title = models.CharField(max_length=100, default="")
@@ -42,14 +47,19 @@ class BasicPackage(models.Model):
 
 class StandardPackage(models.Model):
     DELIVERY_CHOICES2 = [
-        (1, "1 day"),
-        (2, "2 days"),
-        (3, "3 days"),
+        (i, f"{i} days") for i in range(1, 91)
     ]
     REVISION_CHOICES2 = [
         (1, "1"),
         (2, "2"),
         (3, "3"),
+        (4, "4"),
+        (5, "5"),
+        (6, "6"),
+        (7, "7"),
+        (8, "8"),
+        (9, "9"),
+        ("unlimited", "unlimited"),
     ]
     overview = models.ForeignKey(Overview, on_delete=models.CASCADE)
     Standard_title = models.CharField(max_length=100, default="")
@@ -61,14 +71,19 @@ class StandardPackage(models.Model):
 
 class PremiumPackage(models.Model):
     DELIVERY_CHOICES3 = [
-        (1, "1 day"),
-        (2, "2 days"),
-        (3, "3 days"),
+        (i, f"{i} days") for i in range(1, 91)
     ]
     REVISION_CHOICES3 = [
         (1, "1"),
         (2, "2"),
         (3, "3"),
+        (4, "4"),
+        (5, "5"),
+        (6, "6"),
+        (7, "7"),
+        (8, "8"),
+        (9, "9"),
+        ("unlimited", "unlimited"),
     ]
     overview = models.ForeignKey(Overview, on_delete=models.CASCADE)
     Premium_title = models.CharField(max_length=100, default="")
