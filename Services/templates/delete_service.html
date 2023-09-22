@@ -1,7 +1,7 @@
 <div class="confirmation-dialog">
     <h1>Confirm Deletion</h1>
     <p>Are you sure you want to delete the overview "{{ overview.title }}"?</p>
-    <form method="post" action="{% url 'delete_service' overview.id %}">
+    <form method="post" action="{% url 'delete_service' request.user.username overview.id %}">
         {% csrf_token %}
         <button type="submit" name="confirm_delete">Confirm</button>
         <a href="{% url 'IntroHome' %}">Cancel</a>

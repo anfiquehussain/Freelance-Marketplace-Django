@@ -11,7 +11,6 @@ from .models import UserProfile, Certification, Language
 from django.forms import inlineformset_factory
 
 def IntroHome(request):
-    context = {}
     if request.user.is_authenticated:
         username = request.user.username
         return redirect('home', username)

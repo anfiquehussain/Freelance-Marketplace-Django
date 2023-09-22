@@ -5,6 +5,7 @@ from .forms import OverviewForm, BasicPackageForm,StandardPackageForm,PremiumPac
 from Home.models import UserProfile
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Overview, BasicPackage, StandardPackage, PremiumPackage, Description, Question, Gallery
+from django.http import HttpResponseForbidden
 
 
 
@@ -12,6 +13,12 @@ from .models import Overview, BasicPackage, StandardPackage, PremiumPackage, Des
 @login_required()
 def create_job_profile(request, identifier):
     user = get_object_or_404(User, username=identifier)
+
+    current_user = request.user
+    if identifier == current_user.username:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
     
     if request.method == 'POST':
         overview_form = OverviewForm(request.POST)
@@ -94,8 +101,15 @@ def create_job_profile(request, identifier):
 
 
 @login_required()
-def delete_service(request, overview_id):
+def delete_service(request,username,overview_id):
     overview = get_object_or_404(Overview, pk=overview_id, user=request.user)
+    user = get_object_or_404(User, username=username)
+    current_user = request.user
+    if username == current_user.username:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
+
     if request.method == 'POST':
         if 'confirm_delete' in request.POST:
             overview.delete()
@@ -106,8 +120,16 @@ def delete_service(request, overview_id):
 
 
 @login_required()
-def edit_service(request, overview_id):
+def edit_service(request, username ,overview_id):
     overview = get_object_or_404(Overview, pk=overview_id)
+    user = get_object_or_404(User, username=username)
+    current_user = request.user
+    
+    if username == current_user.username and overview.user_id == current_user.id:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
+        
     basic_package = BasicPackage.objects.get(overview=overview)
     standard_package = StandardPackage.objects.get(overview=overview)
     premium_package = PremiumPackage.objects.get(overview=overview)

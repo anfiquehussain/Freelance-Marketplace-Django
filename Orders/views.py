@@ -14,9 +14,20 @@ def submit_requirements(request, transaction_id,username):
     transaction = get_object_or_404(Transaction, id=transaction_id)
     user = get_object_or_404(User, username=username)
 
+    order = Order.objects.get(transaction = transaction_id)
+
+    print(order.created_at)
+    print(transaction.timestamp)
+    
+    tr_payemt_status = transaction.payment_status
+    # print(sender_payemt_id)
+    # print(transaction.payment_id)
+    
     current_user = request.user
-    if username == current_user.username:
-        pass
+    
+    if username == current_user.username and transaction.sender == current_user and tr_payemt_status == True:
+        if current_user == order.buyer:
+            pass
     else:
         return HttpResponseForbidden("Access Denied")
 
@@ -91,6 +102,7 @@ from payments.models import Transaction
 def List_all_orders(request, username):
     user = get_object_or_404(User, username=username)
     orders = Order.objects.filter(buyer__user=user)
+
 
     current_user = request.user
     if username == current_user.username:

@@ -198,7 +198,7 @@
 
 
             {% if user == user_profile.user %}
-            <a href="{% url 'edit_service' service_profile.id %}">
+            <a href="{% url 'edit_service' request.user.username service_profile.id %}">
               <button type="button" class="btn ms-2" style="border: 1px solid #404145;"> <i
                   class="fa-regular fa-pen-to-square"></i>EDIT</button>
             </a>
@@ -304,13 +304,23 @@
                   <p><i class="fa-solid fa-x fa-rotate-90" style="color: #74767e"></i><span style="color: #74767e"
                       class="ms-2">source_file include</span></p>
                   {% endif %}
-                  <a href="{% url 'payments' overview_id=service_profile.id username=request.user.username %}?additional_data={{ basic_pack.overview.id }}&additional_data2=1" class="package-continue-btn">
 
-                    
+                  {% if user != service_profile.user %}
+                  <a href="{% url 'payments' overview_id=service_profile.id username=request.user.username %}?additional_data={{ basic_pack.overview.id }}&additional_data2=1"
+                    class="package-continue-btn">
                     <button style="width: 100%;" type="button" class="btn btn-dark btn-lg">
                       Continue<i class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i>
                     </button>
                   </a>
+                  {% else %}
+                  <div class="alert alert-warning message" role="alert" style="display: none;">
+                    <strong>You</strong> cannot order your own service.
+                  </div>
+
+                  <button style="width: 100%;" type="button" class="btn btn-dark btn-lg continue-button">
+                    Continue<i class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i>
+                  </button>
+                  {% endif %}
 
 
                 </div>
@@ -354,15 +364,26 @@
                       class="ms-2">source_file include</span></p>
                   {% endif %}
 
-                  
 
 
-                  
-                    <a href="{% url 'payments' overview_id=service_profile.id username=request.user.username %}?additional_data={{ standard_pack.overview.id }}&additional_data2=2" class="package-continue-btn">
+
+                  {% if user != service_profile.user %}
+                  <a href="{% url 'payments' overview_id=service_profile.id username=request.user.username %}?additional_data={{ standard_pack.overview.id }}&additional_data2=2"
+                    class="package-continue-btn">
 
                     <button style="width: 100%;" type="button" class="btn btn-dark btn-lg">Continue<i
                         class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i></button>
                     </button></a>
+                  {% else %}
+                  <div class="alert alert-warning message" role="alert" style="display: none;">
+                    <strong>You</strong> cannot order your own service.
+                  </div>
+
+                  <button style="width: 100%;" type="button" class="btn btn-dark btn-lg continue-button">
+                    Continue<i class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i>
+                  </button>
+                  {% endif %}
+
                 </div>
               </div>
             </div>
@@ -403,14 +424,27 @@
                       class="ms-2">source_file include</span></p>
                   {% endif %}
 
-           
 
 
-                    <a href="{% url 'payments' overview_id=service_profile.id username=request.user.username %}?additional_data={{ premium_pack.overview.id }}&additional_data2=3" class="package-continue-btn">
+
+                  {% if user != service_profile.user %}
+                  <a href="{% url 'payments' overview_id=service_profile.id username=request.user.username %}?additional_data={{ premium_pack.overview.id }}&additional_data2=3"
+                    class="package-continue-btn">
 
                     <button style="width: 100%;" type="button" class="btn btn-dark btn-lg">Continue<i
                         class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i></button>
                     </button></a>
+                  {% else %}
+                  <div class="alert alert-warning message" role="alert" style="display: none;">
+                    <strong>You</strong> cannot order your own service.
+                  </div>
+
+                  <button style="width: 100%;" type="button" class="btn btn-dark btn-lg continue-button">
+                    Continue<i class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i>
+                  </button>
+                  {% endif %}
+
+
                 </div>
               </div>
             </div>
@@ -491,6 +525,26 @@
       basicButton.style.backgroundColor = "#ffff";  // Change to your desired color
       basicButton.style.color = "#222325";
     });
+
+  </script>
+
+  <script>
+
+    // Get references to the button and the message paragraph by class name
+    var buttons = document.getElementsByClassName("continue-button");
+    var messages = document.getElementsByClassName("message");
+
+    // Loop through each button element and add a click event listener
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].addEventListener("click", function () {
+        // Find the corresponding message paragraph
+        var index = Array.prototype.indexOf.call(buttons, this);
+        if (index >= 0 && index < messages.length) {
+          // Display the corresponding message paragraph when the button is clicked
+          messages[index].style.display = "block";
+        }
+      });
+    }
 
   </script>
 

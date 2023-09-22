@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> {{transaction_id}} Payments setup</title>
+    <title>{{ transaction_id }} Payments setup</title>
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
@@ -14,16 +14,16 @@
             height: fit-content;
             padding: 1rm;
         }
-        tr{
+
+        tr {
             border-bottom: 1px solid gray;
         }
     </style>
 
+<script src="https://js.stripe.com/v3/"></script>
 </head>
 
 <body>
-
-
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
@@ -31,94 +31,153 @@
                 <hr>
             </div>
             <div class="col text-center mt-3">
-
                 <div class="row">
                     <div class="col">
-                        <h5 class="fw-bold" style="color: #404145;">{{package_name}}</h5>
+                        <h5 class="fw-bold" style="color: #404145;">{{ package_name }}</h5>
                     </div>
                     <div class="col">
-                        <h5 class="fw-ligh" style="color: #404145;">₹{{actual_price}}</h5>
+                        <h5 class="fw-ligh" style="color: #404145;">₹{{ actual_price }}</h5>
                     </div>
                     <div class="col-md-12">
-                        <p>{{package_discription}}</p>
+                        <p>{{ package_discription }}</p>
                     </div>
                 </div>
-
-                <div class="row" >
+                <div class="row">
                     <div class="col" style="background-color: #f5f5f5;">
                         <center>
-                                <div class="bill-details-container col">
-                                    <table width="100%">
-                                        <tr>
-                                            <td style="text-align: center; padding-top: 10px; padding-bottom: 10px;">Service fee</td>
-                                            <td style="text-align: left; padding-top: 10px; padding-bottom: 10px;">{{service_fee}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: center; padding-top: 10px; padding-bottom: 10px;">package payment</td>
-                                            <td style="text-align: left; padding-top: 10px; padding-bottom: 10px;">{{actual_price}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="fw-bold" style="text-align: center; padding-top: 10px; padding-bottom: 10px;">Totalpayment</td>
-                                            <td class="fw-bold" style="text-align: left; padding-top: 10px; padding-bottom: 10px;">{{actual_price_fee_added}}</td>
-                                        </tr>
-                                    </table>
+                            <div class="bill-details-container col">
+                                <table width="100%">
+                                    <tr>
+                                        <td style="text-align: center; padding-top: 10px; padding-bottom: 10px;">Service
+                                            fee</td>
+                                        <td style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
+                                            {{ service_fee }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: center; padding-top: 10px; padding-bottom: 10px;">Package
+                                            payment</td>
+                                        <td style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
+                                            {{ actual_price }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold"
+                                            style="text-align: center; padding-top: 10px; padding-bottom: 10px;">Total
+                                            payment</td>
+                                        <td class="fw-bold"
+                                            style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
+                                            {{ actual_price_fee_added }}
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </center>
                     </div>
                     <div class="col-md-12 mt-3">
-                        <form action="{% url 'success' transaction_id request.user.username %}" method="post">
-                            {% csrf_token %}
-                            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="{{ key }}"
-                                data-description="A Django Charge" data-amount={{package_price}} data-currency="inr" data-locale="auto">
-                                </script>
-                        </form>
+                        <div class="container mt-5">
+                            <div class="row justify-content-center">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            Payment Information
+                                        </div>
+                                        <div class="card-body">
+                                            
+                                            <form action="{% url 'success' transaction_id request.user.username %}" id="payment-form" method="POST">
+                                                {% csrf_token %}
+                                                
+                                                <div id="card-element">
+                                                    <!-- A Stripe Element will be inserted here. -->
+                                                </div>
+                                                
+                                                <!-- Used to display form errors. -->
+                                                <div id="card-errors" role="alert"></div>
+                                                <input type="hidden" name="stripeToken" id="stripeToken" value="">
+                                                
+                                                <button id="submit-button" type="submit">Submit Payment</button>
+                                            </form>
+                                        </div>
+                                    
+                                        <script>
+                                            // Initialize Stripe with your publishable key
+                                            var stripe = Stripe('{{ key }}');
+                                            
+                                            var elements = stripe.elements();
+                                            var cardElement = elements.create('card');
+                                            
+                                            cardElement.mount('#card-element');
+                                            
+                                            var form = document.getElementById('payment-form');
+                                            var errorElement = document.getElementById('card-errors');
+                                            
+                                            form.addEventListener('submit', function(event) {
+                                                event.preventDefault();
+                                                
+                                                stripe.createToken(cardElement).then(function(result) {
+                                                    if (result.error) {
+                                                        // Display error message to the customer.
+                                                        errorElement.textContent = result.error.message;
+                                                    } else {
+                                                        // Add the token to the form and submit.
+                                                        token = result.token.id;
+                                                        console.log(token)
+                                                        var tokenInput = document.createElement('input');
+                                                        tokenInput.setAttribute('type', 'hidden');
+                                                        tokenInput.setAttribute('name', 'stripeToken');
+                                                        tokenInput.setAttribute('value', result.token.id);
+                                                        form.appendChild(tokenInput);
+                                                        
+                                                        // Submit the form to your server.
+                                                        form.submit();
+                                                    }
+                                                });
+                                            });
+                                        </script>
+                                  
+                                            
+
+
+
+                                            <!-- <script>
+                                                    var stripe = Stripe('{{ key }}');
+                                                    var elements = stripe.elements();
+
+                                                    // Create an instance of the card Element.
+                                                    var card = elements.create('card');
+
+                                                    // Add an instance of the card Element into the card-element div.
+                                                    card.mount('#card-element');
+
+                                                    var form = document.getElementById('payment-form');
+
+                                                    form.addEventListener('submit', function (event) {
+                                                        event.preventDefault();
+
+                                                        stripe.createToken(card).then(function (result) {
+                                                            if (result.error) {
+                                                                var errorElement = document.getElementById('card-errors');
+                                                                errorElement.textContent = result.error.message;
+                                                            } else {
+                    
+                                                                var token = result.token.id;
+                                                                
+                                                                console.log('Token:', token);
+
+                                                            }
+                                                        });
+                                                    });
+                                                </script> -->
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
-
-   
-
-
-
-
-
-
-
-
-    <!-- <button id="rzp-button1">Pay</button>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script>
-        var options = {
-            "key": "{{API_KRY}}", // Enter the Key ID generated from the Dashboard
-            "name": "Acme Corp", //your business name
-            "description": "Test Transaction",
-            "image": "https://example.com/your_logo",
-            "order_id": "{{order_id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-            "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
-            "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
-                "name": "Gaurav Kumar", //your customer's name
-                "email": "gaurav.kumar@example.com",
-                "contact": "9000090000" //Provide the customer's phone number for better conversion rates 
-            },
-            "notes": {
-                "address": "Razorpay Corporate Office"
-            },
-            "theme": {
-                "color": "#3399cc"
-            }
-        };
-        var rzp1 = new Razorpay(options);
-        document.getElementById('rzp-button1').onclick = function (e) {
-            rzp1.open();
-            e.preventDefault();
-        }
-    </script> -->
-
-
-
 </body>
 
 </html>

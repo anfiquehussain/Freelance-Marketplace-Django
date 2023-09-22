@@ -267,11 +267,11 @@
                         </p>
                         <ul class="dropdown-menu">
                             <li class="menu-items-links">
-                                <a class="menu-link" href="{% url 'delete_service' service_profile.id %}">Delete</a>
+                                <a class="menu-link" href="{% url 'delete_service' request.user.username service_profile.id  %}">Delete</a>
                             </li>
                             <hr>
                             <li>
-                                <a href="{% url 'edit_service' service_profile.id %}" class="menu-link">Edit Service</a>
+                                <a href="{% url 'edit_service' request.user.username service_profile.id %}" class="menu-link">Edit Service</a>
                         </ul>
                     </div>
                 </div>
