@@ -93,17 +93,6 @@ class PremiumPackage(models.Model):
     Premium_source_file = models.BooleanField(default=False)
     Premium_price = models.IntegerField(default=0,validators=[MinValueValidator(150)])
 
-# class ExtraService(models.Model):
-#     DELIVERY_CHOICES4 = [
-#         (1, "1 day"),
-#         (2, "2 days"),
-#         (3, "3 days"),
-#     ]
-#     overview = models.ForeignKey(Overview, on_delete=models.CASCADE)
-#     title = models.CharField(max_length=100, default="2")
-#     pricing = models.DecimalField(max_digits=10, decimal_places=2)
-#     delivery_time = models.PositiveIntegerField(choices=DELIVERY_CHOICES4, default=1)
-
 class Description(models.Model):
     overview = models.ForeignKey(Overview, on_delete=models.CASCADE)
     description = models.TextField(default="")

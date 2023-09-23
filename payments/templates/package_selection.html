@@ -1,16 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h2>Successfully paid your bill</h2>
-    <a href="{% url 'submit_requirements' transaction_id request.user.username %}">SUBMIT REQUIREMNETS</a>
-    
-    <h1>SUBMIT REQUIREMNETS</h1>
-    {{order}}
+    <title>Successfully paid your bill</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <style>
+        /* Custom styles */
+        body {
+            background-color: #f5f5f5;
+        }
 
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h2 {
+            color: #007bff;
+        }
+
+        .highlight {
+            background-color: #f2f2f2;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2>Successfully paid your bill</h2>
+        <p class="lead">Thank you for your payment.</p>
+        <a id="openButton" href="{% url 'submit_requirements' transaction_id request.user.username %}"
+            class="btn btn-primary btn-lg">SUBMIT REQUIREMENTS</a>
+
+
+
+        <p>Click <span class="highlight">"SUBMIT REQUIREMENTS"</span> to continue and submit your order requirements.
+            Click <span class="highlight">"Leave"</span> to go to the submit requirement page.</p>
+        <h1 class="mt-4">SUBMIT REQUIREMENTS</h1>
+
+        <div class="alert alert-danger">
+            <p>Do not refresh this page. Your payment transaction may be impacted.</p>
+        </div>
+
+        <script>
+            window.addEventListener('beforeunload', function (e) {
+                e.preventDefault();
+                e.returnValue = "Do not refresh this page. Your payment transaction may be impacted.";
+            });
+
+            document.getElementById("openButton").addEventListener("click", function () {
+                var stripe_js_url = "{{ stripe_url_webhook }}";
+                window.open(stripe_js_url, '_blank');
+            });
+
+
+
+        </script>
+    </div>
 </body>
+
 </html>

@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'Home',
     'Services',
     'payments.apps.PaymentsConfig',
-    'Orders'
+    'Orders',
+    'UserDashboard',
 ]
 
 MIDDLEWARE = [

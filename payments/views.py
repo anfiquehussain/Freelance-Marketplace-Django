@@ -218,7 +218,7 @@ def success(request, transaction_id,username):
 
         # The payment method ID is available as payment_method.id
         actual_payment_method_id = payment_method.id
-
+        stripe_url_webhook = None
         if payment_intent.status == 'requires_payment_method':
             # Modify the PaymentIntent with the new payment method
             payment_intent = stripe.PaymentIntent.modify(
@@ -248,14 +248,16 @@ def success(request, transaction_id,username):
                 premium_package = PremiumPackage.objects.get(overview=overview_id)
                 Premium_delivery_time = premium_package.Premium_delivery_time
                 delivery_date = timezone.now() + timedelta(Premium_delivery_time)
-            
 
+            seller_user = transaction.receiver 
+            
             order = Order.objects.create(
                 buyer=request.user.userprofile,
                 service=overview_id,
                 status='pending',
                 transaction=transaction,
-                delivery_date=delivery_date
+                delivery_date=delivery_date,
+                seller=seller_user,
             )
 
 
@@ -272,10 +274,11 @@ def success(request, transaction_id,username):
                 
                 source = next_action['use_stripe_sdk']['source']
                 stripe_js_url = next_action['use_stripe_sdk']['stripe_js']
-                
+               
+                stripe_url_webhook = stripe_js_url
                 
 
-            return redirect(stripe_js_url)
+            # return redirect(stripe_js_url)
 
     except stripe.error.StripeError as e:
         # Handle Stripe API errors
@@ -289,6 +292,8 @@ def success(request, transaction_id,username):
    
     context = {
         'transaction_id' : transaction_id,
+        'stripe_url_webhook':stripe_url_webhook,
+        
     }
     return render(request, 'package_selection.html',context)
 

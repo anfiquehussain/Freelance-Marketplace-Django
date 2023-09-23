@@ -16,19 +16,21 @@
         .user-name-card:hover {
             text-decoration: underline;
         }
-        .card-link{
+
+        .card-link {
             text-decoration: none;
             color: black;
         }
-        .card-link:hover{
-            text-decoration: underline;
-            color: black;
-        }
-        .card-title:hover{
+
+        .card-link:hover {
             text-decoration: underline;
             color: black;
         }
 
+        .card-title:hover {
+            text-decoration: underline;
+            color: black;
+        }
     </style>
     {% load bootstrap5 %}
     {% bootstrap_css %}
@@ -72,6 +74,30 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'profile' user.username %}">View Profile</a>
                     </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Dashboard
+                        </a>
+                        <ul class="dropdown-menu">
+
+                            <li><a class="dropdown-item" href="{% url 'seller_dashboard' user.username %}">Seller
+                                    Dashboard</a></li>
+                            <li><a class="dropdown-item" href="{% url 'buyer_dashboard' user.username %}">Buyer
+                                    Dashboard</a></li>
+
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+
+                            <li>
+                                <hr class="dropdown-divider">
+                                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
@@ -81,8 +107,8 @@
                             <li><a class="dropdown-item" href="{% url 'profile' user.username %}">View Profile</a></li>
                             <li><a class="dropdown-item" href="{% url 'edit_profile' user.username %}">Edit Profile</a>
                             </li>
-                            <li><a class="dropdown-item" href="{% url 'list_all_the_order' user.username %}">My Purchases</a></li>
-                            <li><a class="dropdown-item" href="#">Orders Dashboard</a></li>
+                            <li><a class="dropdown-item" href="{% url 'list_all_the_order' user.username %}">My
+                                    Purchases</a></li>
                             <li><a class="dropdown-item" href="#">Settings</a></li>
                             <li>
                                 <hr class="dropdown-divider">
@@ -139,15 +165,20 @@
                 <div class="mt-1">
                     <img class="rounded-circle mt-1" src="{{ user_profile.profile_image.url }}"
                         style="width: 20px;height:20px;object-fit: cover;float: left;" alt="...">
-                    <a class="card-link" href="{% url 'view_profile_public' service_profile.user %}"><p class="user-name-card text-lowercase ms-4 fw-bold">{{service_profile.user}}</p></a>
+                    <a class="card-link" href="{% url 'view_profile_public' service_profile.user %}">
+                        <p class="user-name-card text-lowercase ms-4 fw-bold">{{service_profile.user}}</p>
+                    </a>
                 </div>
 
-                <a class="card-link" href="{% url 'view_service_profile' service_profile.id %}"><p class="card-title">{{ service_profile.titleOverview}}</p></a>
-                
+                <a class="card-link" href="{% url 'view_service_profile' service_profile.id %}">
+                    <p class="card-title">{{ service_profile.titleOverview}}</p>
+                </a>
+
                 <p class="card-text">★<span style="font-size: smaller;"
                         class="fw-bold">{{service_profile.rating}}</span></p>
                 {% for basic_package in service_profile.basicpackage_set.all %}
-                <p class="card-text text-start"><strong>From<span class="ms-1">₹{{basic_package.Basic_price}}</span></strong>
+                <p class="card-text text-start"><strong>From<span
+                            class="ms-1">₹{{basic_package.Basic_price}}</span></strong>
                 </p>
                 {% endfor %}
             </div>

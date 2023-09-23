@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller List All Orders</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <style>
+        /* Custom CSS for styling */
+        body {
+            background-color: #f8f9fa;
+            /* Set background color */
+        }
+
+        .container {
+            background-color: #ffffff;
+            /* Set container background color */
+            padding: 20px;
+            /* Add some padding for better spacing */
+            border-radius: 8px;
+            /* Add rounded corners to the container */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* Add a subtle shadow */
+        }
+
+        .card {
+            background-color: #fff;
+            /* Set card background color */
+            border: 1px solid #ccc;
+            /* Add a border around the card */
+            border-radius: 8px;
+            /* Add rounded corners to the card */
+            margin-bottom: 20px;
+            /* Add some margin between cards */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* Add a subtle shadow */
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            /* Increase title font size */
+            color: #333;
+            /* Set title color */
+        }
+
+        .card-text {
+            font-size: 1rem;
+            /* Set text font size */
+            color: #555;
+            /* Set text color */
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            /* Set subtitle font size */
+            color: #777;
+            /* Set subtitle color */
+        }
+
+        h1 {
+            color: #333;
+            /* Set heading color */
+        }
+
+        .order-status.pending {
+            color: #f39c12;
+            /* You can keep this color for "Pending" if it suits your needs. */
+        }
+
+        .order-status.completed {
+            color: #27ae60;
+            /* Change this to a more meaningful color like green for "Completed." */
+        }
+
+        .order-status.cancelled {
+            color: #e74c3c;
+            /* Change this to a more meaningful color like red for "Cancelled." */
+        }
+
+        .order-status.expired {
+            color: #d35400;
+            /* Change this to a more meaningful color like orange for "Expired." */
+        }
+
+        .order-status.delivered {
+            color: #3498db;
+            /* Change this to a more meaningful color like blue for "Delivered." */
+        }
+
+
+        .order-type.basic_package {
+            color: #27ae60;
+        }
+
+        .order-type.standard_package {
+            color: #3498db;
+        }
+
+        .order-type.premium_package {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Manage Orders</h1>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#" data-status="all">ALL</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-status="pending">ACTIVE</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-status="expired">EXPIRED</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-status="delivered">DELIVERED</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-status="completed">COMPLETED</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-status="cancelled">CANCELLED</a>
+            </li>
+        </ul>
+        <div class="row">
+            {% for order_data in order_info %}
+            <div class="col-md-12 order-item" data-status="{{ order_data.order.status }}">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ order_data.overview.titleOverview }}</h5>
+                        <p class="card-text">Buyer: {{ order_data.order.buyer.user.username }}</p>
+                        <p class="card-text">Order Status: <span class="order-status {{ order_data.order.status }}">
+                            
+                            {{order_data.order.status }}</span></p>
+                        {% if order_data.transaction %}
+                        <p class="card-text">Amount: {{ order_data.transaction.amount }}</p>
+                        <p class="card-text">Package: <span
+                                class="order-type {{ order_data.transaction.package_name }}">
+                                {{order_data.transaction.package_name }}</span></p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            navLinks.forEach(function (link) {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const status = this.getAttribute('data-status');
+                    filterOrders(status);
+                });
+            });
+
+            function filterOrders(status) {
+                const orderItems = document.querySelectorAll('.order-item');
+                if (status === 'all') {
+                    orderItems.forEach(function (item) {
+                        item.style.display = 'block';
+                    });
+                } else {
+                    orderItems.forEach(function (item) {
+                        const itemStatus = item.getAttribute('data-status');
+                        if (itemStatus === status) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -121,6 +121,37 @@ def List_all_orders(request, username):
 
     context = {
         'user': user, 
-        'orders_services_transactions': orders_services_transactions,  # Include transactions
+        'orders_services_transactions': orders_services_transactions,
     }
     return render(request, 'list_all_orders.html', context)
+
+
+
+def Seller_List_all_orders(request, username):
+    user = get_object_or_404(User, username=username)
+    orders = Order.objects.filter(seller=user)
+
+    # Create a list to store transaction and overview information for each order
+    order_info = []
+
+    for order in orders:
+        transaction = Transaction.objects.filter(order=order).first()  # Get the transaction associated with the order
+        overview = Overview.objects.get(pk=order.service.pk)  # Get the associated overview
+
+        order_info.append({
+            'order': order,
+            'transaction': transaction,
+            'overview': overview,
+        })
+
+    context = {
+        'user': user,
+        'order_info': order_info,
+    }
+
+    return render(request, 'seller_list_all_orders.html', context)
+
+
+
+
+
