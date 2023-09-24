@@ -10,7 +10,7 @@ class Order(models.Model):
     seller = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     service = models.ForeignKey(Overview, on_delete=models.CASCADE)
     transaction = models.ForeignKey(Transaction, on_delete=models.SET_NULL, blank=True, null=True)
-    status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('cancelled', 'Cancelled'),('expired', 'Expired'),('delivered', 'Delivered'),('completed', 'Completed')], default='pending')
+    status = models.CharField(max_length=20, choices=[('pending', 'Pending'),('in_progress','In Progress'),('cancelled', 'Cancelled'),('expired', 'Expired'),('delivered', 'Delivered'),('completed', 'Completed')], default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
     delivery_date = models.DateField(null=True, blank=True)
 

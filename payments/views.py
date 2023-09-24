@@ -271,7 +271,7 @@ def success(request, transaction_id,username):
 
            
             if next_action.get('type') == 'use_stripe_sdk':
-                
+
                 source = next_action['use_stripe_sdk']['source']
                 stripe_js_url = next_action['use_stripe_sdk']['stripe_js']
                

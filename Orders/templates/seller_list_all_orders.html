@@ -62,35 +62,37 @@
 
         h1 {
             color: #333;
-            /* Set heading color */
+           
         }
 
         .order-status.pending {
-            color: #f39c12;
-            /* You can keep this color for "Pending" if it suits your needs. */
+            color: #FFA500;
+            
+            
         }
 
         .order-status.completed {
-            color: #27ae60;
-            /* Change this to a more meaningful color like green for "Completed." */
+            color: #008000;
+           
         }
 
         .order-status.cancelled {
-            color: #e74c3c;
-            /* Change this to a more meaningful color like red for "Cancelled." */
+            color: #FF0000;
+            
         }
 
         .order-status.expired {
-            color: #d35400;
-            /* Change this to a more meaningful color like orange for "Expired." */
+            color: #FF0000;
+            
         }
 
         .order-status.delivered {
-            color: #3498db;
-            /* Change this to a more meaningful color like blue for "Delivered." */
+            color: #0000FF;
         }
 
-
+        .order-status.in_progress {
+            color: #FFA000;
+        }
         .order-type.basic_package {
             color: #27ae60;
         }
@@ -112,8 +114,13 @@
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="#" data-status="all">ALL</a>
             </li>
+
             <li class="nav-item">
-                <a class="nav-link" href="#" data-status="pending">ACTIVE</a>
+                <a class="nav-link" href="#" data-status="pending">PENDING</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-status="in_progress">ACTIVE</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#" data-status="expired">EXPIRED</a>
@@ -128,59 +135,79 @@
                 <a class="nav-link" href="#" data-status="cancelled">CANCELLED</a>
             </li>
         </ul>
-        <div class="row">
-            {% for order_data in order_info %}
-            <div class="col-md-12 order-item" data-status="{{ order_data.order.status }}">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ order_data.overview.titleOverview }}</h5>
-                        <p class="card-text">Buyer: {{ order_data.order.buyer.user.username }}</p>
-                        <p class="card-text">Order Status: <span class="order-status {{ order_data.order.status }}">
-                            
-                            {{order_data.order.status }}</span></p>
+        
+
+ 
+    
+    
+    
+    
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Buyer</th>
+                    <th scope="col">Service</th>
+                    <th scope="col">Due on</th>
+                    <th scope="col">Package Name</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order_data in order_info %}
+                <tr class="order-item" data-status="{{ order_data.order.status }}">
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ order_data.order.buyer.user.username }}</td>
+                    <td>{{ order_data.overview.titleOverview }}</td>
+                    <td>{{ order_data.order.delivery_date }}</td>
+                    <td>{{ order_data.transaction.package_name }}</td>
+                    <td>
                         {% if order_data.transaction %}
-                        <p class="card-text">Amount: {{ order_data.transaction.amount }}</p>
-                        <p class="card-text">Package: <span
-                                class="order-type {{ order_data.transaction.package_name }}">
-                                {{order_data.transaction.package_name }}</span></p>
+                        {{ order_data.transaction.amount }}
                         {% endif %}
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+                    </td>
+                    <td>
+                        <span class="order-status {{ order_data.order.status }}">
+                            {{ order_data.order.status }}
+                        </span>
+                    </td>
+                    <td><a href="{% url 'seller_details_of_order' order_data.order.id request.user.username %}" class="btn btn-primary">View</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const navLinks = document.querySelectorAll('.nav-link');
+            const orderItems = document.querySelectorAll('.order-item');
 
             navLinks.forEach(function (link) {
                 link.addEventListener('click', function (event) {
                     event.preventDefault();
                     const status = this.getAttribute('data-status');
-                    filterOrders(status);
-                });
-            });
 
-            function filterOrders(status) {
-                const orderItems = document.querySelectorAll('.order-item');
-                if (status === 'all') {
-                    orderItems.forEach(function (item) {
-                        item.style.display = 'block';
-                    });
-                } else {
                     orderItems.forEach(function (item) {
                         const itemStatus = item.getAttribute('data-status');
-                        if (itemStatus === status) {
-                            item.style.display = 'block';
+                        if (status === 'all' || itemStatus === status) {
+                            item.style.display = 'table-row';
                         } else {
                             item.style.display = 'none';
                         }
                     });
-                }
-            }
+                });
+            });
         });
     </script>
 </body>
 
 </html>
+
+
+
+
+
+ 

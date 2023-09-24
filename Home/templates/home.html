@@ -86,6 +86,10 @@
                                     Dashboard</a></li>
                             <li><a class="dropdown-item" href="{% url 'buyer_dashboard' user.username %}">Buyer
                                     Dashboard</a></li>
+                                    {% if user.is_superuser%}
+                                    <li><a class="dropdown-item" href="{% url 'admin_dashboard' user.username %}">Admin
+                                        Dashboard</a></li>
+                                    {% endif %}
 
                             <li><a class="dropdown-item" href="#">Settings</a></li>
 

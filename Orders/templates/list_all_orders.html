@@ -41,11 +41,32 @@
         }
 
         .order-status.pending {
-            color: #f39c12;
+            color: #FFA500;
+
+
         }
 
         .order-status.completed {
-            color: #27ae60;
+            color: #008000;
+
+        }
+
+        .order-status.cancelled {
+            color: #FF0000;
+
+        }
+
+        .order-status.expired {
+            color: #FF0000;
+
+        }
+
+        .order-status.delivered {
+            color: #0000FF;
+        }
+
+        .order-status.in_progress {
+            color: #FFA000;
         }
 
         .order-type.basic_package {
@@ -66,33 +87,105 @@
     <div class="container mt-5">
         <h1 class="mb-4">List of Orders for {{ user.username }}</h1>
         <div class="row">
-            {% for order, service, transactions in orders_services_transactions %}
-                <div class="col-md-12 mb-4">
-                    <div class="order-card">
-                        <div class="order-details">
-                            <h5>{{ service.titleOverview }}</h5>
-                            <div class="order-status {{ order.status }}">
+
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#" data-status="all">ALL</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-status="pending">PENDING</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-status="in_progress">ACTIVE</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-status="expired">EXPIRED</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-status="delivered">DELIVERED</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-status="completed">COMPLETED</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-status="cancelled">CANCELLED</a>
+                </li>
+            </ul>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Seller</th>
+                        <th scope="col">Service</th>
+                        <th scope="col">Due on</th>
+                        <th scope="col">Package Name</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order, service, transactions in orders_services_transactions %}
+                    <tr class="order-item" data-status="{{ order.status }}">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ order.seller.username }}</td>
+                        <td>{{ service.titleOverview }}</td>
+                        <td>{{ order.delivery_date }}</td>
+
+                        {% for transaction in transactions %}
+                        {% if transaction.id == order.transaction_id %}
+                        <td class="order-type {{ transaction.package_name }}">{{ transaction.package_name }}</td>
+                        <td>{{ transaction.amount }}</td>
+                        {% endif %}
+                        {% endfor %}
+
+                        <td>
+                            <span class="order-status {{ order.status }}">
                                 {{ order.status }}
-                            </div>
-                            <p>Ordered Date: {{ order.created_at }}</p>
-                        
-                            {% for transaction in transactions %}
-                            {% if  transaction.id == order.transaction_id %}
-                                <p>Transaction Amount: {{ transaction.amount }}</p>
-                                <p class="order-type {{ transaction.package_name }}">Package: {{transaction.package_name}}</p>
-                        
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                        <a href="{% url 'details_of_the_order' order.id request.user.username %}" class="btn btn-primary">View</a>
-                    </div>
-                </div>
-            {% empty %}
-                <div class="col">
-                    <h3>No orders found for this user.</h3>
-                </div>
-            {% endfor %}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{% url 'details_of_the_order' order.id request.user.username %}"
+                                class="btn btn-primary">View</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7">
+                            <h3>No orders found for this user.</h3>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const orderItems = document.querySelectorAll('.order-item');
+
+            navLinks.forEach(function (link) {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const status = this.getAttribute('data-status');
+
+                    orderItems.forEach(function (item) {
+                        const itemStatus = item.getAttribute('data-status');
+                        if (status === 'all' || itemStatus === status) {
+                            item.style.display = 'table-row';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
 </body>
+
 </html>

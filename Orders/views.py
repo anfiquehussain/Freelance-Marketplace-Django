@@ -72,9 +72,9 @@ def Details_of_the_order(request,order_id,username):
     user = get_object_or_404(User, username=username)
     orders = Order.objects.filter(id=order_id)
     order = get_object_or_404(Order, id=order_id)
-    
+
     current_user = request.user
-    if username == current_user.username:
+    if username == current_user.username and order.buyer.id == user.id:
         pass
     else:
         return HttpResponseForbidden("Access Denied")
@@ -130,6 +130,11 @@ def List_all_orders(request, username):
 def Seller_List_all_orders(request, username):
     user = get_object_or_404(User, username=username)
     orders = Order.objects.filter(seller=user)
+    current_user = request.user
+    if username == current_user.username:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
 
     # Create a list to store transaction and overview information for each order
     order_info = []
@@ -153,5 +158,26 @@ def Seller_List_all_orders(request, username):
 
 
 
+
+
+@login_required()
+def Seller_Details_of_the_order(request,order_id,username):
+    user = get_object_or_404(User, username=username)
+    orders = Order.objects.filter(id=order_id)
+    order = get_object_or_404(Order, id=order_id)
+
+    current_user = request.user
+    if username == current_user.username and order.seller == user:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
+    orders_services_transactions = []
+
+    context = {
+        'user': user,
+        'order':order,
+    }
+
+    return render(request, 'seller_detials_of_order.html', context)
 
 
