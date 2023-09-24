@@ -9,64 +9,102 @@
     {% bootstrap_css %}
     {% bootstrap_javascript %}
     <style>
-        .order-card {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 20px;
+        /* Custom CSS for styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+
+        .container {
+            background-color: #ffffff;
+            /* Set container background color */
+            padding: 20px;
+            /* Add some padding for better spacing */
+            border-radius: 8px;
+            /* Add rounded corners to the container */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            display: flex;
-            /* Make the card a flex container */
-            justify-content: space-between;
-            /* Align items horizontally */
-            align-items: center;
-            /* Center items vertically */
+            /* Add a subtle shadow */
         }
 
-        .order-card .order-details {
-            flex: 1;
-            /* Allow the details to grow and take available space */
-            display: flex;
-            /* Make the details a flex container */
-            flex-direction: column;
-            /* Stack details vertically */
+        .card {
+            background-color: #fff;
+            /* Set card background color */
+            border: 1px solid #ccc;
+            /* Add a border around the card */
+            border-radius: 8px;
+            /* Add rounded corners to the card */
+            margin-bottom: 20px;
+            /* Add some margin between cards */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* Add a subtle shadow */
         }
 
-        .order-card .order-details h5 {
-            margin: 0;
+        .card-title {
+            font-size: 1.25rem;
+            /* Increase title font size */
+            color: #333;
+            /* Set title color */
+        }
+
+        .card-text {
+            font-size: 1rem;
+            /* Set text font size */
+            color: #555;
+            /* Set text color */
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            /* Set subtitle font size */
+            color: #777;
+            /* Set subtitle color */
         }
 
         .order-card .order-status {
             font-weight: bold;
         }
 
+        /* Pending */
         .order-status.pending {
-            color: #FFA500;
-
-
+            color: #FFD700;
+            /* Gold */
         }
 
+        /* Completed */
         .order-status.completed {
-            color: #008000;
-
+            color: #00FF00;
+            /* Lime Green */
         }
 
+        /* Return */
+        .order-status.return {
+            color: #0074D9;
+            /* Royal Blue */
+        }
+
+        /* Cancelled */
         .order-status.cancelled {
-            color: #FF0000;
-
+            color: #FF4136;
+            /* Red */
         }
 
+        /* Expired */
         .order-status.expired {
-            color: #FF0000;
-
+            color: #FF4136;
+            /* Red */
         }
 
+        /* Delivered */
         .order-status.delivered {
             color: #0000FF;
+            /* Blue */
         }
 
+        /* In Progress */
         .order-status.in_progress {
-            color: #FFA000;
+            color: #FFA500;
+            /* Orange */
         }
 
         .order-type.basic_package {
@@ -79,6 +117,11 @@
 
         .order-type.premium_package {
             color: #e74c3c;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
         }
     </style>
 </head>
@@ -99,6 +142,9 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="#" data-status="in_progress">ACTIVE</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-status="return">RETURN</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#" data-status="expired">EXPIRED</a>

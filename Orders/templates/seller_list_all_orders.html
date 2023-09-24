@@ -11,9 +11,10 @@
     <style>
         /* Custom CSS for styling */
         body {
-            background-color: #f8f9fa;
-            /* Set background color */
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
         }
+
 
         .container {
             background-color: #ffffff;
@@ -62,37 +63,52 @@
 
         h1 {
             color: #333;
-           
+
         }
 
+        /* Pending */
         .order-status.pending {
-            color: #FFA500;
-            
-            
+            color: #FFD700;
+            /* Gold */
         }
 
+        /* Completed */
         .order-status.completed {
-            color: #008000;
-           
+            color: #00FF00;
+            /* Lime Green */
         }
 
+        /* Return */
+        .order-status.return {
+            color: #0074D9;
+            /* Royal Blue */
+        }
+
+        /* Cancelled */
         .order-status.cancelled {
-            color: #FF0000;
-            
+            color: #FF4136;
+            /* Red */
         }
 
+        /* Expired */
         .order-status.expired {
-            color: #FF0000;
-            
+            color: #FF4136;
+            /* Red */
         }
 
+        /* Delivered */
         .order-status.delivered {
             color: #0000FF;
+            /* Blue */
         }
 
+        /* In Progress */
         .order-status.in_progress {
-            color: #FFA000;
+            color: #FFA500;
+            /* Orange */
         }
+
+
         .order-type.basic_package {
             color: #27ae60;
         }
@@ -123,6 +139,9 @@
                 <a class="nav-link" href="#" data-status="in_progress">ACTIVE</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="#" data-status="return">RETURN</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="#" data-status="expired">EXPIRED</a>
             </li>
             <li class="nav-item">
@@ -135,13 +154,13 @@
                 <a class="nav-link" href="#" data-status="cancelled">CANCELLED</a>
             </li>
         </ul>
-        
 
- 
-    
-    
-    
-    
+
+
+
+
+
+
 
         <table class="table">
             <thead>
@@ -173,12 +192,13 @@
                             {{ order_data.order.status }}
                         </span>
                     </td>
-                    <td><a href="{% url 'seller_details_of_order' order_data.order.id request.user.username %}" class="btn btn-primary">View</a></td>
+                    <td><a href="{% url 'seller_details_of_order' order_data.order.id request.user.username %}"
+                            class="btn btn-primary">View</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        
+
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -205,9 +225,3 @@
 </body>
 
 </html>
-
-
-
-
-
- 

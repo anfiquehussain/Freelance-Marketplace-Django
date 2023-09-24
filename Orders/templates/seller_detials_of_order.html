@@ -1,15 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <style>
+        .col-md-3 {
+            margin-left: 5rem;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .timer-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        h6 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        #timer {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e74c3c;
+            /* Red color for timer text */
+        }
+
+        @media (max-width: 767px) {
+            .col-md-3 {
+                margin-left: 0;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    
-    <h1>Sellr d op r</h1>
-    {{user}}
-    {{order.service.id}}
-    
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-7 border">
+                <h1>Order #{{order.id}}</h1>
+
+                <p style="float: left;" class="me-2"><strong>BUYER</strong> : <a class="text-muted"
+                        style="text-decoration: none;cursor: pointer;"
+                        href="{% url 'view_profile_public' order.buyer %}"> @{{order.buyer.user}}</a></p>
+                <p class="text-muted ms-2 me-2" style="float: left;">View History </p>
+                <p> <a class="text-muted ms-2" style="text-decoration: none;"
+                        href="{% url 'view_service_profile' order.service.id %}">View Package</a></p>
+                <hr>
+                {% for order_requirement in order_requirements %}
+                <h4>Requirements:</h4>
+                <div id="read-more" style="display: none;">
+                    <p>Default question</p>
+                    <p>{{ order_requirement.description }}</p>
+                    <p>Answer to the question:</p>
+                    <p>{{ order_requirement.description }}</p>
+                </div>
+
+                <p class="text-primary" style="cursor: pointer;" onclick="myFunction()" id="myBtn">Show</p>
+                {% endfor %}
+
+                <table class="table">
+                    <thead>
+                        <tr>
+
+                            <th scope="col">Item</th>
+                            <th scope="col">Package name</th>
+                            <th scope="col">Due to</th>
+                            <th scope="col">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{order.service.titleOverview}}</td>
+                            <td>{{order.transaction.package_name}}</td>
+                            <td>{{order.delivery_date}}</td>
+                            <td>{{order.transaction.amount}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                {{ order.status }}
+
+
+
+
+
+
+                <div class="col">
+                    Chat Seller to Buyer <br>
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iste, temporibus? Fugiat sequi amet et
+                    voluptas expedita magnam, deleniti quae eveniet accusamus porro dolorum quibusdam quas officiis
+                    eligendi reiciendis earum! Veritatis!
+                </div>
+
+
+
+            </div>
+            <div class="col-md-3 border">
+                <div class="timer-container">
+                    <h6>Time left to deliver</h6>
+                    <div id="timer"></div>
+                    <form action="" method="POST" class="mt-5">
+                        {% if order.status == 'in_progress' %}
+                        <button type="submit" name="status_order" value="cancel" class="btn btn-danger">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        {% endif %}
+                        {% if order.status == 'pending' %}
+                        
+                        
+                        {% elif order.status == 'cancelled' %}
+                        <p class="alert alert-danger m-1">
+                            <i class="fas fa-exclamation-triangle"></i> You <strong>cancelled</strong> this order
+                        </p>
+                        {% elif order.status == 'expired' %}
+                        <p class="alert alert-danger m-1">
+                            <i class="fas fa-exclamation-triangle"></i> This order is <strong>expired</strong>
+                        </p>
+                        {% elif order.status == 'return' %}
+                        <p class="alert alert-secondary m-1">
+                            <i class="fas fa-exclamation-triangle"></i> This delivary is <strong>Return</strong>
+                        </p>
+                        {% elif order.status == 'delivered' %}
+                        <p class="alert alert-primary m-1">
+                            <i class="fas fa-check-circle"></i> This order is <strong>delivered</strong>
+                        </p>
+                        {% elif order.status == 'completed' %}
+                        <p class="alert alert-success m-1">
+                            <i class="fas fa-check-circle"></i> This order is <strong>completed</strong>
+                        </p>
+                        {% elif order.status != 'expired' and order.status != 'cancelled' and order.status != 'completed' and order.status != 'delivered' and order.status != 'in_progress' and order.status != 'return' %}
+                        <button type="submit" name="status_order" value="accept" class="btn btn-success">
+                            <i class="fas fa-check"></i> Accept
+                        </button>
+                        <button type="submit" name="status_order" value="cancel" class="btn btn-danger">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        {% endif %}
+                    </form>
+                    {% if order.status == 'in_progress' %}
+                    <button type="button" class="btn btn-primary mt-5" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                        Upload Work
+                    </button>
+                    {% elif order.status == 'return' %}
+
+                    <button type="button" class="btn btn-primary mt-5" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                        Upload Work
+                    </button>
+
+                    {% elif order.status == 'pending' %}
+
+                    {% elif order.status == 'cancelled' %}
+
+                    {% elif order.status == 'expired' %}
+
+                    {% elif order.status == 'delivered' %}
+
+                    {% elif order.status == 'completed' %}
+
+                    {% endif %}
+                    {{order.status}}
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+
+                                        <div class="form-floating">
+
+                                            <textarea class="form-control" name="delivery_notes"
+                                                placeholder="Leave a comment here" id="floatingTextarea2"
+                                                style="height: 100px">{{ form.delivery_notes.value }}</textarea>
+                                            <label for="floatingTextarea2">Comments</label>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="formFileSm" class="form-label">Small file input example</label>
+                                            <input name="delivery_file" class="form-control form-control-sm"
+                                                id="formFileSm" type="file">
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Upload</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+        </div>
+
+        <script>
+            function myFunction() {
+                var readmore = document.getElementById("read-more");
+                var btnText = document.getElementById("myBtn");
+                if (readmore.style.display === "none") {
+                    readmore.style.display = "inline"
+                    btnText.innerHTML = "Hide";
+                } else {
+                    readmore.style.display = "none";
+                    btnText.innerHTML = "Show";
+
+                }
+
+            }
+        </script>
+        <script>
+            var time1 = '{{ order.delivery_date }}';
+            var countdownDate = new Date(time1).getTime();
+            var x = setInterval(function () {
+                var now = new Date().getTime();
+                var timeRemaining = countdownDate - now;
+                var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+                var timerElement = document.getElementById("timer");
+                timerElement.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+                if (timeRemaining < 0) {
+                    clearInterval(x);
+                    timerElement.innerHTML = "Order expired!";
+                }
+            }, 1000); 
+        </script>
+
+
 </body>
+
 </html>

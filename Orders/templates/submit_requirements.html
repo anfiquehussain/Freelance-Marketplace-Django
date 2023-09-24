@@ -4,36 +4,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+                body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+    </style>
 </head>
 
 <body>
     <h1>Order management</h1>
 
- 
 
 
     {% for order in orders %}
     {{order.id}}
-    <a href="{% url 'submit_requirements' order.id request.user.username %}">submit Requirements</a>
 
-    
+    {{existing_requirement_check}}
+    {% if existing_requirement_check == False %}
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% for form in forms %}
         <p>About the work you want (provide the Requirements)</p>
         {{ form.description }} <br>
-        {{ service_provide_question_1 }}  <br>
+        {{ service_provide_question_1 }} <br>
         {{ form.answer_1 }}
         <p>Provide the example images{{ form.example_image.label_tag }}</p>
         {{ form.example_image }}
         {% endfor %}
         <button type="submit">Submit</button>
     </form>
-    
+    {% else %}
+    <h1>You alredy submitted</h1>
+    {% endif %}
+
     {% endfor %}
-    
-    
-    <h1>hallo </h1>
 </body>
 
 </html>

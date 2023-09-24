@@ -51,6 +51,7 @@ def payments(request, overview_id,username):
     service_fee = 0
     actual_price_fee_added = 0
 
+
     if additional_data2 == '1':
         for bp in basic_packages:
             # data = { "amount": bp.Basic_price * 100, "currency": "INR", "receipt": "order_rcptid_11" }
@@ -62,7 +63,6 @@ def payments(request, overview_id,username):
             price = (bp.Basic_price + seller_fee) * 100
             actual_price = bp.Basic_price
             actual_price_fee_added = bp.Basic_price + seller_fee
-
 
             
             payment_intent = stripe.PaymentIntent.create(
