@@ -81,8 +81,26 @@ def Details_of_the_order(request,order_id,username):
     order = get_object_or_404(Order, id=order_id)
     delivary_item = DeliveryDetails.objects.filter(order=order)
 
-    for item in delivary_item:
-        print(item.delivery_file)
+    if(order.status=='delivered'):
+        if request.method == 'POST':
+            ok = request.POST.get('ok')
+            no = request.POST.get('no')
+            if(ok=='yes,appove the delivary'):
+                order.status = "completed"
+                order.save()
+            elif(no=='i am not ready of yet'):
+                order.status = "return"
+                order.save()
+            
+    
+    current_user = request.user
+    if username == current_user.username and order.buyer.id == current_user.id:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
+
+    # for item in delivary_item:
+    #     print(item.delivery_file)
 
     order_requirements_check = 0
     
@@ -91,30 +109,23 @@ def Details_of_the_order(request,order_id,username):
         
         if(rq.order.id == order.id):
             order_requirements_check = rq.order.id
-            break;
+            break
         else:
             order_requirements_check = 0
     
     
     if(order_requirements_check):
         order_requirements = Order_Requirements.objects.filter(order=order_requirements_check)
-        for orq in order_requirements:
-            print(orq.id)
+        # for orq in order_requirements:
+        #     print(orq.id)
     else:
         order_requirements = 'bad'
-        print(order_requirements)
-    
-    print(order_requirements_check)
+        # print(order_requirements)
 
-    current_user = request.user
-    if username == current_user.username and order.buyer.id == user.id:
-        pass
-    else:
-        return HttpResponseForbidden("Access Denied")
+
     orders_services_transactions = []
     
     for order in orders:
-        print("not1")
         service = Overview.objects.get(pk=order.service_id)
         transactions = Transaction.objects.filter(overview=order.service_id)
         
@@ -140,7 +151,7 @@ from payments.models import Transaction
 
 def List_all_orders(request, username):
     user = get_object_or_404(User, username=username)
-    orders = Order.objects.filter(buyer__user=user)
+    orders = Order.objects.filter(buyer=user)
 
 
     current_user = request.user
@@ -186,9 +197,11 @@ def Seller_List_all_orders(request, username):
         current_datetime = timezone.now()
         current_date = current_datetime.date()
 
-        if order.delivery_date < current_date:
-            order.status = "expired"
-            order.save()
+        if(order.status == "pending" or order.status == "in_progress"):
+            
+            if order.delivery_date < current_date:
+                order.status = "expired"
+                order.save()
          
 
         order_info.append({
@@ -221,7 +234,8 @@ def Seller_Details_of_the_order(request, order_id, username):
         return HttpResponseForbidden("Access Denied")
 
     existing_delivery_details = DeliveryDetails.objects.filter(order=order).first()
-
+    order_requirements = Order_Requirements.objects.filter(order=order)
+    
     if request.method == 'POST':
         form = DeliveryDetailsForm(request.POST, request.FILES, instance=existing_delivery_details)
         if form.is_valid():
@@ -252,6 +266,7 @@ def Seller_Details_of_the_order(request, order_id, username):
         'user': user,
         'order': order,
         'form': form,
+        'order_requirements':order_requirements
     }
 
     return render(request, 'seller_detials_of_order.html', context)

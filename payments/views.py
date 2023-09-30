@@ -1,3 +1,4 @@
+from audioop import reverse
 from django.shortcuts import render, get_object_or_404
 from Services.models import Overview, BasicPackage, StandardPackage, PremiumPackage
 from Home.models import UserProfile
@@ -252,7 +253,7 @@ def success(request, transaction_id,username):
             seller_user = transaction.receiver 
             
             order = Order.objects.create(
-                buyer=request.user.userprofile,
+                buyer=current_user,
                 service=overview_id,
                 status='pending',
                 transaction=transaction,
@@ -298,3 +299,59 @@ def success(request, transaction_id,username):
     return render(request, 'package_selection.html',context)
 
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
+from django.contrib import messages
+from .models import SellerAccountBalance
+import stripe
+from django.conf import settings
+
+stripe.api_key = settings.STRIPE_SECRET_KEY  # Use your actual Stripe secret key
+
+@login_required
+def withdrawal(request, username):
+    user = get_object_or_404(User, username=username)
+
+    try:
+        seller_account, created = SellerAccountBalance.objects.get_or_create(user=user)
+
+        # Check if the account is not created or stripe_account_id is not set
+        if created or not seller_account.stripe_account_id:
+            # Check if your Stripe account is enabled for Connect
+            # If not, handle this error accordingly
+            if not stripe.Account.create(type="custom").get('capabilities', {}).get('card_payments', 'inactive') == 'active':
+                messages.error(request, 'Your Stripe account is not enabled for Connect.')
+                return redirect('error_page')  # Redirect to an error page
+
+            account = stripe.Account.create(type="custom", country="US",  # Use your appropriate country code
+                                            email=user.email)  # Use user's email or any unique identifier
+            seller_account.stripe_account_id = account['id']
+            seller_account.save()
+
+            # Create an AccountLink for user onboarding
+            account_link = stripe.AccountLink.create(
+                account=account.id,
+                refresh_url=request.build_absolute_uri(reverse('IntroHome')),
+                return_url=request.build_absolute_uri(reverse('IntroHome')),
+                type="account_onboarding",
+            )
+
+            messages.info(request, 'Please complete your account setup to enable payments and payouts.')
+            return redirect(account_link.url)
+
+        else:
+            messages.info(request, 'You already have a Stripe Connect account.')
+            return render(request,"withdrawal.html")
+
+    except stripe.error.StripeError as e:
+        messages.error(request, f'Error: {e}')
+        print(e)
+        return redirect('error_page')
+
+
+
+
+
+
+    

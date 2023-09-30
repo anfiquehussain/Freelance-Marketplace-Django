@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Order(models.Model):
-    buyer = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    buyer = models.ForeignKey(User,on_delete=models.CASCADE,related_name='buyer_orders')
     seller = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     service = models.ForeignKey(Overview, on_delete=models.CASCADE)
     transaction = models.ForeignKey(Transaction, on_delete=models.SET_NULL, blank=True, null=True)

@@ -5,4 +5,5 @@ urlpatterns = [
     
     path('overview/<int:overview_id>/<str:username>/', views.payments, name='payments'),
     path('success/<int:transaction_id>/<str:username>/', views.success, name='success'),
+    path('withdrawal/<str:username>/', views.withdrawal, name='withdrawal'),
 ]

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdrawal Form</title>
+</head>
+<body>
+    <h1>Withdrawal Form</h1>
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form method="post" action="{% url 'withdrawal' user.username %}">
+        {% csrf_token %}
+        <!-- Add your form fields here -->
+        <label for="account_number">Account Number:</label>
+        <input type="text" id="account_number" name="account_number" required><br>
+
+        <label for="routing_number">Routing Number:</label>
+        <input type="text" id="routing_number" name="routing_number" required><br>
+
+        <!-- Add more form fields as necessary (e.g., account holder name, currency, etc.) -->
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

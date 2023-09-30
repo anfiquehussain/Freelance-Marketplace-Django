@@ -4,268 +4,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>List of Orders</title>
+    <title>Document</title>
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
     <style>
-        .order-card {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            display: flex;
-            /* Make the card a flex container */
-            justify-content: space-between;
-            /* Align items horizontally */
-            align-items: center;
-            /* Center items vertically */
-        }
-
-        .order-card .order-details {
-            flex: 1;
-            /* Allow the details to grow and take available space */
-            display: flex;
-            /* Make the details a flex container */
-            flex-direction: column;
-            /* Stack details vertically */
-        }
-
-        .order-card .order-details h5 {
-            margin: 0;
-        }
-
-        .order-card .order-status {
-            font-weight: bold;
-        }
-
-        .order-status.pending {
-            color: #f39c12;
-        }
-
-        .order-status.completed {
-            color: #27ae60;
-        }
-
-        .order-type.basic_package {
-            color: #27ae60;
-        }
-
-        .order-type.standard_package {
-            color: #3498db;
-        }
-
-        .order-type.premium_package {
-            color: #e74c3c;
+        .col-md-3 {
+            margin-left: 5rem;
         }
 
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
         }
+
+        .timer-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        h6 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        #timer {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e74c3c;
+            /* Red color for timer text */
+        }
     </style>
 </head>
 
 <body>
     <div class="container mt-5">
-        <h1 class="mb-4">Orders for {{ user.username }}</h1>
         <div class="row">
             {% for order, service, transactions in orders_services_transactions %}
-            <div class="col-md-12 mb-4">
-                <div class="order-card">
-                    <div class="order-details">
-                        <h5>{{ service.titleOverview }}</h5>
-                        <div class="order-status {{ order.status }}">
-                            {{ order.status }}
-                            {{ order.id }}
-                        </div>
-                        <p>Ordered Date: {{ order.created_at }}</p>
-                        <p>Delivary Date: {{ order.delivery_date }}</p>
+            <div class="col border">
+                <h1>Order #{{ order.id }}</h1>
+                <p>Ordered Date: {{ order.created_at }}</p>
+                <p>Delivary Date: {{ order.delivery_date }}</p>
+                <hr>
+                {% for order_requirement in order_requirements %}
+                <h4>Requirements:</h4>
+                <div id="read-more">
+                    <p>Default question</p>
+                    <p>{{ order_requirement.description }}</p>
+                    <p>Answer to the question:</p>
+                    <p>{{ order_requirement.description }}</p>
+                </div>
 
-                        {% for transaction in transactions %}
-                        {% if transaction.id == order.transaction_id %}
-                        <p>Transaction Amount: {{ transaction.amount }}</p>
-                        <p class="order-type {{ transaction.package_name }}">Package: {{transaction.package_name}}</p>
+                <p class="text-primary" style="cursor: pointer;" onclick="myFunction()" id="myBtn">Hide</p>
+                {% endfor %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Item</th>
+                            <th scope="col">Package name</th>
+                            <th scope="col">Due to</th>
+                            <th scope="col">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{order.service.titleOverview}}</td>
+                            <td>{{order.transaction.package_name}}</td>
+                            <td>{{order.delivery_date}}</td>
+                            <td>{{order.transaction.amount}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col ms-5 border">
+                <div class="timer-container">
+                    {% if order.status == "in_progress" or order.status == "pending" %}
+                    <h6>Time left to deliver</h6>
+                    <div id="timer"></div>
 
-                        {% if order_requirements_check %}
-                        {% for rq in order_requirements %}
-                        <p>Explation:{{rq.description}}</p>
-                        <p>Answer 1:{{rq.answer_1}}</p>
-                        {% endfor %}
+                    {% endif %}
+                    <form action="" method="POST" class="mt-5">
+                        {% if order.status == 'in_progress' %}
+                        <!-- <button type="submit" name="status_order" value="cancel" class="btn btn-danger">
+                            <i class="fas fa-times"></i> Cancel
+                        </button> -->
+                        {% endif %}
+                        {% if order.status == 'pending' %}
+                        <button type="submit" name="status_order" value="cancel" class="btn btn-danger">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+
+                        {% elif order.status == 'cancelled' %}
+                        <p class="alert alert-danger m-1">
+                            <i class="fas fa-exclamation-triangle"></i> You <strong>cancelled</strong> this order
+                        </p>
+                        {% elif order.status == 'expired' %}
+                        <p class="alert alert-danger m-1">
+                            <i class="fas fa-exclamation-triangle"></i> This order is <strong>expired</strong>
+                        </p>
+                        {% elif order.status == 'return' %}
+                        <p class="alert alert-secondary m-1">
+                            <i class="fas fa-exclamation-triangle"></i> This delivary is <strong>Return</strong>
+                        </p>
+                        {% elif order.status == 'delivered' %}
+                        <p class="alert alert-primary m-1">
+                            <i class="fas fa-check-circle"></i> This order is <strong>delivered</strong>
+                        </p>
+                        {% elif order.status == 'completed' %}
+                        <p class="alert alert-success m-1">
+                            <i class="fas fa-check-circle"></i> This order is <strong>completed</strong>
+                        </p>
+                        {% endif %}
+                    </form>
+
+                    {% for item in delivary_item %}
+                    <div class="delivery-item">
+                        <p>Delivery Notes: {{ item.delivery_notes }}</p>
+                        <p>Order Delivered Date: {{ item.order_delivered_date }}</p>
+                        {% if item.delivery_file %}
+
+                        <a href="{{ item.delivery_file.url }}" class="btn btn-primary" download>Download ZIP</a>
+                        {% if order.status == "completed" %}
+
+                        {% elif order.status == "return" %}
+
+                        {% elif order.status == "example" %}
+
                         {% else %}
-                        <h5>plase submit your rquiremnets</h5>
-                        <a id="openButton" href="{% url 'submit_requirements' transaction.id request.user.username %}"
-                            class="btn btn-primary btn-lg">SUBMIT REQUIREMENTS</a>
-                        {% endif %}
-                        {% endif %}
-                        {% endfor %}
-                        <br>
-                        <br>
-                        <br>
-                        {% for item in delivary_item %}
-                        <div class="delivery-item">
-                            <p>Delivery Status: {{ item.delivery_status }}</p>
-                            <p>Delivery Notes: {{ item.delivery_notes }}</p>
-                            <p>Order Delivered Date: {{ item.order_delivered_date }}</p>
-                            {% if item.delivery_file %}
-                            <a href="{{ item.delivery_file.url }}" class="btn btn-primary" download>Download ZIP</a>
-                            {% else %}
-                            <p>No ZIP file available for download.</p>
+                        
+                        <form class="mt-5" action="" method="post">
+                            <input class="btn btn-success p-2 rounded" type="submit" name="ok"
+                                value="yes,appove the delivary">
+
+                            <input class="btn btn-success p-2 rounded" type="submit" name="no"
+                                value="i am not ready of yet">
+                            </form>
                             {% endif %}
-                        </div>
-                        {% endfor %}
 
 
-
+                            {% else %}
+                            <p>No order available for download.</p>
+                            {% endif %}
                     </div>
+                    {% endfor %}
                 </div>
             </div>
-            {% empty %}
-            <div class="col">
-                <h3>No orders found for this user.</h3>
-            </div>
-            {% endfor %}
+
         </div>
+
     </div>
+    <script>
+        function myFunction() {
+            var readmore = document.getElementById("read-more");
+            var btnText = document.getElementById("myBtn");
+            if (readmore.style.display === "none") {
+                readmore.style.display = "inline"
+                btnText.innerHTML = "Hide";
+            } else {
+                readmore.style.display = "none";
+                btnText.innerHTML = "Show";
+
+            }
+
+        }
+    </script>
+    <script>
+        var time1 = '{{ order.delivery_date }}';
+        var countdownDate = new Date(time1).getTime();
+        var x = setInterval(function () {
+            var now = new Date().getTime();
+            var timeRemaining = countdownDate - now;
+            var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+            var timerElement = document.getElementById("timer");
+            timerElement.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+            if (timeRemaining < 0) {
+                clearInterval(x);
+                timerElement.innerHTML = "Order expired!";
+            }
+        }, 1000); 
+    </script>
+    {% endfor %}
 </body>
 
 </html>
 
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>Order Details</title>
-    <style>
-        body,
-        h1,
-        h2,
-        h3,
-        p {
-            margin: 0;
-            padding: 0;
-        }
 
-        header {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 1em 0;
-        }
-
-        main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .order-details {
-            flex: 2;
-            margin-right: 20px;
-        }
-
-        .order-overview {
-            background-color: #f7f7f7;
-            padding: 20px;
-            border: 1px solid #ccc;
-        }
-
-        .order-requirements {
-            background-color: #f7f7f7;
-            padding: 20px;
-            border: 1px solid #ccc;
-            margin-top: 20px;
-        }
-
-        .messages {
-            background-color: #f7f7f7;
-            padding: 20px;
-            border: 1px solid #ccc;
-            margin-top: 20px;
-        }
-
-        .order-details-sidebar {
-            flex: 1;
-            background-color: #f7f7f7;
-            padding: 20px;
-            border: 1px solid #ccc;
-        }
-
-        .order-status {
-            font-size: 24px;
-            color: #ff9900;
-        }
-
-        .delivery-time,
-        .order-price {
-            font-weight: bold;
-        }
-
-        .order-extras {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .order-extras li::before {
-            content: "•";
-            margin-right: 5px;
-        }
-    </style>
-</head>
-
-<body>
-    <header>
-        <h1>Order Details</h1>
-    </header>
-    <main>
-        <section class="order-details">
-            <!-- Order Overview -->
-            <div class="order-overview">
-                <div class="order-status">In Progress</div>
-                <h2>Order #12345</h2>
-                <p>Order Date: September 18, 2023</p>
-                <p>Due Date: September 25, 2023</p>
-            </div>
-
-            <!-- Order Requirements -->
-            <div class="order-requirements">
-                <h2>Order Requirements</h2>
-                <p>Design a logo for a company. Include company name and tagline. Use a modern and minimalist style.</p>
-            </div>
-
-            <!-- Messages -->
-            <div class="messages">
-                <h2>Messages</h2>
-                <div class="message">
-                    <p><strong>Buyer:</strong> Hi, can you provide a sample of your previous logo designs?</p>
-                </div>
-                <div class="message">
-                    <p><strong>Seller:</strong> Sure, here are some samples of my work...</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Delivery Time, Order Files, Order Extras, and Order Actions -->
-        <aside class="order-details-sidebar">
-            <h2>Order Details</h2>
-            <p class="delivery-time">Delivery Time: 7 days</p>
-            <p class="order-price">Price: $50.00</p>
-            <h3>Extras</h3>
-            <ul class="order-extras">
-                <li>Additional Revision: $10.00</li>
-                <li>Source File: $20.00</li>
-            </ul>
-            <button class="deliver-button">Deliver Work</button>
-        </aside>
-    </main>
-    <footer>
-    </footer>
-</body>
-
-</html>
+<

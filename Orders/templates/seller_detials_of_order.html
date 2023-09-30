@@ -49,30 +49,28 @@
         <div class="row">
             <div class="col-md-7 border">
                 <h1>Order #{{order.id}}</h1>
-
                 <p style="float: left;" class="me-2"><strong>BUYER</strong> : <a class="text-muted"
                         style="text-decoration: none;cursor: pointer;"
-                        href="{% url 'view_profile_public' order.buyer %}"> @{{order.buyer.user}}</a></p>
+                        href="{% url 'view_profile_public' order.buyer %}"> @{{order.buyer}}</a></p>
                 <p class="text-muted ms-2 me-2" style="float: left;">View History </p>
                 <p> <a class="text-muted ms-2" style="text-decoration: none;"
                         href="{% url 'view_service_profile' order.service.id %}">View Package</a></p>
                 <hr>
                 {% for order_requirement in order_requirements %}
                 <h4>Requirements:</h4>
-                <div id="read-more" style="display: none;">
+                <div id="read-more">
                     <p>Default question</p>
                     <p>{{ order_requirement.description }}</p>
                     <p>Answer to the question:</p>
                     <p>{{ order_requirement.description }}</p>
                 </div>
 
-                <p class="text-primary" style="cursor: pointer;" onclick="myFunction()" id="myBtn">Show</p>
+                <p class="text-primary" style="cursor: pointer;" onclick="myFunction()" id="myBtn">Hide</p>
                 {% endfor %}
 
                 <table class="table">
                     <thead>
                         <tr>
-
                             <th scope="col">Item</th>
                             <th scope="col">Package name</th>
                             <th scope="col">Due to</th>
@@ -102,14 +100,16 @@
                     voluptas expedita magnam, deleniti quae eveniet accusamus porro dolorum quibusdam quas officiis
                     eligendi reiciendis earum! Veritatis!
                 </div>
-
+                {{order.status}}
 
 
             </div>
             <div class="col-md-3 border">
                 <div class="timer-container">
+                    {% if order.status == "in_progress" or order.status == "pending" %}
                     <h6>Time left to deliver</h6>
                     <div id="timer"></div>
+                    {% endif %}
                     <form action="" method="POST" class="mt-5">
                         {% if order.status == 'in_progress' %}
                         <button type="submit" name="status_order" value="cancel" class="btn btn-danger">
@@ -117,8 +117,12 @@
                         </button>
                         {% endif %}
                         {% if order.status == 'pending' %}
-                        
-                        
+                        <button type="submit" name="status_order" value="accept" class="btn btn-success">
+                            <i class="fas fa-check"></i> Accept
+                        </button>
+                        <button type="submit" name="status_order" value="cancel" class="btn btn-danger">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
                         {% elif order.status == 'cancelled' %}
                         <p class="alert alert-danger m-1">
                             <i class="fas fa-exclamation-triangle"></i> You <strong>cancelled</strong> this order
@@ -139,15 +143,9 @@
                         <p class="alert alert-success m-1">
                             <i class="fas fa-check-circle"></i> This order is <strong>completed</strong>
                         </p>
-                        {% elif order.status != 'expired' and order.status != 'cancelled' and order.status != 'completed' and order.status != 'delivered' and order.status != 'in_progress' and order.status != 'return' %}
-                        <button type="submit" name="status_order" value="accept" class="btn btn-success">
-                            <i class="fas fa-check"></i> Accept
-                        </button>
-                        <button type="submit" name="status_order" value="cancel" class="btn btn-danger">
-                            <i class="fas fa-times"></i> Cancel
-                        </button>
                         {% endif %}
                     </form>
+
                     {% if order.status == 'in_progress' %}
                     <button type="button" class="btn btn-primary mt-5" data-bs-toggle="modal"
                         data-bs-target="#exampleModal">
@@ -171,7 +169,6 @@
                     {% elif order.status == 'completed' %}
 
                     {% endif %}
-                    {{order.status}}
                     <!-- Modal -->
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                         aria-hidden="true">
@@ -236,6 +233,30 @@
         <script>
             var time1 = '{{ order.delivery_date }}';
             var countdownDate = new Date(time1).getTime();
+            countdownDate += 24 * 60 * 60 * 1000;
+            var x = setInterval(function () {
+                var now = new Date().getTime();
+                var timeRemaining = countdownDate - now;
+                var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                
+                var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+                var timerElement = document.getElementById("timer");
+                timerElement.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+
+                if (timeRemaining < 0) {
+                    clearInterval(x);
+                    timerElement.innerHTML = "Order expired!";
+                }
+
+
+            }, 1000); 
+        </script>
+        {{ order.delivery_date }}
+        <!-- <script>
+            var time1 = '{{ order.delivery_date }}';
+            var countdownDate = new Date(time1).getTime();
             var x = setInterval(function () {
                 var now = new Date().getTime();
                 var timeRemaining = countdownDate - now;
@@ -244,13 +265,26 @@
                 var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
                 var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
                 var timerElement = document.getElementById("timer");
-                timerElement.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
-                if (timeRemaining < 0) {
+                
+                if (timeRemaining <= 0) {
                     clearInterval(x);
                     timerElement.innerHTML = "Order expired!";
+                } else {
+                    timerElement.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+                }
+                
+                // Add one day to the countdownDate when expiration condition is met
+                if (timeRemaining <= 0) {
+                    countdownDate += 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+                    console.log(countdownDate)
                 }
             }, 1000); 
-        </script>
+        </script> -->
+
+
+
+
+
 
 
 </body>
