@@ -122,8 +122,10 @@
                     <div class="delivery-item">
                         <p>Delivery Notes: {{ item.delivery_notes }}</p>
                         <p>Order Delivered Date: {{ item.order_delivered_date }}</p>
+                        <p><a href="{% url 'userchat' order.id user.username %}">chat</a></p>
                         {% if item.delivery_file %}
 
+        
                         <a href="{{ item.delivery_file.url }}" class="btn btn-primary" download>Download ZIP</a>
                         {% if order.status == "completed" %}
 
@@ -141,8 +143,6 @@
                                 value="i am not ready of yet">
                             </form>
                             {% endif %}
-
-
                             {% else %}
                             <p>No order available for download.</p>
                             {% endif %}

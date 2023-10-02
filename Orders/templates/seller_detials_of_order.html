@@ -106,10 +106,12 @@
             </div>
             <div class="col-md-3 border">
                 <div class="timer-container">
+                    
                     {% if order.status == "in_progress" or order.status == "pending" %}
                     <h6>Time left to deliver</h6>
                     <div id="timer"></div>
                     {% endif %}
+                    <p><a href="{% url 'userchat' order.id user.username %}">chat</a></p>
                     <form action="" method="POST" class="mt-5">
                         {% if order.status == 'in_progress' %}
                         <button type="submit" name="status_order" value="cancel" class="btn btn-danger">
@@ -169,7 +171,7 @@
                     {% elif order.status == 'completed' %}
 
                     {% endif %}
-                    <!-- Modal -->
+
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog">
@@ -178,7 +180,9 @@
                                     <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
+
                                 </div>
+                               
                                 <div class="modal-body">
                                     <form method="post" enctype="multipart/form-data">
                                         {% csrf_token %}
@@ -200,7 +204,11 @@
                                         <div class="modal-footer">
                                             <button type="submit" class="btn btn-primary">Upload</button>
                                         </div>
+
+                                        
+                                        
                                     </form>
+                                    
                                 </div>
 
 

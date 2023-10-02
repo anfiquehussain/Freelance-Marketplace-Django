@@ -20,3 +20,6 @@ class SellerAccountBalance(models.Model):
     balance_amount = models.DecimalField(max_digits=10, decimal_places=2)
     stripe_account_id = models.CharField(max_length=255, blank=True, null=True)
     currency = models.CharField(max_length=3, default='INR')
+
+
+

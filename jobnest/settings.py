@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'payments.apps.PaymentsConfig',
     'Orders',
     'UserDashboard',
+    'Chating',
 ]
 
 MIDDLEWARE = [
@@ -110,11 +111,14 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+
+TIME_ZONE = 'Asia/Kolkata'
+
 
 USE_I18N = True
 
 USE_TZ = True
+
 
 LOGIN_URL = '/accounts/login/'
 LOGOUT_REDIRECT_URL = '/'
@@ -139,6 +143,11 @@ STRIPE_SECRET_KEY = 'sk_test_51Nl4VZSBLWrgjYEWhH4tEplRz5T2A22c7XGtwT3bvO5e7LHmBC
 
 REZORPAY_PUBLISHABLE_KEY = 'rzp_test_DP6TSArwV4RC1t'
 REZORPAY_SECRET_KEY = '38ybUxXRsMlSSY0r2UpoaPzJ'
+
+app_id = "1680384"
+key = "6efa8427afcd4a75ea98"
+secret = "4112768f1921aa2a8667"
+cluster = "mt1"
 
 
 

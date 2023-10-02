@@ -299,55 +299,94 @@ def success(request, transaction_id,username):
     return render(request, 'package_selection.html',context)
 
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse
-from django.contrib import messages
-from .models import SellerAccountBalance
-import stripe
-from django.conf import settings
 
-stripe.api_key = settings.STRIPE_SECRET_KEY  # Use your actual Stripe secret key
+from django.contrib import messages 
+
+import stripe
+from django.shortcuts import render, get_object_or_404
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+
+# views.py
+from django.shortcuts import render, get_object_or_404
+from django.contrib import messages
+import stripe
+
+# Set the Stripe API key from settings
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 @login_required
 def withdrawal(request, username):
     user = get_object_or_404(User, username=username)
 
+    # bank_account_token = stripe.Token.create(
+    #     bank_account={
+    #         'country': 'IN',
+    #         'currency': 'inr',
+    #         'account_holder_name': 'Test User',
+    #         'account_holder_type': 'individual',
+    #         'routing_number': 'HDFC0000261',
+    #         'account_number': '000123456789',
+    #     },
+    # )
+
+    connected_account_id = 'acct_1Nl4VZSBLWrgjYEW'
+
     try:
-        seller_account, created = SellerAccountBalance.objects.get_or_create(user=user)
+        bank_account_token = stripe.Token.create(
+            bank_account={
+                'country': 'IN',
+                'currency': 'inr',
+                'account_holder_name': "test user",
+                'account_holder_type': "individual",
+                'routing_number': 'HDFC0000261',
+                'account_number': '000123456789',
+            },
+            stripe_account='acct_1Nl4VZSBLWrgjYEW',
+        )
 
-        # Check if the account is not created or stripe_account_id is not set
-        if created or not seller_account.stripe_account_id:
-            # Check if your Stripe account is enabled for Connect
-            # If not, handle this error accordingly
-            if not stripe.Account.create(type="custom").get('capabilities', {}).get('card_payments', 'inactive') == 'active':
-                messages.error(request, 'Your Stripe account is not enabled for Connect.')
-                return redirect('error_page')  # Redirect to an error page
+        # connected_account = stripe.Account.create(
+        #     type="express",
+        #     country="IN",
+        #     external_account=bank_account_token.id,
+        # )
+        transfer = stripe.Transfer.create(
+            amount=900,
+            currency='inr',
+            destination='acct_connected_account_id',
+        )
 
-            account = stripe.Account.create(type="custom", country="US",  # Use your appropriate country code
-                                            email=user.email)  # Use user's email or any unique identifier
-            seller_account.stripe_account_id = account['id']
-            seller_account.save()
 
-            # Create an AccountLink for user onboarding
-            account_link = stripe.AccountLink.create(
-                account=account.id,
-                refresh_url=request.build_absolute_uri(reverse('IntroHome')),
-                return_url=request.build_absolute_uri(reverse('IntroHome')),
-                type="account_onboarding",
-            )
 
-            messages.info(request, 'Please complete your account setup to enable payments and payouts.')
-            return redirect(account_link.url)
 
+
+
+
+# Get the ID of the connected account
+        # connected_account_id = connected_account.id
+        # print(connected_account)
+
+        # payout = stripe.Payout.create(
+        #     amount=int(100 * 100),
+        #     currency='inr',
+        #     method='express',
+        #     destination=bank_account_token.id,
+        # )
+
+        
+        if payout_to_bank.status == 'paid':
+            print(f"Payout to bank successful. Payout ID: {payout_to_bank.id}")
         else:
-            messages.info(request, 'You already have a Stripe Connect account.')
-            return render(request,"withdrawal.html")
+            print(f"Payout to bank failed. Error: {payout_to_bank.failure_message}")
 
     except stripe.error.StripeError as e:
-        messages.error(request, f'Error: {e}')
-        print(e)
-        return redirect('error_page')
+        messages.error(request, f"Stripe Error: {e}")
+        print("Stripe Error:", e)
+
+    return render(request, "withdrawal.html")
+
+    
+
 
 
 

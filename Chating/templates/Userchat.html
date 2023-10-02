@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        #messageContainer {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #f8f8f8;
+            overflow-y: auto;
+            height: 400px;
+        }
+
+        .message {
+            background-color: #e0e0e0;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        /* Form styling */
+        #myForm {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 90%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #submitButton {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .message {
+            max-width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            word-wrap: break-word;
+        }
+
+        .sender {
+            background-color: #fc6d6d;
+            /* Change this to your desired sender message color */
+            color: white;
+            /* Change this to your desired text color for sender messages */
+            align-self: flex-start;
+            text-align: right;
+        }
+
+        .receiver {
+            background-color: #f0f0f0;
+            color: black;
+            align-self: flex-end;
+            text-align: left;
+        }
+
+        .username {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.5em;
+        }
+    </style>
+
+    </style>
+</head>
+
+<body>
+
+
+
+    
+
+    <div id="messageContainer">
+        <p>Loading...</p>
+    </div>
+    <form id="myForm" action="" method="post" enctype="multipart/form-data">
+        <div>
+            <p>Sent to : {{ receiver }}</p>
+        </div>
+        <div>
+            <input type="text" style="float: left;" name="{{ form.message.name }}" id="{{ form.message.id_for_label }}">
+
+        </div>
+        <div>
+            <label for="{{ form.image.id_for_label }}">Image:</label>
+            <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}">
+        </div>
+
+        <div>
+            <label for="{{ form.video.id_for_label }}">Video:</label>
+            <input type="file" name="{{ form.video.name }}" id="{{ form.video.id_for_label }}">
+        </div>
+
+        <input type="submit" id="submitButton" value="Sent">
+
+    </form>
+
+
+    <script>
+        $(document).ready(function () {
+            function scrollToBottom() {
+                var messageContainer = document.getElementById("messageContainer");
+                messageContainer.scrollTop = messageContainer.scrollHeight;
+            }
+
+            function addMessage(messageText, sender) {
+                var messageList = document.getElementById("messageContainer");
+                var newMessage = document.createElement("div");
+                newMessage.className = "message " + sender;
+                newMessage.textContent = messageText;
+                messageList.appendChild(newMessage);
+                scrollToBottom();
+            }
+
+            function fetchMessages() {
+                $.ajax({
+                    type: "GET",
+                    url: "{% url 'get_messages' order.id %}",
+                    success: function (response) {
+                        $("#messageContainer").html(response.messages);
+                        scrollToBottom();
+                    },
+                    error: function (error) {
+                        console.error("Error:", error);
+                    }
+                });
+            }
+
+            $("#myForm").submit(function (event) {
+                event.preventDefault();
+                var formData = new FormData($("#myForm")[0]);
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'userchat' order.id user %}",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        $("#myForm")[0].reset();
+
+                        addMessage(response.message, 'sender');
+                    },
+                    error: function (error) {
+                        console.error("Error:", error);
+                        $("#messageContainer").html("Error sending message.");
+                    }
+                });
+            });
+
+            fetchMessages();
+            setInterval(fetchMessages, 5000);
+        });
+    </script>
+
+</body>
+
+</html>
