@@ -120,9 +120,9 @@
 
                     {% for item in delivary_item %}
                     <div class="delivery-item">
+                        <p><a href="{% url 'userchat' order.id user.username %}">chat</a></p>
                         <p>Delivery Notes: {{ item.delivery_notes }}</p>
                         <p>Order Delivered Date: {{ item.order_delivered_date }}</p>
-                        <p><a href="{% url 'userchat' order.id user.username %}">chat</a></p>
                         {% if item.delivery_file %}
 
         

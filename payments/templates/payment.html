@@ -14,6 +14,7 @@
             height: fit-content;
             padding: 1rm;
         }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
@@ -25,7 +26,7 @@
         }
     </style>
 
-<script src="https://js.stripe.com/v3/"></script>
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 
 <body>
@@ -86,94 +87,63 @@
                                             Payment Information
                                         </div>
                                         <div class="card-body">
-                                            
-                                            <form action="{% url 'success' transaction_id request.user.username %}" id="payment-form" method="POST">
-                                                {% csrf_token %}
-                                                
-                                                <div id="card-element">
-                                                    <!-- A Stripe Element will be inserted here. -->
-                                                </div>
-                                                
-                                                <!-- Used to display form errors. -->
-                                                <div id="card-errors" role="alert"></div>
-                                                <input type="hidden" name="stripeToken" id="stripeToken" value="">
-                                                
-                                                <button id="submit-button" type="submit">Submit Payment</button>
-                                            </form>
+
+
                                         </div>
-                                    
+
+
+
+                                        <form action="{% url 'success' transaction_id request.user.username %}" method="POST" id="payment-form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="success_url" value="{% url 'success' transaction_id request.user.username %}">
+
+                                            <button id="rzp-button1">Pay with Razorpay</button>
+                                        </form>
+                                        <script src="https://checkout.razorpay.com/v2/checkout.js"></script>
                                         <script>
-                                            // Initialize Stripe with your publishable key
-                                            var stripe = Stripe('{{ key }}');
-                                            
-                                            var elements = stripe.elements();
-                                            var cardElement = elements.create('card');
-                                            
-                                            cardElement.mount('#card-element');
-                                            
-                                            var form = document.getElementById('payment-form');
-                                            var errorElement = document.getElementById('card-errors');
-                                            
-                                            form.addEventListener('submit', function(event) {
-                                                event.preventDefault();
-                                                
-                                                stripe.createToken(cardElement).then(function(result) {
-                                                    if (result.error) {
-                                                        // Display error message to the customer.
-                                                        errorElement.textContent = result.error.message;
-                                                    } else {
-                                                        // Add the token to the form and submit.
-                                                        token = result.token.id;
-                                                        console.log(token)
-                                                        var tokenInput = document.createElement('input');
-                                                        tokenInput.setAttribute('type', 'hidden');
-                                                        tokenInput.setAttribute('name', 'stripeToken');
-                                                        tokenInput.setAttribute('value', result.token.id);
-                                                        form.appendChild(tokenInput);
-                                                        
-                                                        // Submit the form to your server.
-                                                        form.submit();
-                                                    }
-                                                });
+                                            var options = {
+                                                "key": "{{ API_KEY }}",  // Replace with your Razorpay API key
+                                                "amount": "{{ actual_price_fee_added }} * 100",  // Payment amount in paise
+                                                "currency": "INR",
+                                                "name": "FMP",
+                                                "description": "Test Transaction",
+                                                "image": "//www.html.am/images/html-codes/links/boracay-white-beach-sunset-300x225.jpg",
+                                                "order_id": "{{ order_id }}",  // Replace with your order ID
+                                                "handler": function (response) {
+                                                    //alert("Payment successful");
+                                                    var successUrl = document.getElementById('payment-form').elements["success_url"].value;
+                                                    window.location.href = successUrl;
+                                                },
+                                                "prefill": {
+                                                    "name": "{{ user.username }}",
+                                                    "email": "{{ user.email }}",
+                                                    "contact": "{{ user.phone }}"
+                                                },
+                                                "notes": {
+                                                    "address": "Razorpay Corporate Office"
+                                                },
+                                                "theme": {
+                                                    "color": "#3399cc"
+                                                }
+                                            };
+                                    
+                                            var rzp1 = new Razorpay(options);
+                                            rzp1.on('payment.failed', function (response) {
+                                                alert("Payment failed");
                                             });
+                                    
+                                            document.getElementById('rzp-button1').onclick = function (e) {
+                                                rzp1.open();
+                                                e.preventDefault();
+                                            }
                                         </script>
-                                  
-                                            
 
 
 
-                                            <!-- <script>
-                                                    var stripe = Stripe('{{ key }}');
-                                                    var elements = stripe.elements();
-
-                                                    // Create an instance of the card Element.
-                                                    var card = elements.create('card');
-
-                                                    // Add an instance of the card Element into the card-element div.
-                                                    card.mount('#card-element');
-
-                                                    var form = document.getElementById('payment-form');
-
-                                                    form.addEventListener('submit', function (event) {
-                                                        event.preventDefault();
-
-                                                        stripe.createToken(card).then(function (result) {
-                                                            if (result.error) {
-                                                                var errorElement = document.getElementById('card-errors');
-                                                                errorElement.textContent = result.error.message;
-                                                            } else {
-                    
-                                                                var token = result.token.id;
-                                                                
-                                                                console.log('Token:', token);
-
-                                                            }
-                                                        });
-                                                    });
-                                                </script> -->
 
 
-                                        </div>
+
+
                                     </div>
                                 </div>
                             </div>
@@ -182,6 +152,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </body>
 

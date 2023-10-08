@@ -1,15 +1,26 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>Checkout</title>
-  </head>
-  <body>
-    <form action="{% url 'withdrawal' user.username %}" method="POST">
-      <button type="submit">Checkout</button>
+<head>
+    <title>Withdrawal Page</title>
+</head>
+<body>
+    <h1>Withdraw Funds</h1>
+    <p>Welcome, {{ user.username }}!</p>
+    
+    <form method="post" action="{% url 'withdrawal' user.username %}">
+        {% csrf_token %}
+        <label for="amount">Withdrawal Amount:</label>
+        <input type="text" id="amount" name="amount" required>
+        <button type="submit">Submit</button>
     </form>
 
-<script>
-
-</script>
-
-  </body>
+    <!-- Display errors if any -->
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</body>
 </html>

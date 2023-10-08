@@ -41,9 +41,7 @@
         <h2>Successfully paid your bill</h2>
         <p class="lead">Thank you for your payment.</p>
         <a id="openButton" href="{% url 'submit_requirements' transaction_id request.user.username %}"
-            class="btn btn-primary btn-lg">SUBMIT REQUIREMENTS</a>
-
-
+        class="btn btn-primary btn-lg">SUBMIT REQUIREMENTS</a>
 
         <p>Click <span class="highlight">"SUBMIT REQUIREMENTS"</span> to continue and submit your order requirements.
             Click <span class="highlight">"Leave"</span> to go to the submit requirement page.</p>
@@ -53,21 +51,6 @@
             <p>Do not refresh this page. Your payment transaction may be impacted.</p>
         </div>
 
-        <script>
-            window.addEventListener('beforeunload', function (e) {
-                e.preventDefault();
-                e.returnValue = "Do not refresh this page. Your payment transaction may be impacted.";
-            });
-
-            document.getElementById("openButton").addEventListener("click", function () {
-                var stripe_js_url = "{{ stripe_url_webhook }}";
-                window.open(stripe_js_url, '_blank');
-            });
-
-
-
-        </script>
-    </div>
 </body>
 
 </html>
