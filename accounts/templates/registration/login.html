@@ -1,16 +1,58 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
+
+    <!-- Include the CSS file from static/css/ -->
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
 </head>
+
 <body>
-    <h2>Login</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Login</button>
-        <a href="#">Forgot password?</a>
-        <a href="{% url 'register' %}">Register</a>
-    </form>
+    <div class="container-fuild overflow-hidden">
+        <div class="row me-2 ms-2">
+            <div class="col">
+                <nav class="navbar navbar-light navbar-transparent">
+                    <a class="navbar-brand" href="{% url 'IntroHome' %}">
+                        <img src="{% static 'img/logo1.png' %}" width="30" height="30" alt="">
+                    </a>
+                    <button class="theme-toggle-button theme-btn">Toggle Theme</button>
+                </nav>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-6 f-col">
+                <img src="{% static 'img/login.svg' %}" class="img-fluid w-70 ms-auto" alt="...">
+            </div>
+            <div class="col-xs-12 col-md-6 d-flex flex-column align-items-center justify-content-center s-col">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h2 class="ok">Login</h2>
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <div class="d-flex d-flex justify-content-between">
+                                <button class="btn loginbtn me-2" type="submit">Login</button>
+                            <a class="signupbtn" href="{% url 'register' %}">Register</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/theme.js' %}"></script>
 </body>
+
 </html>
