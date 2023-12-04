@@ -8,6 +8,7 @@
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
@@ -15,6 +16,7 @@
 
     <!-- Include the CSS file from static/css/ -->
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
+
 </head>
 
 <body>
@@ -43,14 +45,20 @@
                             {{ form.as_p }}
                             <div class="d-flex d-flex justify-content-between">
                                 <button class="btn loginbtn me-2" type="submit">Login</button>
-                            <a class="signupbtn" href="{% url 'register' %}">Register</a>
+                                <a class="signupbtn" href="{% url 'register' %}">Register</a>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
+            
         </div>
+
+
+
     </div>
+
+
 
     <script src="{% static 'js/theme.js' %}"></script>
 </body>

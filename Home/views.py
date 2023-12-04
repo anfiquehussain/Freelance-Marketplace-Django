@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.http import HttpResponseForbidden
 from .forms import UserProfileForm, CertificationForm, LanguageForm
-from Services.models import Overview
+from Services.models import Overview,Category
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
@@ -26,7 +26,8 @@ def home(request, identifier):
     user_id = [user.id for user in users]
     user_profile = UserProfile.objects.all()
     user_service_profiles = Overview.objects.all()
-
+    category = Category.objects.all()
+    
     current_user = request.user
     if identifier == current_user.username:
         pass
@@ -38,7 +39,8 @@ def home(request, identifier):
         'user_id': user_id,
         'usernames': usernames,
         'user_profile': user_profile,
-        'user_service_profiles': user_service_profiles
+        'user_service_profiles': user_service_profiles,
+        'category':category,
     }
     return render(request, 'home.html', context)
 

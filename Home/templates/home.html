@@ -5,210 +5,407 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home {{ user.username }} </title>
-    <style>
-        /* Add your CSS styling here */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-        .user-name-card:hover {
-            text-decoration: underline;
-        }
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
 
-        .card-link {
-            text-decoration: none;
-            color: black;
-        }
 
-        .card-link:hover {
-            text-decoration: underline;
-            color: black;
-        }
-
-        .card-title:hover {
-            text-decoration: underline;
-            color: black;
-        }
-    </style>
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+
 </head>
 
 <body>
 
-    <!-- <div class="navbar">
-        <a href="#home">Home Page</a>
-        {% if user.is_authenticated %}
-        <div class="dropdown">
-            <button class="dropbtn">Profile</button>
-            <div class="dropdown-content">
-                <a href="{% url 'profile' user.username %}">View Profile</a> 
-                <a href="{% url 'edit_profile' user.username %}">Edit Profile</a>
-                <a href="#">Become Seller</a>
-                <a href="#">Settings</a>
-                <a href="{% url 'logout' %}">Logout</a>
-            </div>
-        </div>
-        {% else %}
-        <a href="{% url 'login' %}">Login</a>
-        {% endif %}
-        <a href="#explore">Explore</a>
-    </div> -->
-
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url 'home' user.username %}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'profile' user.username %}">View Profile</a>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Dashboard
-                        </a>
-                        <ul class="dropdown-menu">
-
-                            <li><a class="dropdown-item" href="{% url 'seller_dashboard' user.username %}">Seller
-                                    Dashboard</a></li>
-                            <li><a class="dropdown-item" href="{% url 'buyer_dashboard' user.username %}">Buyer
-                                    Dashboard</a></li>
-                                    {% if user.is_superuser%}
-                                    <li><a class="dropdown-item" href="{% url 'admin_dashboard' user.username %}">Admin
-                                        Dashboard</a></li>
-                                    {% endif %}
-
-                            <li><a class="dropdown-item" href="#">Settings</a></li>
-
-                            <li>
-                                <hr class="dropdown-divider">
-                                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-                            </li>
-
-                        </ul>
-                    </li>
-
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Profile
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'profile' user.username %}">View Profile</a></li>
-                            <li><a class="dropdown-item" href="{% url 'edit_profile' user.username %}">Edit Profile</a>
-                            </li>
-                            <li><a class="dropdown-item" href="{% url 'list_all_the_order' user.username %}">My
-                                    Purchases</a></li>
-                            <li><a class="dropdown-item" href="#">Settings</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-                        </ul>
-                    </li>
-                    <!-- <li class="nav-item">
-                <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-              </li> -->
-                </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-            </div>
-        </div>
-    </nav>
-
-    <h1>Welcome, {{ user.username }}!</h1>
-
-
-    <!-- {% for user_ids in user_id %}
-    {% for service_profile in user_service_profiles %}
-        {% if service_profile.user == user_ids %}
-            <li>{{ user_ids }}</li>
-        {% endif %}
-    {% endfor %}
-{% endfor %} -->
-
-
-
-
-
-
-    {% for service_profile in user_service_profiles %}
-
-
-
-    {% for user_profile in user_profile %}
-    {% if user_profile.profile_image %}
-    {% if user_profile.user == service_profile.user%}
-
-    <div class="service_profile_list_all" style="display: inline-block;">
-
-        <div class="card ms-5" style="width: 18rem;">
-            <div class="card-body">
-                {% for gallery in service_profile.gallery_set.all %}
-                {% if gallery.image1 %}
-                <img src="{{ gallery.image1.url }}" style="width:100%;height:160px;object-fit: cover;"
-                    class="card-img-top" alt="...">
-                {% endif %}
-                {% endfor %}
-                <div class="mt-1">
-                    <img class="rounded-circle mt-1" src="{{ user_profile.profile_image.url }}"
-                        style="width: 20px;height:20px;object-fit: cover;float: left;" alt="...">
-                    <a class="card-link" href="{% url 'view_profile_public' service_profile.user %}">
-                        <p class="user-name-card text-lowercase ms-4 fw-bold">{{service_profile.user}}</p>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="navbar navbar-expand-lg navbar-light navbar-transparent ">
+                <div class="container-fluid">
+                    <!-- Navbar Brand (Logo) -->
+                    <a class="navbar-brand" href="{% url 'IntroHome' %}">
+                        <img src="{% static 'img/logo1.png' %}" alt="" width="30" height="30">
                     </a>
+
+                    <!-- Navbar Toggler for small screens (moved to the right) -->
+                    <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon "></span>
+                    </button>
+
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <div class="d-flex ms-auto">
+                            <ul class="navbar-nav ">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        Dashboard
+                                    </a>
+                                    <ul class="dropdown-menu">
+
+                                        <li><a class="dropdown-item"
+                                                href="{% url 'seller_dashboard' user.username %}">Seller
+                                                Dashboard</a></li>
+                                        <li><a class="dropdown-item"
+                                                href="{% url 'buyer_dashboard' user.username %}">Buyer
+                                                Dashboard</a></li>
+                                        {% if user.is_superuser%}
+                                        <li><a class="dropdown-item"
+                                                href="{% url 'admin_dashboard' user.username %}">Admin
+                                                Dashboard</a></li>
+                                        {% endif %}
+
+                                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        Profile
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{% url 'profile' user.username %}">View
+                                                Profile</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'edit_profile' user.username %}">Edit
+                                                Profile</a>
+                                        </li>
+                                        <li><a class="dropdown-item"
+                                                href="{% url 'list_all_the_order' user.username %}">My
+                                                Purchases</a></li>
+                                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                                    </ul>
+
+                                </li>
+                                <!-- <li class="nav-item">
+                                    <form class="d-flex me-2 ms-1">
+                                        <input class="form-control me-2"
+                                            style="  outline: none;box-shadow: none;width: 250px;" type="search"
+                                            placeholder="Search" aria-label="Search">
+                                        <button class="btn btn-search" type="submit"
+                                            style="color: var(--text);  outline: none;box-shadow: none;">Search</button>
+                                    </form>
+                                </li> -->
+                            </ul>
+                        </div>
+                        <div class="d-flex ms-auto ">
+                            <!-- <a href="{% url 'login' %}" class="btn loginbtn me-2" style="color: var(--text);">Log In</a>
+                            <a href="{% url 'register' %}" class="btn signupbtn me-2"
+                                style="color: var(--background)">Sign Up</a> -->
+                            <form class="d-flex me-2 ms-1">
+                                <input class="form-control me-2" style="  outline: none;box-shadow: none;" type="search"
+                                    placeholder="Search" aria-label="Search">
+                                <button class="btn btn-search" type="submit"
+                                    style="color: var(--background);  outline: none;box-shadow: none;">Search</button>
+                            </form>
+                            <a class="btn loginbtn me-2" style="color: var(--text);"
+                                href="{% url 'logout' %}">Logout</a>
+                        </div>
+
+                        <div class="d-flex ms-auto">
+
+                            <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Dark/Light Mode"
+                                class="theme-toggle-button  theme-btn mt-4 ms-0 ms-lg-2 mt-lg-0 mytoolthip">Toggle
+                                Theme</button>
+                            {% for user_profile in user_profile %}
+                            {% if user_profile.user == user %}
+                            <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Profile"
+                                class="navbar-brand mytoolthip" href="{% url 'profile' user.username %}">
+                                <img src="{{ user_profile.profile_image.url }}"
+                                    style="width: 35px;height:35px;object-fit: cover;float: left;"
+                                    class="rounded-circle mt-3 ms-0 ms-lg-2 mt-lg-0" alt="" width="30" height="30">
+                            </a>
+                            {% endif %}
+                            {% endfor %}
+
+                        </div>
+
+
+
+                    </div>
                 </div>
-
-                <a class="card-link" href="{% url 'view_service_profile' service_profile.id %}">
-                    <p class="card-title">{{ service_profile.titleOverview}}</p>
-                </a>
-
-                <p class="card-text">★<span style="font-size: smaller;"
-                        class="fw-bold">{{service_profile.rating}}</span></p>
-                {% for basic_package in service_profile.basicpackage_set.all %}
-                <p class="card-text text-start"><strong>From<span
-                            class="ms-1">₹{{basic_package.Basic_price}}</span></strong>
-                </p>
-                {% endfor %}
+            </nav>
+        </div>
+        <hr>
+        <div class="row mt-3" id="CtgListRow">
+            {% for ctg in category %}
+            <div class="col-6 cat1 col-sm-4 col-md-3 col-lg-2 {% if forloop.counter > 6 %}d-none{% endif %}">
+                <p style="cursor: pointer;">{{ ctg }}</p>
+            </div>
+            <div class="col-6 cat2 col-sm-4 col-md-3 col-lg-2 {% if forloop.counter > 2 %}d-none{% endif %}">
+                <p>{{ ctg }}</p>
+            </div>
+            {% endfor %}
+            <div class="col-12">
+                <button id="ShowbtnCtg" class="w-100 btn loginbtn" onclick="toggleCategories()">Show/Hide</button>
             </div>
         </div>
+
+        <hr>
+
+        <div class="row mt-3">
+            <div class="col">
+                <img src="{% static 'img/banner_home_1.jpg' %}" class="img-fluid rounded" alt="...">
+
+
+                <!-- <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                      <div class="carousel-item active">
+                        <img src="{% static 'img/banner_home_1.jpg' %}" class="d-block w-100" data-bs-interval="5" alt="...">
+                      </div>
+                      <div class="carousel-item">
+                        <img src="{% static 'img/banner_home_2.jpg' %}" class="d-block w-100" data-bs-interval="5" alt="...">
+                      </div>
+                      <div class="carousel-item">
+                        <img src="{% static 'img/banner_home_3.jpg' %}" class="d-block w-100" data-bs-interval="5" alt="...">
+                      </div>
+                    </div>
+                  </div> -->
+
+            </div>
+        </div>
+
+        <div class="row mt-1 mb-3 ">
+
+            <div class="col-12">
+                <h4>
+                    All
+                </h4>
+
+
+                <div class="d-flex flex-row flex-nowrap overflow-auto">
+                    {% for service_profile in user_service_profiles %}
+                    {% for user_profile in user_profile %}
+                    {% if user_profile.profile_image %}
+                    {% if user_profile.user == service_profile.user%}
+                    <div class="card card-block mx-2" style="min-width: 333px;max-height: auto;">
+                        {% for gallery in service_profile.gallery_set.all %}
+                        {% if gallery.image1 %}
+                        <img src="{{ gallery.image1.url }}" style="width:100%;height:160px;object-fit: cover;"
+                            class="card-img-top" alt="...">
+                        {% endif %}
+                        {% endfor %}
+                        <div class="card-body">
+                            <div class="mt-1">
+                                <img class="rounded-circle mt-1" src="{{ user_profile.profile_image.url }}"
+                                    style="width: 20px;height:20px;object-fit: cover;float: left;" alt="...">
+                                <a class="card-link" href="{% url 'view_profile_public' service_profile.user %}">
+                                    <p class="user-name-card text-lowercase ms-4 fw-bold">{{service_profile.user}}</p>
+                                </a>
+                            </div>
+                            <a class="card-link" href="{% url 'view_service_profile' service_profile.id %}">
+                                <p class="card-title">{{ service_profile.titleOverview}}</p>
+                            </a>
+                            <div class="d-flex justify-content-between">
+                                <p class="card-text">★<span style="font-size: smaller;"
+                                        class="fw-bold">{{service_profile.rating}}</span></p>
+                                {% for basic_package in service_profile.basicpackage_set.all %}
+                                <p class="card-text text-start"><strong>From<span
+                                            class="ms-1">₹{{basic_package.Basic_price}}</span></strong>
+                                </p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="row mt-1 mb-3 ">
+
+            <div class="col-12">
+                <h4>IT & Networking</h4>
+
+                <div class="d-flex flex-row flex-nowrap overflow-auto">
+                    {% for service_profile in user_service_profiles %}
+                    {% for user_profile in user_profile %}
+                    {% if user_profile.profile_image %}
+                    {% if user_profile.user == service_profile.user%}
+
+                    {% if service_profile.category|lower == "it & networking" %}
+
+
+
+
+
+                    <div class="card card-block mx-2" style="min-width: 333px;max-height: auto;">
+                        {% for gallery in service_profile.gallery_set.all %}
+                        {% if gallery.image1 %}
+                        <img src="{{ gallery.image1.url }}" style="width:100%;height:160px;object-fit: cover;"
+                            class="card-img-top" alt="...">
+                        {% endif %}
+                        {% endfor %}
+                        <div class="card-body">
+                            <div class="mt-1">
+                                <img class="rounded-circle mt-1" src="{{ user_profile.profile_image.url }}"
+                                    style="width: 20px;height:20px;object-fit: cover;float: left;" alt="...">
+                                <a class="card-link" href="{% url 'view_profile_public' service_profile.user %}">
+                                    <p class="user-name-card text-lowercase ms-4 fw-bold">{{service_profile.user}}</p>
+                                </a>
+                            </div>
+                            <a class="card-link" href="{% url 'view_service_profile' service_profile.id %}">
+                                <p class="card-title">{{ service_profile.titleOverview}}</p>
+                            </a>
+                            <div class="d-flex justify-content-between">
+                                <p class="card-text">★<span style="font-size: smaller;"
+                                        class="fw-bold">{{service_profile.rating}}</span></p>
+                                {% for basic_package in service_profile.basicpackage_set.all %}
+                                <p class="card-text text-start"><strong>From<span
+                                            class="ms-1">₹{{basic_package.Basic_price}}</span></strong>
+                                </p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endif %}
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-1 mb-3 ">
+
+            <div class="col-12">
+                <h4>UI/UX Design</h4>
+
+                <div class="d-flex flex-row flex-nowrap overflow-auto">
+                    {% for service_profile in user_service_profiles %}
+                    {% for user_profile in user_profile %}
+                    {% if user_profile.profile_image %}
+                    {% if user_profile.user == service_profile.user%}
+
+                    {% if service_profile.category|lower == "ui/ux design" %}
+
+                    <div class="card card-block mx-2" style="min-width: 333px;max-height: auto;">
+                        {% for gallery in service_profile.gallery_set.all %}
+                        {% if gallery.image1 %}
+                        <img src="{{ gallery.image1.url }}" style="width:100%;height:160px;object-fit: cover;"
+                            class="card-img-top" alt="...">
+                        {% endif %}
+                        {% endfor %}
+                        <div class="card-body">
+                            <div class="mt-1">
+                                <img class="rounded-circle mt-1" src="{{ user_profile.profile_image.url }}"
+                                    style="width: 20px;height:20px;object-fit: cover;float: left;" alt="...">
+                                <a class="card-link" href="{% url 'view_profile_public' service_profile.user %}">
+                                    <p class="user-name-card text-lowercase ms-4 fw-bold">{{service_profile.user}}</p>
+                                </a>
+                            </div>
+                            <a class="card-link" href="{% url 'view_service_profile' service_profile.id %}">
+                                <p class="card-title">{{ service_profile.titleOverview}}</p>
+                            </a>
+                            <div class="d-flex justify-content-between">
+                                <p class="card-text">★<span style="font-size: smaller;"
+                                        class="fw-bold">{{service_profile.rating}}</span></p>
+                                {% for basic_package in service_profile.basicpackage_set.all %}
+                                <p class="card-text text-start"><strong>From<span
+                                            class="ms-1">₹{{basic_package.Basic_price}}</span></strong>
+                                </p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endif %}
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row mt-1 mb-3 ">
+
+            <div class="col-12">
+                <h4>Writing & Translation</h4>
+
+                <div class="d-flex flex-row flex-nowrap overflow-auto">
+                    {% for service_profile in user_service_profiles %}
+                    {% for user_profile in user_profile %}
+                    {% if user_profile.profile_image %}
+                    {% if user_profile.user == service_profile.user%}
+
+                    {% if service_profile.category|lower == "writing & translation" %}
+
+                    <div class="card card-block mx-2" style="min-width: 333px;max-height: auto;">
+                        {% for gallery in service_profile.gallery_set.all %}
+                        {% if gallery.image1 %}
+                        <img src="{{ gallery.image1.url }}" style="width:100%;height:160px;object-fit: cover;"
+                            class="card-img-top" alt="...">
+                        {% endif %}
+                        {% endfor %}
+                        <div class="card-body">
+                            <div class="mt-1">
+                                <img class="rounded-circle mt-1" src="{{ user_profile.profile_image.url }}"
+                                    style="width: 20px;height:20px;object-fit: cover;float: left;" alt="...">
+                                <a class="card-link" href="{% url 'view_profile_public' service_profile.user %}">
+                                    <p class="user-name-card text-lowercase ms-4 fw-bold">{{service_profile.user}}</p>
+                                </a>
+                            </div>
+                            <a class="card-link" href="{% url 'view_service_profile' service_profile.id %}">
+                                <p class="card-title">{{ service_profile.titleOverview}}</p>
+                            </a>
+                            <div class="d-flex justify-content-between">
+                                <p class="card-text">★<span style="font-size: smaller;"
+                                        class="fw-bold">{{service_profile.rating}}</span></p>
+                                {% for basic_package in service_profile.basicpackage_set.all %}
+                                <p class="card-text text-start"><strong>From<span
+                                            class="ms-1">₹{{basic_package.Basic_price}}</span></strong>
+                                </p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endif %}
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+
+
     </div>
 
 
 
+    <script src="{% static 'js/theme.js' %}"></script>
+    <script src="{% static 'js/home.js' %}"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-    {% endif %}
-    {% endif %}
-    {% endfor %}
-
-    {% endfor %}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <script>
-        const cardTitles = document.getElementsByClassName('card-title');
-        const maxCharacters = 50; // Adjust this to your desired character limit
-
-        Array.from(cardTitles).forEach(cardTitle => {
-            if (cardTitle.textContent.length > maxCharacters) {
-                const truncatedText = cardTitle.textContent.substring(0, maxCharacters) + '...';
-                cardTitle.textContent = truncatedText;
-            }
+        $(function () {
+            $('.mytoolthip').tooltip();
         });
     </script>
-
 
 
 </body>
