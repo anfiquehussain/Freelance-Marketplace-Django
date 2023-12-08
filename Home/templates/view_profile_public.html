@@ -1,278 +1,549 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>View Profile</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: space-between;
-            background-color: #f0f0f0;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home {{ user.username }} </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-        }
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
 
-        .profile-container {
-            width: 49%;
-            margin: 20px 10px 20px 20px;
-            padding: 20px;
-            border-right: 1px solid black;
-
-        }
-
-        .profile-image {
-            width: 150px;
-            border-radius: 100%;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-            margin-bottom: 10px;
-            height: 150px;
-            object-fit: cover;
-        }
-
-        .user-info {
-            margin: 10px 0;
-        }
-
-        .skills-list,
-        .certifications-list,
-        .languages-list {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .create-services-button {
-            width: 100vh;
-            height: 100%;
-            margin: 20px 20px 20px 10px;
-            padding: 20px;
-            border-radius: 10px;
-
-        }
-
-        .create-services-button a {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-transform: uppercase;
-            background-color: #28a745;
-            color: #fff;
-            text-decoration: none;
-
-        }
-
-        .create-services-button a:hover {
-            background-color: #3cb857;
-
-        }
-
-        .buttoncon {
-            margin-bottom: 10px;
-        }
-
-        .profile-action-button {
-            display: inline-block;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-right: 10px;
-        }
-
-        .profile-action-buttons {
-            text-align: right;
-        }
-
-        .profile-action-button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 5px;
-            font-size: 10px;
-        }
-
-        .edit-button {
-            background-color: #28a745;
-            color: #fff;
-        }
-
-        .home-button {
-            background-color: #6c757d;
-            color: #fff;
-        }
-
-        .profile-header {
-            text-align: center;
-        }
-
-
-
-        .centered-heading {
-            margin: 0;
-            font-size: 28px;
-            font-family: "Helvetica Neue", Arial, sans-serif;
-            color: #333;
-        }
-
-        .create-services-button .card-link {
-            background-color: transparent;
-            color: black;
-            margin: 0px;
-            padding: 0px 0px 0px 0px;
-            text-decoration: none;
-
-        }
-
-        .create-services-button .card-link:hover {
-            background-color: transparent;
-            text-decoration: underline;
-        }
-
-        .create-services-button .menu-link {
-            color: black;
-            background-color: transparent;
-            margin-left: 10px;
-            padding: 0px 0px 0px 0px;
-            text-decoration: none;
-        }
-
-        .create-services-button .menu-link:hover {
-            background-color: transparent;
-            text-decoration: underline;
-        }
-
-
-
-
-        /* .card-img-top{
-            width:100px;
-            height: 160px;
-            object-fit: cover;
-        } */
-
-
-
-        .row {
-            background-color: #fff;
-            width: 650px;
-            height: 300px;
-        }
-    </style>
 
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'css/view_profile.css' %}">
+
+
+
+
 </head>
 
-<body>
-    <div class="profile-container">
-        <div class="profile-action-buttons">
-            <a class="profile-action-button home-button" href="{% url 'IntroHome' %}">Home</a>
+<body style="overflow-x: hidden;">
+
+    <div class="container-fluid ">
+        <div class="row ">
+            <nav class="navbar  navbar-expand-lg navbar-light navbar-transparent ">
+                <div class="container-fluid">
+                    <!-- Navbar Brand (Logo) -->
+                    <a class="navbar-brand" href="{% url 'IntroHome' %}">
+                        <img src="{% static 'img/logo1.png' %}" alt="" width="30" height="30">
+                    </a>
+
+                    <!-- Navbar Toggler for small screens (moved to the right) -->
+                    <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon "></span>
+                    </button>
+
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <div class="d-flex ms-auto">
+                            <ul class="navbar-nav ">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        Dashboard
+                                    </a>
+                                    <ul class="dropdown-menu">
+
+                                        <li><a class="dropdown-item"
+                                                href="{% url 'seller_dashboard' user.username %}">Seller
+                                                Dashboard</a></li>
+                                        <li><a class="dropdown-item"
+                                                href="{% url 'buyer_dashboard' user.username %}">Buyer
+                                                Dashboard</a></li>
+                                        {% if user.is_superuser%}
+                                        <li><a class="dropdown-item"
+                                                href="{% url 'admin_dashboard' user.username %}">Admin
+                                                Dashboard</a></li>
+                                        {% endif %}
+
+
+                                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        Profile
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{% url 'profile' user.username %}">View
+                                                Profile</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'edit_profile' user.username %}">Edit
+                                                Profile</a>
+                                        </li>
+                                        <li><a class="dropdown-item"
+                                                href="{% url 'list_all_the_order' user.username %}">My
+                                                Purchases</a></li>
+                                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                                    </ul>
+
+                                </li>
+
+
+
+
+                            </ul>
+                        </div>
+                        <div class="d-flex ms-auto ">
+                            <!-- <a href="{% url 'login' %}" class="btn loginbtn me-2" style="color: var(--text);">Log In</a>
+                            <a href="{% url 'register' %}" class="btn signupbtn me-2"
+                                style="color: var(--background)">Sign Up</a> -->
+                            <form class="d-flex me-2 ms-1">
+                                <input class="form-control me-2" style="  outline: none;box-shadow: none;" type="search"
+                                    placeholder="Search" aria-label="Search">
+                                <button class="btn btn-search" type="submit"
+                                    style="color: var(--background);  outline: none;box-shadow: none;">Search</button>
+                            </form>
+                            <a class="btn loginbtn me-2" style="color: var(--text);"
+                                href="{% url 'logout' %}">Logout</a>
+                        </div>
+
+                        <div class="d-flex ms-auto">
+
+                            <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Dark/Light Mode"
+                                class="theme-toggle-button  theme-btn mt-4 ms-0 ms-lg-2 mt-lg-0 mytoolthip">Toggle
+                                Theme</button>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </nav>
         </div>
-
-
-        <div class="profile-header">
-            <h2 class="centered-heading">{{ user_profile.user.username }}'s Profile</h2>
-        </div>
-
-
-
-        {% if user_profile.profile_image %}
-        <img class="profile-image" src="{{ user_profile.profile_image.url }}" alt="Profile Picture">
-        {% else %}
-        <p>No profile image available.</p>
-        {% endif %}
-        <h1>User Profile</h1>
-        <p><strong>Username:</strong> {{ user_profile.user.username }}</p>
-        <p><strong>Email:</strong> {{ user_profile.user.email }}</p>
-        <p><strong>First Name:</strong> {{ user_profile.user.first_name }}</p>
-        <p><strong>Last Name:</strong> {{ user_profile.user.last_name }}</p>
-        <p><strong>Country:</strong> {{ user_profile.country }}</p>
-        <p><strong>State:</strong> {{ user_profile.state }}</p>
-        <p><strong>Website Link:</strong> {{ user_profile.website_link }}</p>
-        <p><strong>About Me:</strong> {{ user_profile.about_me }}</p>
-        <p><strong>Overall Rating:</strong> {{ user_profile.overall_rating }}</p>
-
-        <h2>Skills</h2>
-        <ul>
-            {% for skill in user_profile.skills.all %}
-            <li>{{ skill.name }}</li>
-            {% endfor %}
-        </ul>
-
-        <h2>Certifications</h2>
-        <ul>
-            {% for certification in user_profile.certifications.all %}
-            <li><strong>Title:</strong> {{ certification.title }}</li>
-            <li><strong>Issuing Organization:</strong> {{ certification.issuing_organization }}</li>
-            <li><strong>Issue Date:</strong> {{ certification.issue_date }}</li>
-            {% endfor %}
-        </ul>
-
-        <h2>Languages</h2>
-        <ul>
-            {% for language in user_profile.languages.all %}
-            <li><strong>Language:</strong> {{ language.language }}</li>
-            <li><strong>Proficiency:</strong> {{ language.proficiency }}</li>
-            {% endfor %}
-        </ul>
+        <hr>
     </div>
 
-    <div class="create-services-button">
-        <div class="row">
-            {% for service_profile in user_service_profiles %}
-            <div class="col-md-4 mb-4">
-                <div class="card">
 
-                    {% for gallery in service_profile.gallery_set.all %}
-                    {% if gallery.image1 %}
-                    <img src="{{ gallery.image1.url }}" style="width:100%;height:160px;object-fit: cover;"
-                        class="card-img-top" alt="...">
-                    {% endif %}
-                    {% endfor %}
-                    <div class="card-body">
-                        <a class="card-link" href="{% url 'view_service_profile' service_profile.id %}"><p class="card-title">{{ service_profile.titleOverview}}</p></a>
-                        <p class="card-text">★<span style="font-size: smaller;"
-                                class="fw-bold">{{service_profile.rating}}</span></p>
-                        {% for basic_package in service_profile.basicpackage_set.all %}
-                        <p class="card-text text-end"><small>Starting at</small> 
-                            <strong>₹{{ basic_package.Basic_price}}</strong></p>
-                        {% endfor %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-7 ">
+                <div class="row">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            {% if user_profile.profile_image %}
+                            <img style="width: 200px;height:200px;object-fit: cover;float: left;"
+                                class="rounded-circle  ms-0 ms-lg-2 mt-lg-0" alt=""
+                                src="{{ user_profile.profile_image.url }}">
+                            {% else %}
+                            <p>No profile image available.</p>
+                            {% endif %}
+                        </div>
+                        <div class="ms-4  w-100">
+                            <h4 class="d-inline fw-bold f-name">{{user_profile.user.first_name}} </h4>
+                            <h4 class="d-inline fw-bold s-name">{{user_profile.user.last_name}}</h4>
+                            <p><span class="d-inline u-name"> @{{user_profile.user.username}}</span></p>
+                            <p class="d-block rating"><span class="star">&#9733;</span><span style="font-size: smaller;"
+                                    class="fw-bold">4.5</span></p>
+                            <h5 class="d-inline me-3"><i class="las la-map-marker"></i> {{ user_profile.country }}</h5>
+                            {% for language in user_profile.languages.all %}
+                            {% if forloop.first %}
+                            <h5 class="d-inline me-2 d-block d-sm-inline mt-2 mt-md-0"><i
+                                    class="fa-regular fa-comment"></i>Speaks {{ language.language }}</h5>
+                            {% endif %}
+                            {% endfor %}
+
+                            <button class="btn loginbtn more-about-me mt-2 mt-sm-2 mt-md-0" type="button"
+                                data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom"
+                                aria-controls="offcanvasBottom">More About us</button>
+
+                            <div class="offcanvas offcanvas-bottom h-auto" tabindex="-1" id="offcanvasBottom"
+                                aria-labelledby="offcanvasBottomLabel">
+                                <div class="offcanvas-header">
+                                    <h5 class="offcanvas-title" id="offcanvasBottomLabel"><strong>ABOUT ME</strong></h5>
+                                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="offcanvas-body h-50">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="row col-12 col-sm-12 col-md-12 col-lg-7">
+                                                    <div class="d-flex align-items-center">
+                                                        <div>
+                                                            {% if user_profile.profile_image %}
+                                                            <img style="width: 100px;height:100px;object-fit: cover;float: left;"
+                                                                class="rounded-circle  ms-0 ms-lg-2 mt-lg-0" alt=""
+                                                                src="{{ user_profile.profile_image.url }}">
+                                                            {% else %}
+                                                            <p>No profile image available.</p>
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="ms-4  w-100">
+                                                            <h4 class="d-inline fw-bold f-name">
+                                                                {{user_profile.user.first_name}} </h4>
+                                                            <h4 class="d-inline fw-bold s-name">
+                                                                {{user_profile.user.last_name}}</h4>
+                                                            <p><span class="d-inline u-name">
+                                                                    @{{user_profile.user.username}}</span></p>
+                                                            <p class="d-block rating">★<span style="font-size: smaller;"
+                                                                    class="fw-bold">4.5</span></p>
+                                                            <h5 class="d-inline me-3"><i class="las la-map-marker"></i>
+                                                                {{ user_profile.country }}</h5>
+                                                            {% for language in user_profile.languages.all %}
+                                                            {% if forloop.first %}
+                                                            <h5 class="d-inline me-2 d-block d-sm-inline mt-2 mt-md-0">
+                                                                <i class="fa-regular fa-comment"></i>Speaks
+                                                                {{ language.language }}
+                                                            </h5>
+                                                            {% endif %}
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col mt-3">
+                                                        <div class="card skillcard">
+                                                            <div class="card-body ">
+                                                                <h4 class="card-title">Skills</h4>
+                                                                {% for skill in user_profile.skills.all %}
+                                                                <span
+                                                                    class="badge rounded-pill p-3 pe-4 ps-4 m-1 loginbtn"
+                                                                    style="cursor: pointer;">
+                                                                    {{ skill.name }}</span>
+                                                                {% endfor %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col mt-3 mb-3">
+
+                                                        <div class="card skillcard ">
+                                                            <h4 class="card-title">I speak</h4>
+                                                            <div class="card-body overflow-auto"
+                                                                style="width: 100%;height: 150px;">
+                                                                {% for language in user_profile.languages.all %}
+                                                                <div class="language-item">
+                                                                    <h5><strong>{{ language.language }} </strong> :
+                                                                        {{ language.proficiency }}</h5>
+                                                                </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12  mt-3">
+                                                <hr>
+                                                <h4>About me</h4>
+                                                <p>{{ user_profile.about_me }}</p>
+                                            </div>
+                                            <hr>
+                                            <div class="col-12">
+                                                <div class="card skillcard ">
+                                                    <h4 class="card-title">Education</h4>
+                                                    <div class="card-body overflow-auto"
+                                                        style="width: 100%;height: 150px;">
+                                                        {% for certification in user_profile.certifications.all %}
+                                                        <h4><strong>{{ certification.issuing_organization }}</strong>
+                                                        </h4>
+                                                        <strong>{{ certification.title }}</strong>
+                                                        <small>{{ certification.issue_date }}</small>
+                                                        {% endfor %}
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
 
                     </div>
 
+
+                </div>
+
+            </div>
+            <div class="col right-side-amd">
+                <div class="card skillcard">
+
+                    <div class="card-body ">
+                        <h4 class="card-title">Skills</h4>
+                        {% for skill in user_profile.skills.all %}
+                        <span class="badge rounded-pill p-3 pe-4 ps-4 m-1 loginbtn" style="cursor: pointer;">
+                            {{ skill.name }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-12 col-lg-7 mt-5  mt-lg-0">
+                <h1>About me</h1>
+                <p>{{ user_profile.about_me }}</p>
+            </div>
+            <div class="col right-side-bmd">
+                <div class="card skillcard">
+                    <div class="card-body">
+                        <h4 class="card-title">Skills</h4>
+                        {% for skill in user_profile.skills.all %}
+                        <span class="badge rounded-pill p-3 pe-4 ps-4 m-1 loginbtn" style="cursor: pointer;">
+                            {{ skill.name }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% for service_profile in user_service_profiles %}
+            <div class="mt-3 col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 col-xxl-2">
+                <div class="card " style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+
+                    {% for gallery in service_profile.gallery_set.all %}
+                    {% if gallery.image1 %}
+
+                    <img src="{{ gallery.image1.url }}" style="width:100%;height:160px;object-fit: cover;"
+                        class="card-img-top" alt="...">
+
+                    {% endif %}
+                    {% endfor %}
+
+                    <div class="card-body">
+                        <a href="{% url 'view_service_profile' service_profile.id %}" class="card-link text-start">
+                            <h6 class="cardTitle card-title text-start">{{ service_profile.titleOverview }}</h6>
+                        </a>
+
+                        {% for basic_package in service_profile.basicpackage_set.all %}
+                        <p class="card-text text-end"><small>Starting at</small> <strong>
+                                ₹{{ basic_package.Basic_price}}</strong></p>
+                        {% endfor %}
+
+                    </div>
+                  
                 </div>
             </div>
             {% endfor %}
         </div>
+    </div>
 
+    <div class="container-fluid mb-3 mt-3">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body d-flex justify-content-start">
+                        <div class="ms-2 d-block w-75">
+                            <h1 class="fs-5 d-inline">5</h1><span class="star d-inline"
+                                style="font-size: 110%;">&#9733;</span>
+                            <p>Average rating based on 2555 reviews</p>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-end" style="width: 30%">
+
+                            <!-- Button trigger modal -->
+                            <p type="button" class="btn loginbtn mt-3 text-end me-2" data-bs-toggle="modal"
+                                data-bs-target="#staticBackdrop">
+                                Sent Review
+                            </p>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <form>
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+
+                                                <div class="mb-3">
+                                                    <p for="recipient-name" class="col-form-label">Rating:</p>
+                                                    <div class="wrapper">
+                                                        <input class="rating-stars" type="radio" id="r1" name="rg1"
+                                                            value="5">
+                                                        <label class="rating_label" for="r1">&#9733;</label>
+                                                        <input class="rating-stars" type="radio" id="r2" name="rg1"
+                                                            value="4">
+                                                        <label class="rating_label" for="r2">&#9733;</label>
+                                                        <input class="rating-stars" type="radio" id="r3" name="rg1"
+                                                            value="3">
+                                                        <label class="rating_label" for="r3">&#9733;</label>
+                                                        <input class="rating-stars" type="radio" id="r4" name="rg1"
+                                                            value="2">
+                                                        <label class="rating_label" for="r4">&#9733;</label>
+                                                        <input class="rating-stars" type="radio" id="r5" name="rg1"
+                                                            value="1">
+                                                        <label class="rating_label" for="r5">&#9733;</label>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="recipient-name" class="col-form-label">Title:</label>
+                                                    <input style="outline: none;box-shadow: none" type="text"
+                                                        class="form-control" id="recipient-name">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="message-text" class="col-form-label">Review:</label>
+                                                    <textarea style="outline: none;box-shadow: none"
+                                                        class="form-control" id="message-text"></textarea>
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" onclick="submitForm()" class="btn btn-search"
+                                                    style="outline: none;box-shadow: none;color: var(--background)">Send
+                                                    message</button>
+                                                <button type="button" class="btn loginbtn"
+                                                    style="outline: none;box-shadow: none;"
+                                                    data-bs-dismiss="modal">Close</button>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body d-flex justify-content-start">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col d-flex justify-content-between">
+                                    <p>Reviews</p>
+                                    <div style="background-color: transparent;" class="dropdown">
+                                        <p class="dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            Sort
+                                        </p>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                            <li><a class="dropdown-item" href="#">Most Recent</a></li>
+                                            <li><a class="dropdown-item" href="#">Most Relevent</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col d-flex justify-content-between">
+                                    <div style="width: 50%;">
+                                        <img src="{% static 'img/draw2.webp' %}"
+                                            style="width: 30px; height: 30px; object-fit: cover; float: left;"
+                                            class="rounded-circle">
+                                        <p class="mt-1" style="margin-left: 6%;">@username [ Country ]</p>
+                                    </div>
+                                    <div>
+                                        <p class="fs-6 d-inline text-end mt-3"> 4 weeks ago | 5</p><span
+                                            class="star d-inline" style="font-size: 110%;">&#9733;</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 contentContainer">
+                                    <p class="content">
+                                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet incidunt
+                                        necessitatibus, error quam debitis at nam dolore. Distinctio laboriosam
+                                        voluptates
+                                        saepe repudiandae natus reiciendis tenetur non ipsum culpa sunt. Commodi.
+                                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet incidunt
+                                        necessitatibus, error quam debitis at nam dolore. Distinctio laboriosam
+                                        voluptates
+                                        saepe repudiandae natus reiciendis tenetur non ipsum culpa sunt. Commodi.
+                                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet incidunt
+                                        necessitatibus, error quam debitis at nam dolore. Distinctio laboriosam
+                                        voluptates
+                                        saepe repudiandae natus reiciendis tenetur non ipsum culpa sunt. Commodi.
+                                    </p>
+                                    <strong><span class="readMoreBtn" onclick="toggleContent()">Read
+                                            more</span></strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
     </div>
 
-
+    <!-- ----------------------new html above-------------------------- -->
 
     <script>
-        function showProfileIncompleteMessage(message) {
-            alert(message);
-        }
+        document.addEventListener("DOMContentLoaded", function () {
+            var contentContainers = document.querySelectorAll(".contentContainer");
 
-        const cardTitles = document.getElementsByClassName('card-title');
-        const maxCharacters = 40; // Adjust this to your desired character limit
+            contentContainers.forEach(function (contentContainer) {
+                var content = contentContainer.querySelector(".content");
+                var readMoreBtn = contentContainer.querySelector(".readMoreBtn");
 
-        Array.from(cardTitles).forEach(cardTitle => {
-            if (cardTitle.textContent.length > maxCharacters) {
-                const truncatedText = cardTitle.textContent.substring(0, maxCharacters) + '...';
-                cardTitle.textContent = truncatedText;
-            }
+                var words = content.textContent.split(' ').slice(0, 220).join(' ');
+                content.innerHTML = words + '<span class="hidden">' + content.textContent.slice(words.length) + '</span>';
+
+                readMoreBtn.onclick = function () {
+                    var hiddenContent = content.querySelector('.hidden');
+                    if (hiddenContent) {
+                        // Show the hidden content
+                        hiddenContent.classList.remove("hidden");
+                        readMoreBtn.innerText = "Hide";
+                    } else {
+                        // Hide the content after 60 words
+                        content.innerHTML = words + '<span class="hidden">' + content.textContent.slice(words.length) + '</span>';
+                        readMoreBtn.innerText = "Read more";
+                    }
+                };
+            });
         });
-
     </script>
+
+    <script>
+        function submitForm() {
+            // Get selected rating
+            const rating = document.querySelector('input[name="rg1"]:checked');
+            const title = document.getElementById('recipient-name').value;
+            const review = document.getElementById('message-text').value;
+
+            // Check if a rating is selected
+            if (!rating) {
+                alert('Please select a rating');
+                return;
+            }
+
+            // Display the values (you can replace this with your desired form submission logic)
+            alert(`Rating: ${rating.value}\nTitle: ${title}\nReview: ${review}`);
+        }
+    </script>
+
+
+
+    <script src="{% static 'js/theme.js' %}"></script>
+    <script src="{% static 'js/view_profile.js' %}"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script>
+        $(function () {
+            $('.mytoolthip').tooltip();
+        });
+    </script>
+
+
 </body>
 
 </html>

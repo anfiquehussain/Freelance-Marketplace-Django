@@ -151,8 +151,10 @@ def view_profile(request, username):
     user = get_object_or_404(User, username=username)
     user_profile, created = UserProfile.objects.get_or_create(user=user)
     user_service_profiles = Overview.objects.filter(user=user)
+    user_profile_all = UserProfile.objects.all()
+    user_service_profiles = Overview.objects.all()
     # print(user_service_profiles)
-
+   
     current_user = request.user
     if username == current_user.username:
         pass
@@ -162,6 +164,7 @@ def view_profile(request, username):
     context = {
         'user_profile': user_profile,
         'user_service_profiles': user_service_profiles,
+         "user_profile_all":user_profile_all
     }
     return render(request, 'view_profile.html', context)
 

@@ -11,3 +11,4 @@ Array.from(cardTitles).forEach(cardTitle => {
         cardTitle.textContent = truncatedText;
     }
 });
+

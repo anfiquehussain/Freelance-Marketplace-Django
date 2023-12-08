@@ -21,318 +21,16 @@
 
     <link rel="stylesheet" href="{% static 'css/view_profile.css' %}">
 
-    <style>
-        @import url('https://fonts.googleapis.com/css?family=Montserrat:700|Lora:400');
-        @import url('https://fonts.googleapis.com/css?family=Athiti:700|Athiti:400');
-        @import url('https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css');
 
-        :root[data-theme="light"] {
-            --text: #333333;
-            --background: #ffffff;
-            --primary: #5c3da4;
-            --secondary: #d0ceda;
-            --accent: #200e71;
-            --secondary-hover: #d9d2f9;
-            --primary-hover: #7757c1;
-            --navbar-toggler-bg-color: #fffff;
-            --dropdown-bg-color: #ffff;
-            --dropdwon-bgc-hover: #E9ECEF;
-            --card-bg-color: #ffff;
-            --user-name-color: #73757d;
-        }
-
-        :root[data-theme="dark"] {
-            --text: #cccccc;
-            --background: #000000;
-            --primary: #7a5bc2;
-            --secondary: #272531;
-            --accent: #a08ef1;
-            --secondary-hover: #5c5874;
-            --primary-hover: #957dcf;
-            --navbar-toggler-bg-color: #333333;
-            --dropdown-bg-color: #171b27;
-            --dropdwon-bgc-hover: #556491;
-            --card-bg-color: #181A1B;
-            --user-name-color: #82848c;
-        }
-
-        :root {
-            --main-font-family: 'Helvetica, Arial, sans-serif';
-            --body-font: 'Lora', serif --header-font-size: 24px;
-            --body-font-size: 16px;
-        }
-
-        body {
-            background-color: var(--background);
-            color: var(--text);
-            font-family: 'Athiti';
-            width: 100%;
-            height: auto;
-        }
-
-        .dropdown {
-            background-color: var(--background);
-        }
-
-        .dropdown-menu {
-            background-color: var(--dropdown-bg-color);
-            color: var(--text);
-        }
-
-        .dropdown .dropdown-menu li a {
-            color: var(--text);
-        }
-
-
-
-        .dropdown .dropdown-menu li a:hover {
-            background-color: var(--dropdwon-bgc-hover);
-            color: var(--text);
-        }
-
-        .dropdown .dropdown-menu li a:active {
-            background-color: var(--dropdown-bg-color);
-            color: var(--text);
-        }
-
-        .dropdown .dropdown-menu li a:focus {
-            background-color: var(--dropdown-bg-color);
-            color: var(--text);
-        }
-
-        .nav-btn {
-            background-color: transparent;
-            text-decoration: none;
-            color: var(--text);
-            cursor: pointer;
-            border: none;
-            margin-left: 10px;
-        }
-
-
-        .navbar-light {
-            color: var(--text);
-        }
-
-        .navbar-light .navbar-nav .nav-link {
-            color: var(--text);
-            font-size: 20px;
-        }
-
-        .navbar-light .navbar-nav .nav-link:hover {
-            color: #a48fd6;
-        }
-
-        .navbar-light .navbar-nav .nav-link:focus {
-            color: var(--text);
-        }
-
-        .navbar-light .d-flex .btn {
-            color: var(--text);
-            outline: none;
-            box-shadow: none;
-        }
-
-        .navbar-toggler {
-            border-color: rgb(119, 87, 193);
-        }
-
-        .navbar-toggler .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgb(119, 87, 193)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
-        }
-
-        .navbar-toggler:active,
-        .navbar-toggler:focus {
-            background-color: var(--navbar-toggler-bg-color);
-            outline: none;
-        }
-
-
-        .loginbtn {
-            background-color: var(--secondary);
-            color: var(--text);
-        }
-
-        .loginbtn:hover {
-            background-color: var(--secondary-hover);
-        }
-
-
-        .signupbtn {
-            background-color: var(--primary);
-        }
-
-        .signupbtn:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .btn-search {
-            background-color: var(--primary);
-            outline: none;
-            box-shadow: none;
-        }
-
-        .btn-search:hover {
-            background-color: var(--primary-hover);
-        }
-
-
-        .theme-btn {
-            background-color: transparent;
-            color: var(--text);
-            cursor: pointer;
-            border: none;
-            border-radius: 100%;
-        }
-
-        .fa-moon,
-        .fa-sun {
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-            font-size: 1.5rem;
-        }
-
-        .fa-moon.active,
-        .fa-sun.active {
-            opacity: 1;
-        }
-
-
-
-
-        .card {
-            min-width: 90%;
-            max-height: auto;
-            color: var(--text);
-            background-color: var(--card-bg-color);
-        }
-
-        .skillcard {
-            min-width: 90%;
-            max-height: auto;
-            color: var(--text);
-            background-color: transparent;
-            border: none;
-        }
-
-        .more-about-me:focus,
-        .more-about-me:active {
-            outline: none;
-            border: none;
-        }
-
-        .user-name-card:hover {
-            text-decoration: underline;
-        }
-
-        .card-link {
-            text-decoration: none;
-            color: var(--text);
-        }
-
-        .card-link:hover {
-            text-decoration: underline;
-            color: var(--text);
-        }
-
-        .card-title:hover {
-            text-decoration: underline;
-            color: var(--text);
-        }
-
-        /* width */
-        ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
-        }
-
-        /* Track */
-        ::-webkit-scrollbar-track {
-            box-shadow: inset 0 0 5px grey;
-            border-radius: 10px;
-        }
-
-        /* Handle */
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 10px;
-        }
-
-        /* Handle on hover */
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-hover);
-        }
-
-        .left-side-col {
-            background-color: var(--secondary-hover);
-            border-radius: 10px;
-        }
-
-        .left-sub-container {
-            background-color: var(--primary);
-            color: var(--background);
-            border-radius: 30px;
-            font-size: smaller;
-        }
-
-        .f-name,
-        .s-name {
-            color: var(--text);
-        }
-
-        .u-name {
-            color: var(--user-name-color);
-        }
-
-        .right-side-amd {
-            display: flex;
-            justify-content: center;
-        }
-
-        .right-side-bmd {
-            display: none;
-        }
-
-        .badge:hover {
-            box-shadow: #181A1B;
-        }
-
-        .menu-link {
-            text-decoration: none;
-            color: var(--text);
-            text-align: center;
-        }
-
-        .btncreatejob {
-            text-decoration: none;
-            color: var(--text);
-        }
-
-        .offcanvas {
-            background-color: var(--card-bg-color);
-            color: var(--text);
-        }
-
-
-        @media (max-width: 992px) {
-            .right-side-amd {
-                display: none;
-            }
-
-            .right-side-bmd {
-                display: flex;
-            }
-        }
-    </style>
 
 
 </head>
 
-<body>
+<body style="overflow-x: hidden;">
 
-    <div class="container-fluid">
-        <div class="row">
-            <nav class="navbar navbar-expand-lg navbar-light navbar-transparent ">
+    <div class="container-fluid ">
+        <div class="row ">
+            <nav class="navbar  navbar-expand-lg navbar-light navbar-transparent ">
                 <div class="container-fluid">
                     <!-- Navbar Brand (Logo) -->
                     <a class="navbar-brand" href="{% url 'IntroHome' %}">
@@ -466,7 +164,7 @@
                             {% if user_profile.profile_image %}
                             <img style="width: 200px;height:200px;object-fit: cover;float: left;"
                                 class="rounded-circle  ms-0 ms-lg-2 mt-lg-0" alt=""
-                                src="{{ user_profile.profile_image.url }}" alt="Profile Picture">
+                                src="{{ user_profile.profile_image.url }}">
                             {% else %}
                             <p>No profile image available.</p>
                             {% endif %}
@@ -475,7 +173,8 @@
                             <h4 class="d-inline fw-bold f-name">{{user_profile.user.first_name}} </h4>
                             <h4 class="d-inline fw-bold s-name">{{user_profile.user.last_name}}</h4>
                             <p><span class="d-inline u-name"> @{{user_profile.user.username}}</span></p>
-                            <p class="d-block rating">★<span style="font-size: smaller;" class="fw-bold">4.5</span></p>
+                            <p class="d-block rating"><span class="star">&#9733;</span><span style="font-size: smaller;"
+                                    class="fw-bold">4.5</span></p>
                             <h5 class="d-inline me-3"><i class="las la-map-marker"></i> {{ user_profile.country }}</h5>
                             {% for language in user_profile.languages.all %}
                             {% if forloop.first %}
@@ -505,8 +204,7 @@
                                                             {% if user_profile.profile_image %}
                                                             <img style="width: 100px;height:100px;object-fit: cover;float: left;"
                                                                 class="rounded-circle  ms-0 ms-lg-2 mt-lg-0" alt=""
-                                                                src="{{ user_profile.profile_image.url }}"
-                                                                alt="Profile Picture">
+                                                                src="{{ user_profile.profile_image.url }}">
                                                             {% else %}
                                                             <p>No profile image available.</p>
                                                             {% endif %}
@@ -525,8 +223,9 @@
                                                             {% for language in user_profile.languages.all %}
                                                             {% if forloop.first %}
                                                             <h5 class="d-inline me-2 d-block d-sm-inline mt-2 mt-md-0">
-                                                                <i class="fa-regular fa-comment"></i>Speaks 
-                                                                {{ language.language }}</h5>
+                                                                <i class="fa-regular fa-comment"></i>Speaks
+                                                                {{ language.language }}
+                                                            </h5>
                                                             {% endif %}
                                                             {% endfor %}
                                                         </div>
@@ -546,7 +245,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                          
+
                                                     <div class="col mt-3 mb-3">
 
                                                         <div class="card skillcard ">
@@ -555,7 +254,7 @@
                                                                 style="width: 100%;height: 150px;">
                                                                 {% for language in user_profile.languages.all %}
                                                                 <div class="language-item">
-                                                                    <h5><strong>{{ language.language }} </strong> : 
+                                                                    <h5><strong>{{ language.language }} </strong> :
                                                                         {{ language.proficiency }}</h5>
                                                                 </div>
                                                                 {% endfor %}
@@ -565,7 +264,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-12 mt-3">
+                                            <div class="col-12  mt-3">
                                                 <hr>
                                                 <h4>About me</h4>
                                                 <p>{{ user_profile.about_me }}</p>
@@ -577,11 +276,12 @@
                                                     <div class="card-body overflow-auto"
                                                         style="width: 100%;height: 150px;">
                                                         {% for certification in user_profile.certifications.all %}
-                                                        <h4><strong>{{ certification.issuing_organization }}</strong> </h4>
-                                                        <strong>{{ certification.title }}</strong> 
-                                                        <small>{{ certification.issue_date }}</small> 
+                                                        <h4><strong>{{ certification.issuing_organization }}</strong>
+                                                        </h4>
+                                                        <strong>{{ certification.title }}</strong>
+                                                        <small>{{ certification.issue_date }}</small>
                                                         {% endfor %}
-                                                        
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -631,7 +331,7 @@
         <div class="row">
             {% for service_profile in user_service_profiles %}
             <div class="mt-3 col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 col-xxl-2">
-                <div class="card ">
+                <div class="card " style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
 
                     {% for gallery in service_profile.gallery_set.all %}
                     {% if gallery.image1 %}
@@ -666,6 +366,7 @@
                             <li>
                                 <a href="{% url 'edit_service' request.user.username service_profile.id %}"
                                     class="menu-link">Edit Service</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -673,10 +374,199 @@
             {% endfor %}
         </div>
     </div>
+
+    <div class="container-fluid mb-3 mt-3">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body d-flex justify-content-start">
+                        <div class="ms-2 d-block w-75">
+                            <h1 class="fs-5 d-inline">5</h1><span class="star d-inline"
+                                style="font-size: 110%;">&#9733;</span>
+                            <p>Average rating based on 2555 reviews</p>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-end" style="width: 30%">
+
+                            <!-- Button trigger modal -->
+                            <p type="button" class="btn loginbtn mt-3 text-end me-2" data-bs-toggle="modal"
+                                data-bs-target="#staticBackdrop">
+                                Sent Review
+                            </p>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <form>
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+
+                                                <div class="mb-3">
+                                                    <p for="recipient-name" class="col-form-label">Rating:</p>
+                                                    <div class="wrapper">
+                                                        <input class="rating-stars" type="radio" id="r1" name="rg1"
+                                                            value="5">
+                                                        <label class="rating_label" for="r1">&#9733;</label>
+                                                        <input class="rating-stars" type="radio" id="r2" name="rg1"
+                                                            value="4">
+                                                        <label class="rating_label" for="r2">&#9733;</label>
+                                                        <input class="rating-stars" type="radio" id="r3" name="rg1"
+                                                            value="3">
+                                                        <label class="rating_label" for="r3">&#9733;</label>
+                                                        <input class="rating-stars" type="radio" id="r4" name="rg1"
+                                                            value="2">
+                                                        <label class="rating_label" for="r4">&#9733;</label>
+                                                        <input class="rating-stars" type="radio" id="r5" name="rg1"
+                                                            value="1">
+                                                        <label class="rating_label" for="r5">&#9733;</label>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="recipient-name" class="col-form-label">Title:</label>
+                                                    <input style="outline: none;box-shadow: none" type="text"
+                                                        class="form-control" id="recipient-name">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="message-text" class="col-form-label">Review:</label>
+                                                    <textarea style="outline: none;box-shadow: none"
+                                                        class="form-control" id="message-text"></textarea>
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" onclick="submitForm()" class="btn btn-search"
+                                                    style="outline: none;box-shadow: none;color: var(--background)">Send
+                                                    message</button>
+                                                <button type="button" class="btn loginbtn"
+                                                    style="outline: none;box-shadow: none;"
+                                                    data-bs-dismiss="modal">Close</button>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body d-flex justify-content-start">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col d-flex justify-content-between">
+                                    <p>Reviews</p>
+                                    <div style="background-color: transparent;" class="dropdown">
+                                        <p class="dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            Sort
+                                        </p>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                            <li><a class="dropdown-item" href="#">Most Recent</a></li>
+                                            <li><a class="dropdown-item" href="#">Most Relevent</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col d-flex justify-content-between">
+                                    <div style="width: 50%;">
+                                        <img src="{% static 'img/draw2.webp' %}"
+                                            style="width: 30px; height: 30px; object-fit: cover; float: left;"
+                                            class="rounded-circle">
+                                        <p class="mt-1" style="margin-left: 6%;">@username [ Country ]</p>
+                                    </div>
+                                    <div>
+                                        <p class="fs-6 d-inline text-end mt-3"> 4 weeks ago | 5</p><span
+                                            class="star d-inline" style="font-size: 110%;">&#9733;</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 contentContainer">
+                                    <p class="content">
+                                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet incidunt
+                                        necessitatibus, error quam debitis at nam dolore. Distinctio laboriosam
+                                        voluptates
+                                        saepe repudiandae natus reiciendis tenetur non ipsum culpa sunt. Commodi.
+                                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet incidunt
+                                        necessitatibus, error quam debitis at nam dolore. Distinctio laboriosam
+                                        voluptates
+                                        saepe repudiandae natus reiciendis tenetur non ipsum culpa sunt. Commodi.
+                                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet incidunt
+                                        necessitatibus, error quam debitis at nam dolore. Distinctio laboriosam
+                                        voluptates
+                                        saepe repudiandae natus reiciendis tenetur non ipsum culpa sunt. Commodi.
+                                    </p>
+                                    <strong><span class="readMoreBtn" onclick="toggleContent()">Read
+                                            more</span></strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- ----------------------new html above-------------------------- -->
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var contentContainers = document.querySelectorAll(".contentContainer");
+
+            contentContainers.forEach(function (contentContainer) {
+                var content = contentContainer.querySelector(".content");
+                var readMoreBtn = contentContainer.querySelector(".readMoreBtn");
+
+                var words = content.textContent.split(' ').slice(0, 220).join(' ');
+                content.innerHTML = words + '<span class="hidden">' + content.textContent.slice(words.length) + '</span>';
+
+                readMoreBtn.onclick = function () {
+                    var hiddenContent = content.querySelector('.hidden');
+                    if (hiddenContent) {
+                        // Show the hidden content
+                        hiddenContent.classList.remove("hidden");
+                        readMoreBtn.innerText = "Hide";
+                    } else {
+                        // Hide the content after 60 words
+                        content.innerHTML = words + '<span class="hidden">' + content.textContent.slice(words.length) + '</span>';
+                        readMoreBtn.innerText = "Read more";
+                    }
+                };
+            });
+        });
+    </script>
+
+    <script>
+        function submitForm() {
+            // Get selected rating
+            const rating = document.querySelector('input[name="rg1"]:checked');
+            const title = document.getElementById('recipient-name').value;
+            const review = document.getElementById('message-text').value;
+
+            // Check if a rating is selected
+            if (!rating) {
+                alert('Please select a rating');
+                return;
+            }
+
+            // Display the values (you can replace this with your desired form submission logic)
+            alert(`Rating: ${rating.value}\nTitle: ${title}\nReview: ${review}`);
+        }
+    </script>
 
 
 
