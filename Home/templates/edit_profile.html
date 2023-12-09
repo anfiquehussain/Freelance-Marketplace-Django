@@ -2,134 +2,61 @@
 <html>
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
-    <style>
-       /* Reset default margin and padding for all elements */
-       * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-        /* Set a background color for the body */
-        body {
-            background-color: #f4f4f4;
-            font-family: Arial, sans-serif;
-        }
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
 
-        /* Center the form on the page */
-        form {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-        }
+    <link rel="stylesheet" href="{% static 'css/edit_profile.css' %}">
 
-        /* Style for headings */
-        h1,
-        h2 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        /* Style for labels */
-        label {
-            font-weight: bold;
-        }
-
-        /* Style for input fields */
-        input[type="text"],
-        input[type="email"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        /* Style for buttons */
-        button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        /* Style for error messages */
-        .error {
-            color: red;
-            background-color: #ffebeb;
-            padding: 5px;
-            border: 1px solid #ff8080;
-            border-radius: 4px;
-            margin-bottom: 10px;
-        }
-
-        /* Style for profile images */
-        #current-profile-preview {
-            width: 100px; 
-            border-radius: 100%; 
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); 
-            margin-bottom: 10px; 
-            height: 100px; 
-            object-fit: cover;
-        }
-
-        #new-profile-preview {
-            width: 100px; 
-            border-radius: 100%; 
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); 
-            margin-bottom: 10px; 
-            height: 100px; 
-            object-fit: cover;
-        }
-
-        /* Style for add button */
-        #add-certification-btn,
-        #add-language-btn {
-            background-color: #4CAF50;
-        }
-
-        /* Style for forms within containers */
-        #certifications-forms,
-        #languages-forms {
-            margin-top: 10px;
-        }
-        .certification-form,
-        .language-form,
-        .skill-form {
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 4px;
-            margin-top: 10px;
-        }
-
-        /* Add hover effect to buttons */
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
 </head>
 
 <body>
     <!-- Rest of your template -->
 
+    <div class="container-fuild overflow-hidden">
+        <div class="row me-2 ms-2">
+            <div class="col">
+                <nav class="navbar navbar-light navbar-transparent">
+                    <a class="navbar-brand" href="{% url 'IntroHome' %}">
+                        <img src="{% static 'img/logo1.png' %}" width="30" height="30" alt="">
+                    </a>
+                    <button class="theme-toggle-button theme-btn">Toggle Theme</button>
+                </nav>
+            </div>
+        </div>
+    </div>
     <h1 style="text-align: center; margin-top: 20px;">Edit Your Profile</h1>
     <form method="post" enctype="multipart/form-data">
-        {% if username_message %}
-        <p class="error">{{ username_message }}</p>
-        {% endif %}
-
-        {% if email_message %}
-        <p class="error">{{ email_message }}</p>
-        {% endif %}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    {% if username_message %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ username_message }}
+                    </div>
+                    {% endif %}
+                    {% if email_message %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ email_message }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+    
+        </div>
 
         <div style="display: flex; gap: 20px; justify-content: center;">
             <div>
@@ -146,6 +73,12 @@
             </div>
         </div>
 
+        
+        <span style="font-weight: bold;">
+            <p class="p_o">{{ user_form.profile.label }}</p>
+            {{ user_form.profile_image }}
+            
+        </span>
 
         <h2>Authentication Information</h2>
         <label for="id_username">Username:</label>
@@ -159,7 +92,40 @@
 
 
         <h2>User Profile</h2>
-        {{ user_form.as_p }}
+        
+
+        <span style="font-weight: bold;">
+        {{ user_form.country.label }}
+        {{ user_form.country }}
+
+        {{ user_form.state.label }}
+        {{ user_form.state }}
+
+        {{ user_form.website_link.label }}
+        {{ user_form.website_link }}
+
+        {{ user_form.about_me.label }}
+        {{ user_form.about_me }}
+    </span>
+        
+
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="flush-headingOne">
+                        <button style="color: black;" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                            {{ user_form.skills.label }}
+                        </button>
+                      </h2>
+                      <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body" style="background-color: var(--card-bg-color);">
+                            {{ user_form.skills }}
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+        
+
         <h2>Certifications</h2>
         <!-- Certifications Container -->
         <div id="certifications-container">
@@ -193,6 +159,19 @@
 
         <button type="submit">Save Changes</button>
     </form>
+
+    
+<script src="{% static 'js/theme.js' %}"></script>
+<script src="{% static 'js/edit_profile.js' %}"></script>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+<script>
+    $(function () {
+        $('.mytoolthip').tooltip();
+    });
+</script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

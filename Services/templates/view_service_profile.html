@@ -8,177 +8,130 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
     integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet"
+    href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+
+
   {% load bootstrap5 %}
   {% bootstrap_css %}
   {% bootstrap_javascript %}
+  {% load static %}
 
-  <style>
-    @font-face {
-      font-family: Delicious;
-      src: url('Delicious-Roman.otf');
-    }
+  <link rel="stylesheet" href="{% static 'css/view_service_profile.css' %}">
 
-    body {
-            font-family: Arial, sans-serif;
-        }
-
-
-    .main-title {
-      color: #404145;
-      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-      font-weight: 700;
-    }
-
-    .name-of-seller {
-      color: #404145;
-      text-decoration: none;
-      font-size: 1.5rem;
-      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-      font-style: normal;
-      cursor: pointer;
-    }
-
-    .name-of-seller:hover {
-      color: #404145;
-    }
-
-    .d-block {
-      width: 100%;
-      height: 400px;
-      object-fit: cover;
-      border-radius: 10px;
-    }
-
-    .section-title {
-      font-size: 20px;
-      line-height: 28px;
-      padding-bottom: 25px;
-      color: #404145;
-      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-      font-weight: 700;
-    }
-
-    .user-name-profile {
-      font-size: 0.9rem;
-      color: #74767e;
-      font-weight: 100;
-      font-family: Verdana, Geneva, Tahoma, sans-serif;
-    }
-
-    .main-container {
-      width: 60%;
-      margin: auto;
-      border: 2px solid #ddd;
-    }
-
-    .header-row {
-      display: flex;
-      background-color: #f1f1f1;
-      border-bottom: 2px solid #ddd;
-    }
-
-    .header-cell {
-      flex: 1;
-      text-align: center;
-      padding: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      border-right: 1px solid #ddd;
-      color: #74767e;
-    }
-
-    .header-cell:last-child {
-      border-right: none;
-
-    }
-
-    .details {
-      display: none;
-      width: 100%;
-    }
-
-    .details-cell {
-      width: 100%;
-      padding: 20px;
-    }
-
-    .package {
-      border: 2px solid #ddd;
-      padding: 20px;
-      text-align: left;
-    }
-
-    .package-price {
-      font-size: 1.5em;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .package-header {
-      font-size: 1.2em;
-      font-weight: 400;
-      margin-bottom: 10px;
-    }
-
-
-    .package-content {
-      font-size: 0.9em;
-      line-height: 1.5;
-    }
-  </style>
 
 </head>
 
-<body>
-  <div class="container">
-    <!-- navbar -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{% url 'home' user.username %}">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'profile' user.username %}">View Profile</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Profile
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{% url 'profile' user.username %}">View Profile</a></li>
-                <li><a class="dropdown-item" href="{% url 'edit_profile' user.username %}">Edit Profile</a>
+<body style="overflow-x: hidden;">
+  <div class="container-fluid ">
+    <div class="row ">
+      <nav class="navbar  navbar-expand-lg navbar-light navbar-transparent ">
+        <div class="container-fluid">
+          <!-- Navbar Brand (Logo) -->
+          <a class="navbar-brand" href="{% url 'IntroHome' %}">
+            <img src="{% static 'img/logo1.png' %}" alt="" width="30" height="30">
+          </a>
+
+          <!-- Navbar Toggler for small screens (moved to the right) -->
+          <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon "></span>
+          </button>
+
+
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="d-flex ms-auto">
+              <ul class="navbar-nav ">
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Dashboard
+                  </a>
+                  <ul class="dropdown-menu">
+
+                    <li><a class="dropdown-item" href="{% url 'seller_dashboard' user.username %}">Seller
+                        Dashboard</a></li>
+                    <li><a class="dropdown-item" href="{% url 'buyer_dashboard' user.username %}">Buyer
+                        Dashboard</a></li>
+                    {% if user.is_superuser%}
+                    <li><a class="dropdown-item" href="{% url 'admin_dashboard' user.username %}">Admin
+                        Dashboard</a></li>
+                    {% endif %}
+
+
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                  </ul>
                 </li>
-                <li><a class="dropdown-item" href="#">Become Seller</a></li>
-                <li><a class="dropdown-item" href="#">Settings</a></li>
-                <li>
-                  <hr class="dropdown-divider">
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Profile
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'profile' user.username %}">View
+                        Profile</a></li>
+                    <li><a class="dropdown-item" href="{% url 'edit_profile' user.username %}">Edit
+                        Profile</a>
+                    </li>
+                    <li><a class="dropdown-item" href="{% url 'list_all_the_order' user.username %}">My
+                        Purchases</a></li>
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                  </ul>
+
                 </li>
-                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                <!-- <li class="nav-item">
+                                <form class="d-flex me-2 ms-1">
+                                    <input class="form-control me-2"
+                                        style="  outline: none;box-shadow: none;width: 250px;" type="search"
+                                        placeholder="Search" aria-label="Search">
+                                    <button class="btn btn-search" type="submit"
+                                        style="color: var(--text);  outline: none;box-shadow: none;">Search</button>
+                                </form>
+                            </li> -->
+
+
+
+
               </ul>
-            </li>
-            <!-- <li class="nav-item">
-              <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-            </li> -->
-          </ul>
-          <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
+            </div>
+            <div class="d-flex ms-auto ">
+              <!-- <a href="{% url 'login' %}" class="btn loginbtn me-2" style="color: var(--text);">Log In</a>
+                        <a href="{% url 'register' %}" class="btn signupbtn me-2"
+                            style="color: var(--background)">Sign Up</a> -->
+              <form class="d-flex me-2 ms-1">
+                <input class="form-control me-2" style="  outline: none;box-shadow: none;" type="search"
+                  placeholder="Search" aria-label="Search">
+                <button class="btn btn-search" type="submit"
+                  style="color: var(--background);  outline: none;box-shadow: none;">Search</button>
+              </form>
+              <a class="btn loginbtn me-2" style="color: var(--text);" href="{% url 'logout' %}">Logout</a>
+            </div>
+
+            <div class="d-flex ms-auto">
+
+              <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Dark/Light Mode"
+                class="theme-toggle-button  theme-btn mt-4 ms-0 ms-lg-2 mt-lg-0 mytoolthip">Toggle
+                Theme</button>
+            </div>
+
+
+
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </div>
+    <hr>
+  </div>
+  <div class="container-fluid">
 
-
-    <!-- navbar  -->
-    <div class="row">
+    
+    <div class="row ms-1">
       <div class="col-md-6">
 
         <div class="row">
@@ -189,7 +142,10 @@
             <h4>{{service_profile.titleOverview}}</h4>
           </div>
           <div class="col mt-1">
-
+            <span style="display: none;">
+              
+              {{service_profile.user}}
+            </span>
             <img class="rounded-circle me-1" src="{{ user_profile.profile_image.url }}"
               style="width: 40px;height:40px;object-fit: cover;float: left;" alt="...">
             <a style="float: left;" class="name-of-seller" href="{% url 'view_profile_public' service_profile.user %}">
@@ -198,11 +154,9 @@
                   class="user-name-profile">(@{{user_profile.user.username}})</span>
               </p>
             </a>
-
-
             {% if user == user_profile.user %}
             <a href="{% url 'edit_service' request.user.username service_profile.id %}">
-              <button type="button" class="btn ms-2" style="border: 1px solid #404145;"> <i
+              <button type="button" class="btn ms-2" style="border: 1px solid var(--user-name-color);color: var(--text);"> <i
                   class="fa-regular fa-pen-to-square"></i>EDIT</button>
             </a>
             {% endif %}
@@ -264,294 +218,368 @@
         <div class="row">
 
 
+          <div>
+            <center>
+              <div class="main-container mt-5">
+                <div class="header-row">
+                  <div class="header-cell" id="basic-button">Basic</div>
+                  <div class="header-cell" id="standard-button">Standard</div>
+                  <div class="header-cell" id="premium-button">Premium</div>
+                </div>
+
+                {% for basic_pack in basic_packages %}
+                <div id="basic-details" class="details">
+                  <div class="details-cell">
+                    <div class="package">
+                      <h4 class="package-price">₹{{ basic_pack.Basic_price }}</h4>
+                      <h4 class="package-header">{{ basic_pack.Basic_title }}</h4>
+                      <div class="package-content">
+                        <p>{{ basic_pack.Basic_description }}</p>
+                        <p style="color: #74767e">
+                          <span>
+                            <i class="fa-regular fa-clock" style="color: #74767e"></i>
+                            {{ basic_pack.Basic_delivery_time }} Days Delivery
+                          </span>
+                          <span class="ms-2">
+                            <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                              <path fill="#74767e"
+                                d="M4.50001 11.4999C6.40001 13.3999 9.60001 13.3999 11.5 11.4999C12.2 10.7999 12.7 9.7999 12.9 8.7999L14.9 9.0999C14.7 10.5999 14 11.8999 13 12.8999C10.3 15.5999 5.90001 15.5999 3.10001 12.8999L0.900012 15.0999L0.200012 8.6999L6.60001 9.3999L4.50001 11.4999Z">
+                              </path>
+                              <path fill="#74767e"
+                                d="M15.8 7.2999L9.40001 6.5999L11.5 4.4999C9.60001 2.5999 6.40001 2.5999 4.50001 4.4999C3.80001 5.1999 3.30001 6.1999 3.10001 7.1999L1.10001 6.8999C1.30001 5.3999 2.00001 4.0999 3.00001 3.0999C4.40001 1.6999 6.10001 1.0999 7.90001 1.0999C9.70001 1.0999 11.5 1.7999 12.8 3.0999L15 0.899902L15.8 7.2999Z">
+                              </path>
+                            </svg>
+                            {{ basic_pack.Basic_revisions }} Revision
+                          </span>
+                        </p>
+                        {% if basic_pack.Basic_source_file %}
+                        <p><i class="fa-solid fa-check"></i> <span class="ms-1">source_file include</span></p>
+                        {% else %}
+                        <p><i class="fa-solid fa-x fa-rotate-90" style="color: #74767e"></i><span style="color: #74767e"
+                            class="ms-2">source_file include</span></p>
+                        {% endif %}
+
+                        {% if user != service_profile.user %}
+                        <a href="{% url 'payments' overview_id=service_profile.id username=request.user.username %}?additional_data={{ basic_pack.overview.id }}&additional_data2=1"
+                          class="package-continue-btn">
+                          <button style="width: 100%;" type="button" class="btn btn-dark btn-lg">
+                            Continue<i class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i>
+                          </button>
+                        </a>
+                        {% else %}
+                        <div class="alert alert-warning message" role="alert" style="display: none;">
+                          <strong>You</strong> cannot order your own service.
+                        </div>
+
+                        <button style="width: 100%;" type="button" class="btn btn-dark btn-lg continue-button">
+                          Continue<i class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i>
+                        </button>
+                        {% endif %}
 
 
-          <center>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
 
+
+                {% for standard_pack in standardpackage %}
+                <div id="standard-details" class="details">
+                  <div class="details-cell">
+                    <div class="package">
+                      <h4 class="package-price">₹{{ standard_pack.Standard_price }}</h4>
+                      <h4 class="package-header">{{ standard_pack.Standard_title }}</h4>
+                      <div class="package-content">
+                        <p>{{ standard_pack.Standard_description }}</p>
+                        <p style="color: #74767e">
+                          <span>
+                            <i class="fa-regular fa-clock" style="color: #74767e"></i>
+                            {{ standard_pack.Standard_delivery_time }} Days Delivery
+                          </span>
+                          <span class="ms-2">
+                            <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                              <path fill="#74767e"
+                                d="M4.50001 11.4999C6.40001 13.3999 9.60001 13.3999 11.5 11.4999C12.2 10.7999 12.7 9.7999 12.9 8.7999L14.9 9.0999C14.7 10.5999 14 11.8999 13 12.8999C10.3 15.5999 5.90001 15.5999 3.10001 12.8999L0.900012 15.0999L0.200012 8.6999L6.60001 9.3999L4.50001 11.4999Z">
+                              </path>
+                              <path fill="#74767e"
+                                d="M15.8 7.2999L9.40001 6.5999L11.5 4.4999C9.60001 2.5999 6.40001 2.5999 4.50001 4.4999C3.80001 5.1999 3.30001 6.1999 3.10001 7.1999L1.10001 6.8999C1.30001 5.3999 2.00001 4.0999 3.00001 3.0999C4.40001 1.6999 6.10001 1.0999 7.90001 1.0999C9.70001 1.0999 11.5 1.7999 12.8 3.0999L15 0.899902L15.8 7.2999Z">
+                              </path>
+                            </svg>
+                            {{ standard_pack.Standard_revisions }} Revision
+                          </span>
+                        </p>
+
+
+                        {% if standard_pack.Standard_source_file %}
+                        <p><i class="fa-solid fa-check"></i> <span class="ms-1">source_file include</span></p>
+                        {% else %}
+                        <p><i class="fa-solid fa-x fa-rotate-90" style="color: #74767e"></i><span style="color: #74767e"
+                            class="ms-2">source_file include</span></p>
+                        {% endif %}
+
+
+
+
+                        {% if user != service_profile.user %}
+                        <a href="{% url 'payments' overview_id=service_profile.id username=request.user.username %}?additional_data={{ standard_pack.overview.id }}&additional_data2=2"
+                          class="package-continue-btn">
+
+                          <button style="width: 100%;" type="button" class="btn btn-dark btn-lg">Continue<i
+                              class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i>
+                          </button>
+                        </a>
+                        {% else %}
+                        <div class="alert alert-warning message" role="alert" style="display: none;">
+                          <strong>You</strong> cannot order your own service.
+                        </div>
+
+                        <button style="width: 100%;" type="button" class="btn btn-dark btn-lg continue-button">
+                          Continue<i class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i>
+                        </button>
+                        {% endif %}
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+
+
+                {% for premium_pack in premiumpackage %}
+                <div id="premium-details" class="details">
+                  <div class="details-cell">
+                    <div class="package">
+                      <h4 class="package-price">₹{{ premium_pack.Premium_price }}</h4>
+                      <h4 class="package-header">{{ premium_pack.Premium_title }}</h4>
+                      <div class="package-content">
+                        <p>{{ premium_pack.Premium_description }}</p>
+                        <p style="color: #74767e">
+                          <span>
+                            <i class="fa-regular fa-clock" style="color: #74767e"></i>
+                            {{ premium_pack.Premium_delivery_time }} Days Delivery
+                          </span>
+                          <span class="ms-2">
+                            <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                              <path fill="#74767e"
+                                d="M4.50001 11.4999C6.40001 13.3999 9.60001 13.3999 11.5 11.4999C12.2 10.7999 12.7 9.7999 12.9 8.7999L14.9 9.0999C14.7 10.5999 14 11.8999 13 12.8999C10.3 15.5999 5.90001 15.5999 3.10001 12.8999L0.900012 15.0999L0.200012 8.6999L6.60001 9.3999L4.50001 11.4999Z">
+                              </path>
+                              <path fill="#74767e"
+                                d="M15.8 7.2999L9.40001 6.5999L11.5 4.4999C9.60001 2.5999 6.40001 2.5999 4.50001 4.4999C3.80001 5.1999 3.30001 6.1999 3.10001 7.1999L1.10001 6.8999C1.30001 5.3999 2.00001 4.0999 3.00001 3.0999C4.40001 1.6999 6.10001 1.0999 7.90001 1.0999C9.70001 1.0999 11.5 1.7999 12.8 3.0999L15 0.899902L15.8 7.2999Z">
+                              </path>
+                            </svg>
+                            {{ premium_pack.Premium_revisions }} Revision
+                          </span>
+                        </p>
+
+                        {% if premium_pack.Premium_source_file %}
+                        <p><i class="fa-solid fa-check"></i> <span class="ms-1">source_file include</span></p>
+                        {% else %}
+                        <p><i class="fa-solid fa-x fa-rotate-90" style="color: #74767e"></i><span style="color: #74767e"
+                            class="ms-2">source_file include</span></p>
+                        {% endif %}
+
+
+
+
+                        {% if user != service_profile.user %}
+                        <a href="{% url 'payments' overview_id=service_profile.id username=request.user.username %}?additional_data={{ premium_pack.overview.id }}&additional_data2=3"
+                          class="package-continue-btn">
+
+                          <button style="width: 100%;" type="button" class="btn btn-dark btn-lg">Continue<i
+                              class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i></button>
+                        </a>
+                        {% else %}
+                        <div class="alert alert-warning message" role="alert" style="display: none;">
+                          <strong>You</strong> cannot order your own service.
+                        </div>
+
+                        <button style="width: 100%;" type="button" class="btn btn-dark btn-lg continue-button">
+                          Continue<i class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i>
+                        </button>
+                        {% endif %}
+
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </center>
+          </div>
         </div>
-        <div class="main-container mt-5">
-          <div class="header-row">
-            <div class="header-cell" id="basic-button">Basic</div>
-            <div class="header-cell" id="standard-button">Standard</div>
-            <div class="header-cell" id="premium-button">Premium</div>
-          </div>
+      </div>
+    </div>
+  </div>
 
-          {% for basic_pack in basic_packages %}
-          <div id="basic-details" class="details">
-            <div class="details-cell">
-              <div class="package">
-                <h4 class="package-price">₹{{ basic_pack.Basic_price }}</h4>
-                <h4 class="package-header">{{ basic_pack.Basic_title }}</h4>
-                <div class="package-content">
-                  <p>{{ basic_pack.Basic_description }}</p>
-                  <p style="color: #74767e">
-                    <span>
-                      <i class="fa-regular fa-clock" style="color: #74767e"></i>
-                      {{ basic_pack.Basic_delivery_time }} Days Delivery
-                    </span>
-                    <span class="ms-2">
-                      <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                        <path fill="#74767e"
-                          d="M4.50001 11.4999C6.40001 13.3999 9.60001 13.3999 11.5 11.4999C12.2 10.7999 12.7 9.7999 12.9 8.7999L14.9 9.0999C14.7 10.5999 14 11.8999 13 12.8999C10.3 15.5999 5.90001 15.5999 3.10001 12.8999L0.900012 15.0999L0.200012 8.6999L6.60001 9.3999L4.50001 11.4999Z">
-                        </path>
-                        <path fill="#74767e"
-                          d="M15.8 7.2999L9.40001 6.5999L11.5 4.4999C9.60001 2.5999 6.40001 2.5999 4.50001 4.4999C3.80001 5.1999 3.30001 6.1999 3.10001 7.1999L1.10001 6.8999C1.30001 5.3999 2.00001 4.0999 3.00001 3.0999C4.40001 1.6999 6.10001 1.0999 7.90001 1.0999C9.70001 1.0999 11.5 1.7999 12.8 3.0999L15 0.899902L15.8 7.2999Z">
-                        </path>
-                      </svg>
-                      {{ basic_pack.Basic_revisions }} Revision
-                    </span>
-                  </p>
-                  {% if basic_pack.Basic_source_file %}
-                  <p><i class="fa-solid fa-check"></i> <span class="ms-1">source_file include</span></p>
-                  {% else %}
-                  <p><i class="fa-solid fa-x fa-rotate-90" style="color: #74767e"></i><span style="color: #74767e"
-                      class="ms-2">source_file include</span></p>
-                  {% endif %}
+  <div class="container-fluid mb-3 mt-3">
+    <div class="row">
+      <div class="col">
+        <div class="card" style="height: 100px;">
+          <div class="card-body d-flex justify-content-start">
+            <div class="ms-2 d-block w-75">
+              <h1 class="fs-5 d-inline">5</h1><span class="star d-inline" style="font-size: 110%;">&#9733;</span>
+              <p>Average rating based on 2555 reviews</p>
+            </div>
+            <div class="d-flex align-items-start justify-content-end" style="width: 30%">
 
-                  {% if user != service_profile.user %}
-                  <a href="{% url 'payments' overview_id=service_profile.id username=request.user.username %}?additional_data={{ basic_pack.overview.id }}&additional_data2=1"
-                    class="package-continue-btn">
-                    <button style="width: 100%;" type="button" class="btn btn-dark btn-lg">
-                      Continue<i class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i>
-                    </button>
-                  </a>
-                  {% else %}
-                  <div class="alert alert-warning message" role="alert" style="display: none;">
-                    <strong>You</strong> cannot order your own service.
-                  </div>
+              <!-- Button trigger modal -->
+              <p type="button" class="btn loginbtn mt-3 text-end me-2" data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop">
+                Sent Review
+              </p>
 
-                  <button style="width: 100%;" type="button" class="btn btn-dark btn-lg continue-button">
-                    Continue<i class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i>
-                  </button>
-                  {% endif %}
+              <!-- Modal -->
+              <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <form>
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="mb-3">
+                          <p for="recipient-name" class="col-form-label">Rating:</p>
+                          <div class="wrapper">
+                            <input class="rating-stars" type="radio" id="r1" name="rg1" value="5">
+                            <label class="rating_label" for="r1">&#9733;</label>
+                            <input class="rating-stars" type="radio" id="r2" name="rg1" value="4">
+                            <label class="rating_label" for="r2">&#9733;</label>
+                            <input class="rating-stars" type="radio" id="r3" name="rg1" value="3">
+                            <label class="rating_label" for="r3">&#9733;</label>
+                            <input class="rating-stars" type="radio" id="r4" name="rg1" value="2">
+                            <label class="rating_label" for="r4">&#9733;</label>
+                            <input class="rating-stars" type="radio" id="r5" name="rg1" value="1">
+                            <label class="rating_label" for="r5">&#9733;</label>
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <label for="recipient-name" class="col-form-label">Title:</label>
+                          <input style="outline: none;box-shadow: none" type="text" class="form-control"
+                            id="recipient-name">
+                        </div>
+                        <div class="mb-3">
+                          <label for="message-text" class="col-form-label">Review:</label>
+                          <textarea style="outline: none;box-shadow: none" class="form-control"
+                            id="message-text"></textarea>
+                        </div>
 
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" onclick="submitForm()" class="btn btn-search"
+                          style="outline: none;box-shadow: none;color: var(--background)">Send
+                          message</button>
+                        <button type="button" class="btn loginbtn" style="outline: none;box-shadow: none;"
+                          data-bs-dismiss="modal">Close</button>
 
+                      </div>
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>
           </div>
-          {% endfor %}
-
-
-          {% for standard_pack in standardpackage %}
-          <div id="standard-details" class="details">
-            <div class="details-cell">
-              <div class="package">
-                <h4 class="package-price">₹{{ standard_pack.Standard_price }}</h4>
-                <h4 class="package-header">{{ standard_pack.Standard_title }}</h4>
-                <div class="package-content">
-                  <p>{{ standard_pack.Standard_description }}</p>
-                  <p style="color: #74767e">
-                    <span>
-                      <i class="fa-regular fa-clock" style="color: #74767e"></i>
-                      {{ standard_pack.Standard_delivery_time }} Days Delivery
-                    </span>
-                    <span class="ms-2">
-                      <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                        <path fill="#74767e"
-                          d="M4.50001 11.4999C6.40001 13.3999 9.60001 13.3999 11.5 11.4999C12.2 10.7999 12.7 9.7999 12.9 8.7999L14.9 9.0999C14.7 10.5999 14 11.8999 13 12.8999C10.3 15.5999 5.90001 15.5999 3.10001 12.8999L0.900012 15.0999L0.200012 8.6999L6.60001 9.3999L4.50001 11.4999Z">
-                        </path>
-                        <path fill="#74767e"
-                          d="M15.8 7.2999L9.40001 6.5999L11.5 4.4999C9.60001 2.5999 6.40001 2.5999 4.50001 4.4999C3.80001 5.1999 3.30001 6.1999 3.10001 7.1999L1.10001 6.8999C1.30001 5.3999 2.00001 4.0999 3.00001 3.0999C4.40001 1.6999 6.10001 1.0999 7.90001 1.0999C9.70001 1.0999 11.5 1.7999 12.8 3.0999L15 0.899902L15.8 7.2999Z">
-                        </path>
-                      </svg>
-                      {{ standard_pack.Standard_revisions }} Revision
-                    </span>
-                  </p>
-
-
-                  {% if standard_pack.Standard_source_file %}
-                  <p><i class="fa-solid fa-check"></i> <span class="ms-1">source_file include</span></p>
-                  {% else %}
-                  <p><i class="fa-solid fa-x fa-rotate-90" style="color: #74767e"></i><span style="color: #74767e"
-                      class="ms-2">source_file include</span></p>
-                  {% endif %}
-
-
-
-
-                  {% if user != service_profile.user %}
-                  <a href="{% url 'payments' overview_id=service_profile.id username=request.user.username %}?additional_data={{ standard_pack.overview.id }}&additional_data2=2"
-                    class="package-continue-btn">
-
-                    <button style="width: 100%;" type="button" class="btn btn-dark btn-lg">Continue<i
-                        class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i></button>
-                    </button></a>
-                  {% else %}
-                  <div class="alert alert-warning message" role="alert" style="display: none;">
-                    <strong>You</strong> cannot order your own service.
-                  </div>
-
-                  <button style="width: 100%;" type="button" class="btn btn-dark btn-lg continue-button">
-                    Continue<i class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i>
-                  </button>
-                  {% endif %}
-
-                </div>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-
-
-          {% for premium_pack in premiumpackage %}
-          <div id="premium-details" class="details">
-            <div class="details-cell">
-              <div class="package">
-                <h4 class="package-price">₹{{ premium_pack.Premium_price }}</h4>
-                <h4 class="package-header">{{ premium_pack.Premium_title }}</h4>
-                <div class="package-content">
-                  <p>{{ premium_pack.Premium_description }}</p>
-                  <p style="color: #74767e">
-                    <span>
-                      <i class="fa-regular fa-clock" style="color: #74767e"></i>
-                      {{ premium_pack.Premium_delivery_time }} Days Delivery
-                    </span>
-                    <span class="ms-2">
-                      <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                        <path fill="#74767e"
-                          d="M4.50001 11.4999C6.40001 13.3999 9.60001 13.3999 11.5 11.4999C12.2 10.7999 12.7 9.7999 12.9 8.7999L14.9 9.0999C14.7 10.5999 14 11.8999 13 12.8999C10.3 15.5999 5.90001 15.5999 3.10001 12.8999L0.900012 15.0999L0.200012 8.6999L6.60001 9.3999L4.50001 11.4999Z">
-                        </path>
-                        <path fill="#74767e"
-                          d="M15.8 7.2999L9.40001 6.5999L11.5 4.4999C9.60001 2.5999 6.40001 2.5999 4.50001 4.4999C3.80001 5.1999 3.30001 6.1999 3.10001 7.1999L1.10001 6.8999C1.30001 5.3999 2.00001 4.0999 3.00001 3.0999C4.40001 1.6999 6.10001 1.0999 7.90001 1.0999C9.70001 1.0999 11.5 1.7999 12.8 3.0999L15 0.899902L15.8 7.2999Z">
-                        </path>
-                      </svg>
-                      {{ premium_pack.Premium_revisions }} Revision
-                    </span>
-                  </p>
-
-                  {% if premium_pack.Premium_source_file %}
-                  <p><i class="fa-solid fa-check"></i> <span class="ms-1">source_file include</span></p>
-                  {% else %}
-                  <p><i class="fa-solid fa-x fa-rotate-90" style="color: #74767e"></i><span style="color: #74767e"
-                      class="ms-2">source_file include</span></p>
-                  {% endif %}
-
-
-
-
-                  {% if user != service_profile.user %}
-                  <a href="{% url 'payments' overview_id=service_profile.id username=request.user.username %}?additional_data={{ premium_pack.overview.id }}&additional_data2=3"
-                    class="package-continue-btn">
-
-                    <button style="width: 100%;" type="button" class="btn btn-dark btn-lg">Continue<i
-                        class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i></button>
-                    </button></a>
-                  {% else %}
-                  <div class="alert alert-warning message" role="alert" style="display: none;">
-                    <strong>You</strong> cannot order your own service.
-                  </div>
-
-                  <button style="width: 100%;" type="button" class="btn btn-dark btn-lg continue-button">
-                    Continue<i class="fa-solid fa-right-long fa-2xs ms-4" style="color: white;"></i>
-                  </button>
-                  {% endif %}
-
-
-                </div>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
         </div>
-        </center>
-        <div class="col">
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col">
+        <div class="card">
+          <div class="card-body d-flex justify-content-start">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col d-flex justify-content-between">
+                  <p>Reviews</p>
+                  <div style="background-color: transparent;" class="dropdown">
+                    <p class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                      aria-expanded="false">
+                      Sort
+                    </p>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                      <li><a class="dropdown-item" href="#">Most Recent</a></li>
+                      <li><a class="dropdown-item" href="#">Most Relevent</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col d-flex justify-content-between">
+                  <div style="width: 50%;">
+                    <img src="{% static 'img/draw2.webp' %}"
+                      style="width: 30px; height: 30px; object-fit: cover; float: left;" class="rounded-circle">
+                    <p class="mt-1" style="margin-left: 6%;">@username [ Country ]</p>
+                  </div>
+                  <div>
+                    <p class="fs-6 d-inline text-end mt-3"> 4 weeks ago | 5</p><span class="star d-inline"
+                      style="font-size: 110%;">&#9733;</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12 contentContainer">
+                  <p class="content">
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet incidunt
+                    necessitatibus, error quam debitis at nam dolore. Distinctio laboriosam
+                    voluptates
+                    saepe repudiandae natus reiciendis tenetur non ipsum culpa sunt. Commodi.
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet incidunt
+                    necessitatibus, error quam debitis at nam dolore. Distinctio laboriosam
+                    voluptates
+                    saepe repudiandae natus reiciendis tenetur non ipsum culpa sunt. Commodi.
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet incidunt
+                    necessitatibus, error quam debitis at nam dolore. Distinctio laboriosam
+                    voluptates
+                    saepe repudiandae natus reiciendis tenetur non ipsum culpa sunt. Commodi.
+                  </p>
+                  <strong><span class="readMoreBtn" onclick="toggleContent()">Read
+                      more</span></strong>
+                </div>
+              </div>
+            </div>
+          </div>
 
         </div>
       </div>
-
     </div>
-  </div>
-  </div>
+
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="{% static 'js/theme.js' %}"></script>
+  <script src="{% static 'js/view_service_profile_continue_btn.js' %}"></script>
+  <script src="{% static 'js/view_service_profile.js' %}"></script>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const basicButton = document.getElementById("basic-button");
-      const standardButton = document.getElementById("standard-button");
-      const premiumButton = document.getElementById("premium-button");
-
-      const basicDetails = document.getElementById("basic-details");
-      const standardDetails = document.getElementById("standard-details");
-      const premiumDetails = document.getElementById("premium-details");
-
-      basicButton.addEventListener("click", function () {
-        basicDetails.style.display = "block";
-        standardDetails.style.display = "none";
-        premiumDetails.style.display = "none";
-
-        // Change button background colors
-        basicButton.style.backgroundColor = "#ffff";  // Change to your desired color
-
-        standardButton.style.backgroundColor = "";
-        premiumButton.style.backgroundColor = "";
-
-        basicButton.style.color = "#222325";
-        standardButton.style.color = "";
-        premiumButton.style.color = "";
-
-      });
-
-      standardButton.addEventListener("click", function () {
-        basicDetails.style.display = "none";
-        standardDetails.style.display = "block";
-        premiumDetails.style.display = "none";
-
-        // Change button background colors
-        basicButton.style.backgroundColor = "";
-        standardButton.style.backgroundColor = "#ffff";  // Change to your desired color
-        premiumButton.style.backgroundColor = "";
-
-        basicButton.style.color = "";
-        standardButton.style.color = "#222325";
-        premiumButton.style.color = "";
-      });
-
-      premiumButton.addEventListener("click", function () {
-        basicDetails.style.display = "none";
-        standardDetails.style.display = "none";
-        premiumDetails.style.display = "block";
-
-        // Change button background colors
-        basicButton.style.backgroundColor = "";
-        standardButton.style.backgroundColor = "";
-        premiumButton.style.backgroundColor = "#ffff";  // Change to your desired color
-        basicButton.style.color = "";
-        standardButton.style.color = "";
-        premiumButton.style.color = "#222325";
-      });
-
-      // Show basic details by default
-      basicDetails.style.display = "block";
-      basicButton.style.backgroundColor = "#ffff";  // Change to your desired color
-      basicButton.style.color = "#222325";
+    $(function () {
+      $('.mytoolthip').tooltip();
     });
-
   </script>
 
   <script>
+    function submitForm() {
+      // Get selected rating
+      const rating = document.querySelector('input[name="rg1"]:checked');
+      const title = document.getElementById('recipient-name').value;
+      const review = document.getElementById('message-text').value;
 
-    // Get references to the button and the message paragraph by class name
-    var buttons = document.getElementsByClassName("continue-button");
-    var messages = document.getElementsByClassName("message");
+      // Check if a rating is selected
+      if (!rating) {
+        alert('Please select a rating');
+        return;
+      }
 
-    // Loop through each button element and add a click event listener
-    for (var i = 0; i < buttons.length; i++) {
-      buttons[i].addEventListener("click", function () {
-        // Find the corresponding message paragraph
-        var index = Array.prototype.indexOf.call(buttons, this);
-        if (index >= 0 && index < messages.length) {
-          // Display the corresponding message paragraph when the button is clicked
-          messages[index].style.display = "block";
-        }
-      });
+      // Display the values (you can replace this with your desired form submission logic)
+      alert(`Rating: ${rating.value}\nTitle: ${title}\nReview: ${review}`);
     }
-
   </script>
-
-
 
 
 

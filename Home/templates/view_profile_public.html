@@ -150,6 +150,8 @@
                             <p><span class="d-inline u-name"> @{{user_profile.user.username}}</span></p>
                             <p class="d-block rating"><span class="star">&#9733;</span><span style="font-size: smaller;"
                                     class="fw-bold">4.5</span></p>
+                                    <p>{{user_profile.user.email}}</p>
+
                             <h5 class="d-inline me-3"><i class="las la-map-marker"></i> {{ user_profile.country }}</h5>
                             {% for language in user_profile.languages.all %}
                             {% if forloop.first %}
@@ -193,6 +195,7 @@
                                                                     @{{user_profile.user.username}}</span></p>
                                                             <p class="d-block rating">★<span style="font-size: smaller;"
                                                                     class="fw-bold">4.5</span></p>
+                                                            <p>{{user_profile.user.email}}</p>
                                                             <h5 class="d-inline me-3"><i class="las la-map-marker"></i>
                                                                 {{ user_profile.country }}</h5>
                                                             {% for language in user_profile.languages.all %}
