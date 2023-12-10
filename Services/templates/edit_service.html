@@ -1,281 +1,243 @@
 <!DOCTYPE html>
-
-
-
 <html>
 
 <head>
-  <title>Create Service</title>
-  <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Service</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet"
+    href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
 
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+  {% load static %}
 
-    .step {
-      display: none;
-      width: 100%;
-      background-color: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      margin: 0 auto;
-      position: relative;
-    }
+  <link rel="stylesheet" href="{% static 'css/create_service.css' %}">
 
-    .step.active {
-      display: block;
-    }
-
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-top: 20px;
-    }
-
-    th,
-    td {
-      border: 1px solid black;
-      padding: 10px;
-      text-align: center;
-    }
-
-    th {
-      background-color: #f2f2f2;
-    }
-
-    .buttons {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-    }
-
-    label {
-      font-weight: bold;
-      margin-bottom: 5px;
-      display: block;
-    }
-
-    input[type="text"],
-    input[type="file"] {
-      width: fit-content;
-      padding: 8px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      transition: border-color 0.3s;
-    }
-
-    input[type="text"]:focus,
-    input[type="file"]:focus {
-      border-color: #007bff;
-      outline: none;
-    }
-
-    .next-step {
-      padding: 10px 20px;
-      background-color: #222325;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .next-step:hover {
-      background-color: #343435;
-    }
-
-    .prev-step {
-      background: transparent;
-      border: 0;
-      color: #1dbf73;
-      margin-right: 20px;
-    }
-
-    .prev-step:hover {
-      text-decoration: underline;
-    }
-
-    .publish-btn {
-      padding: 10px 20px;
-      background-color: #222325;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .publish-btn:hover {
-      background-color: #343435;
-    }
-
-    select {
-      width: 65%;
-      padding: 8px;
-      border-radius: 5px;
-      text-align: center;
-    }
-
-  </style>
-<script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
+  <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
 </head>
 
 <body>
-  <center>
-    <form method="post" enctype="multipart/form-data">
-      <h1>Create Job Profile</h1>
-      <div class="step active">
-        <h3>Overview</h3>
-        <!-- Overview form fields -->
-        {{ overview_form.as_p }}
-        <button class="next-step">Save & Continue</button>
+
+  <div class="container-fuild overflow-hidden">
+    <div class="row me-2 ms-2">
+      <div class="col">
+        <nav class="navbar navbar-light navbar-transparent">
+          <a class="navbar-brand" href="{% url 'IntroHome' %}">
+            <img src="{% static 'img/logo1.png' %}" width="30" height="30" alt="">
+          </a>
+          <button class="theme-toggle-button theme-btn">Toggle Theme</button>
+        </nav>
       </div>
+    </div>
+  </div>
+  <!-- -----------------new html above---------------------------- -->
 
-      <div class="step">
-        <h3>Pricing</h3>
-        <table>
-          <tr>
-            <th>Package</th>
-            <th>BASIC</th>
-            <th>STANDARD</th>
-            <th>PREMIUM</th>
-          </tr>
-          <tr>
-            <td>Title:</td>
-            <td>{{ basic_package_form.Basic_title }}</td>
-            <td>{{ standard_package_form.Standard_title }}</td>
-            <td>{{ premium_package_form.Premium_title }}</td>
-          </tr>
-          <tr>
-            <td>description:</td>
-            <td> {{ basic_package_form.Basic_description }}</td>
-            <td>{{ standard_package_form.Standard_description }}</td>
-            <td>{{ premium_package_form.Premium_description }}</td>
-          </tr>
 
-          <tr>
-            <td>deliverytime</td>
-            <td> {{ basic_package_form.Basic_delivery_time }}</td>
-            <td>{{ standard_package_form.Standard_delivery_time }}</td>
-            <td>{{ premium_package_form.Premium_delivery_time }}</td>
-          </tr>
+  <div class="container-fluid main-form-contents">
+    <div class="row">
+      <div class="col-12">
+        <center>
+          <form method="post" enctype="multipart/form-data">
+            <h1 class="mt-5">Edit Job Profile</h1>
+            <div class="step active">
 
-          <tr>
-            <td>revisions</td>
-            <td> {{ basic_package_form.Basic_revisions }}</td>
-            <td>{{ standard_package_form.Standard_revisions }}</td>
-            <td>{{ premium_package_form.Premium_revisions }}</td>
-          </tr>
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-12">
+                    <h3>Overview</h3>
+                  </div>
+                </div>
 
-          <tr>
-            <td>source_file</td>
-            <td> {{ basic_package_form.Basic_source_file }}</td>
-            <td>{{ standard_package_form.Standard_source_file }}</td>
-            <td>{{ premium_package_form.Premium_source_file }}</td>
-          </tr>
+                <div class="row mb-3" style="cursor: pointer;">
+                  <div class="col-12 fw-bold" data-bs-toggle="popover" data-bs-trigger="hover focus"
+                    data-bs-placement="left"
+                    data-bs-content="Title is the most important place to include keywords that buyers would likely use to search for a service like yours.">
+                    <i class="las la-question-circle"></i> Service Title 
+                  </div>
 
-          <tr>
-            <td>price</td>
-            <td>{{ basic_package_form.Basic_price }}</td>
-            <td>{{ standard_package_form.Standard_price }}</td>
-            <td>{{ premium_package_form.Premium_price }}</td>
-          </tr>
-          <!-- <tr>
-            <td colspan="4">extra_service</td>
-          </tr>
-          <tr>
-            <td>{{ extra_service_form.title }}</td>
-            <td>{{ extra_service_form.delivery_time }}</td>
-            <td colspan="2">{{ extra_service_form.pricing }}</td>
-          </tr> -->
-        </table>
+                  <div class="col-12 mt-1">
+                    <i class="las la-question-circle"></i>  {{ overview_form.titleOverview }}
+                  </div>
+                </div>
 
-        <br>
-        <br>
+                <div class="row mb-3" style="cursor: pointer;">
+                  <div class="col-12 fw-bold" data-bs-toggle="popover" data-bs-trigger="hover focus"
+                    data-bs-placement="left" data-bs-content="Choose the category most suitable for your Job.">
+                    <i class="las la-question-circle"></i>    Category
+                  </div>
+                  <div class="col-12 mt-1">
+                    {{ overview_form.category }}
+                  </div>
+                </div>
 
-        <button class="prev-step">Previous</button>
-        <button class="next-step">Save & Continue</button>
+                <div class="row mb-3" style="cursor: pointer;">
+                  <div class="col-12 fw-bold" data-bs-toggle="popover" data-bs-trigger="hover focus"
+                    data-bs-placement="left"
+                    data-bs-content="Tag your Job Profile with buzz words that are relevant to the services you offer. Use all 5 tags to get found.use #tags">
+                    <i class="las la-question-circle"></i>    Search tags
+                  </div>
+                  <div class="col-12 mt-1">
+                    {{ overview_form.search_tags }}
+                  </div>
+                </div>
+                <button class="next-step">Save <tl>&</tl> Continue</button>
+              </div>
+            </div>
+
+
+            <div class="step">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Package</th>
+                    <th scope="col">BASIC</th>
+                    <th scope="col">STANDARD</th>
+                    <th scope="col">PREMIUM</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row mb-3" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="left"
+                      data-bs-content="Describe the details of your offering in the area provided,
+                      Choose an eye-catching title for each of your packages, and make certain that the difference between them is crystal clear">
+                      <i class="las la-question-circle"></i>   Title
+                    </th>
+                    <td class="packagaetitle">{{ basic_package_form.Basic_title }}</td>
+                    <td class="packagaetitle">{{ standard_package_form.Standard_title }}</td>
+                    <td class="packagaetitle">{{ premium_package_form.Premium_title }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row mb-3" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="left"
+                      data-bs-content="Briefly explain what’s included in each package, and why you’ve included it. You’re only allowed 100 characters here, so you may have to get creative to fit in everything you’d like to say. Just make sure the offerings are clear to any potential buyers. - short this sentence ">
+                      <i class="las la-question-circle"></i>    Description</th>
+                    <td>{{ basic_package_form.Basic_description }}</td>
+                    <td>{{ standard_package_form.Standard_description }}</td>
+                    <td>{{ premium_package_form.Premium_description }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row mb-3" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="left"
+                      data-bs-content="How long you’ll take to complete a project. Depending on the scope of the work, this may vary greatly between packages.">
+                      <i class="las la-question-circle"></i>     Delivery Time</th>
+                    <td>{{ basic_package_form.Basic_delivery_time }}</td>
+                    <td>{{ standard_package_form.Standard_delivery_time }}</td>
+                    <td>{{ premium_package_form.Premium_delivery_time }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row mb-3" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="left"
+                      data-bs-content="The number of times you’ll alter your work upon the buyer’s request. Premium packages often include additional revisions.">
+                      <i class="las la-question-circle"></i>      Revisions</th>
+                    <td>{{ basic_package_form.Basic_revisions }}</td>
+                    <td>{{ standard_package_form.Standard_revisions }}</td>
+                    <td>{{ premium_package_form.Premium_revisions }}</td>
+                  </tr>
+
+                  <tr>
+                    <th scope="row mb-3" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="left"
+                      data-bs-content="Include the source file or not">
+                      <i class="las la-question-circle"></i>      Source File</th>
+                    <td>{{ basic_package_form.Basic_source_file }}</td>
+                    <td>{{ standard_package_form.Standard_source_file }}</td>
+                    <td>{{ premium_package_form.Premium_source_file }}</td>
+                  </tr>
+
+                  <tr>
+                    <th scope="row mb-3" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="left"
+                      data-bs-content="Each package can be priced anywhere from 50 to - . Your basic package should always be priced lowest (50-), and your premium the highest(150-). Remember, you can always change your price later, so in the beginning, it may be smart to keep them low to help build reviews">
+                      <i class="las la-question-circle"></i>    Price</th>
+                    <td>{{ basic_package_form.Basic_price }}</td>
+                    <td>{{ standard_package_form.Standard_price }}</td>
+                    <td>{{ premium_package_form.Premium_price }}</td>
+                  </tr>
+
+                </tbody>
+              </table>
+              <br>
+              <br>
+              <button class="prev-step">Previous</button>
+              <button class="next-step">Save <tl>&</tl> Continue</button>
+            </div>
+            <div class="step">
+              <h2 data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="left"
+                data-bs-content="Briefly describe your Service Profile in up to 1,200 characters. Provide detailed information so clients can assess if your Service Profile meets their needs. Exclude non-approved URLs from Fiverr and avoid adding contact information.">
+                <i class="las la-question-circle"></i> Description</h2>
+                <p style="color: var(--user-name-color);">Briefly Describe Your Gig</p>
+              <textarea style="color: black;" name="{{ description_form.description.name }}" id="editor">
+                &lt;p&gt; {{ description_form.description.value }} &lt;/p&gt;
+              </textarea>
+
+              <button class="prev-step">Previous</button>
+              <button class="next-step mt-5">Save <tl>&</tl> Continue</button>
+            </div>
+
+            <div class="step">
+              <h2 data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="left"
+              data-bs-content="This is where you’ll include any requirements that are necessary for your buyer to supply in order for you to complete the job."
+              > <i class="las la-question-circle"></i>  Add questions</h2>
+              <p style="color: var(--user-name-color);">Add questions to help buyers provide you with exactly what <br> you need to start working on their order.</p>
+              {{ question_form.as_p }}
+              <button class="prev-step">Previous</button>
+              <button class="next-step">Save <tl>&</tl> Continue</button>
+            </div>
+
+            <div class="step">
+              <h2 <h2 data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="left"
+              data-bs-content="Get noticed by the right buyers with visual examples of your services.Show some of the best work you created in a document"
+              > <i class="las la-question-circle"></i>Showcase Your Services In A Service Gallery</h2>
+              <p style="color: var(--user-name-color);">Encourage buyers to choose your Service Profile by featuring a variety of your work.</p>
+              <label style="display: block; margin-top: 10px; font-weight: bold;">Thumbnail</label>
+              {{ gallery_form.image1 }}
+              <label style="display: block; margin-top: 10px; font-weight: bold;">{{ gallery_form.image2.label }}</label>
+              {{ gallery_form.image2 }}
+              <label style="display: block; margin-top: 10px; font-weight: bold;">{{ gallery_form.image3.label }}</label>
+              {{ gallery_form.image3 }}
+              <label style="display: block; margin-top: 10px; font-weight: bold;">Documents</label>
+              {{ gallery_form.video }}              
+              <button class="prev-step">Previous</button>
+              <button class="publish-btn" type="submit">Publish</button>
+            </div>
+          </form>
+        </center>
       </div>
+    </div>
+  </div>
 
-      <div class="step">
-        <h2>Description Package Form</h2>
-        <textarea class="dis-editor" name="{{ description_form.description.name }}"id="editor">
-          &lt;p&gt;{{ description_form.description.value }}&lt;/p&gt;
-        </textarea>
 
-        <br>
-        <button class="prev-step">Previous</button>
-        <button class="next-step">Save & Continue</button>
-      </div>
 
-      <div class="step">
-        <h2>Question Package Form</h2>
-        {{ question_form.as_p }}
-        <button class="prev-step">Previous</button>
-        <button class="next-step">Save & Continue</button>
-      </div>
 
-      <div class="step">
-        <h2>Image and Video Upload</h2>
-        {{ gallery_form.as_p }}
-        <button class="prev-step">Previous</button>
-        <button class="publish-btn" type="submit">Publish</button>
-      </div>
-    </form>
-  </center>
-
-  
   <script>
     ClassicEditor
-        .create( document.querySelector( '#editor' ) )
-        .catch( error => {
-            console.error( error );
-        } );
-</script>
-  <script>
-
-    const steps = document.querySelectorAll('.step');
-    const nextBtns = document.querySelectorAll('.next-step');
-    const prevBtns = document.querySelectorAll('.prev-step');
-    let currentStep = 0;
-
-    function showStep(stepIndex) {
-      steps.forEach((step, index) => {
-        if (index === stepIndex) {
-          step.classList.add('active');
-        } else {
-          step.classList.remove('active');
-        }
-      });
-    }
-
-    nextBtns.forEach((btn, index) => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        currentStep++;
-        showStep(currentStep);
-      });
-    });
-
-    prevBtns.forEach((btn, index) => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        currentStep--;
-        showStep(currentStep);
-      });
-    });
-
-    showStep(currentStep);
+      .create(document.querySelector('#editor'))
+      .catch(error => {
+        console.error(error);
+      }); 
   </script>
-  
+
+  <script src="{% static 'js/theme.js' %}"></script>
+  <script src="{% static 'js/create_service.js' %}"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+  <script>
+    $(function () {
+      $('.mytoolthip').tooltip();
+    });
+  </script>
+
+  <script>
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+      return new bootstrap.Popover(popoverTriggerEl)
+    })
+  </script>
 </body>
 
 </html>
