@@ -6,119 +6,209 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        #messageContainer {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            background-color: #f8f8f8;
-            overflow-y: auto;
-            height: 400px;
-        }
 
-        .message {
-            background-color: #e0e0e0;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
 
-        /* Form styling */
-        #myForm {
-            max-width: 400px;
-            margin: 20px auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            background-color: #fff;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-        label {
-            font-weight: bold;
-        }
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
 
-        input[type="text"],
-        input[type="file"] {
-            width: 90%;
-            padding: 10px;
-            margin-top: 5px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
 
-        #submitButton {
-            background-color: #007bff;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
 
-        .message {
-            max-width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            word-wrap: break-word;
-        }
-
-        .sender {
-            background-color: #fc6d6d;
-            /* Change this to your desired sender message color */
-            color: white;
-            /* Change this to your desired text color for sender messages */
-            align-self: flex-start;
-            text-align: right;
-        }
-
-        .receiver {
-            background-color: #f0f0f0;
-            color: black;
-            align-self: flex-end;
-            text-align: left;
-        }
-
-        .username {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.5em;
-        }
-    </style>
-
-    </style>
+    <link rel="stylesheet" href="{% static 'css/Userchat.css' %}">
 </head>
 
 <body>
 
+    <div class="container-fluid ">
+        <div class="row ">
+            <nav class="navbar  navbar-expand-lg navbar-light navbar-transparent ">
+                <div class="container-fluid">
+                    <!-- Navbar Brand (Logo) -->
+                    <a class="navbar-brand" href="{% url 'IntroHome' %}">
+                        <img src="{% static 'img/logo1.png' %}" alt="" width="30" height="30">
+                    </a>
+
+                    <!-- Navbar Toggler for small screens (moved to the right) -->
+                    <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon "></span>
+                    </button>
 
 
-    
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <div class="d-flex ms-auto">
+                            <ul class="navbar-nav ">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        Dashboard
+                                    </a>
+                                    <ul class="dropdown-menu">
 
-    <div id="messageContainer">
-        <p>Loading...</p>
+                                        <li><a class="dropdown-item"
+                                                href="{% url 'seller_dashboard' user.username %}">Seller
+                                                Dashboard</a></li>
+                                        <li><a class="dropdown-item"
+                                                href="{% url 'buyer_dashboard' user.username %}">Buyer
+                                                Dashboard</a></li>
+                                        {% if user.is_superuser%}
+                                        <li><a class="dropdown-item"
+                                                href="{% url 'admin_dashboard' user.username %}">Admin
+                                                Dashboard</a></li>
+                                        {% endif %}
+
+
+                                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        Profile
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{% url 'profile' user.username %}">View
+                                                Profile</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'edit_profile' user.username %}">Edit
+                                                Profile</a>
+                                        </li>
+                                        <li><a class="dropdown-item"
+                                                href="{% url 'list_all_the_order' user.username %}">My
+                                                Purchases</a></li>
+                                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                                    </ul>
+
+                                </li>
+                                <!-- <li class="nav-item">
+                                    <form class="d-flex me-2 ms-1">
+                                        <input class="form-control me-2"
+                                            style="  outline: none;box-shadow: none;width: 250px;" type="search"
+                                            placeholder="Search" aria-label="Search">
+                                        <button class="btn btn-search" type="submit"
+                                            style="color: var(--text);  outline: none;box-shadow: none;">Search</button>
+                                    </form>
+                                </li> -->
+
+
+
+
+                            </ul>
+                        </div>
+
+                        <div class="d-flex ms-auto">
+                            <a class="btn loginbtn me-2" style="color: var(--text);"
+                                href="{% url 'logout' %}">Logout</a>
+                            <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Dark/Light Mode"
+                                class="theme-toggle-button  theme-btn mt-4 ms-0 ms-lg-2 mt-lg-0 mytoolthip">Toggle
+                                Theme</button>
+                            {% for log_user in user_profile %}
+                            <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Profile"
+                                class="navbar-brand mytoolthip" href="{% url 'profile' user.username %}">
+                                <img src=" {{ log_user.profile_image.url }}"
+                                    style="width: 35px;height:35px;object-fit: cover;float: left;"
+                                    class="rounded-circle mt-3 ms-0 ms-lg-2 mt-lg-0" alt="" width="30" height="30">
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <hr>
     </div>
-    <form id="myForm" action="" method="post" enctype="multipart/form-data">
-        <div>
-            <p>Sent to : {{ receiver }}</p>
-        </div>
-        <div>
-            <input type="text" style="float: left;" name="{{ form.message.name }}" id="{{ form.message.id_for_label }}">
 
-        </div>
-        <div>
-            <label for="{{ form.image.id_for_label }}">Image:</label>
-            <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}">
-        </div>
 
-        <div>
-            <label for="{{ form.video.id_for_label }}">Video:</label>
-            <input type="file" name="{{ form.video.name }}" id="{{ form.video.id_for_label }}">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="container-fuild">
+                    <div class="row">
+                        <div class="col-12">
+                            <div>
+                                {% for u in reciver_profile %}
+                                <img class="rounded-circle mt-1 mb-3 ms-3 me-2" src="{{ u.profile_image.url }}"
+                                    style="width: 20px;height:20px;object-fit: cover;float: left;" alt="...">
+                                <a href="{% url 'view_profile_public' u.user %}"
+                                    class="user-name-card text-lowercase fw-bold">{{u.user}}
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div id="messageContainer">
+                                    <p>Loading...</p>
+                                </div>
+                            </div>
+                        </div>
+                        <form class="d-flex justify-content-center" id="myForm" action="/submit_form" method="post"
+                            enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-12 d-flex align-items-center">
+                                    <!-- Image File Input -->
+                                    <label for="{{ form.image.id_for_label }}" class="me-2 icon-label">
+                                        <i class="fa fa-image"></i>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="file" class="form-control visually-hidden"
+                                            name="{{ form.image.name }}" id="{{ form.image.id_for_label }}">
+                                        <input type="text" class="form-control" placeholder="Choose an image" readonly>
+                                        <label class="input-group-text"
+                                            for="{{ form.image.id_for_label }}">Browse</label>
+                                    </div>
+
+                                    <label for="{{ form.video.id_for_label }}" class="ms-3 me-2 icon-label">
+                                        <i class="fa fa-file"></i>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="file" class="form-control visually-hidden"
+                                            name="{{ form.video.name }}" id="{{ form.video.id_for_label }}">
+                                        <input type="text" class="form-control" placeholder="Choose a video" readonly>
+                                        <label class="input-group-text"
+                                            for="{{ form.video.id_for_label }}">Browse</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <textarea type="text" name="message" id="{{ form.message.id_for_label }}"
+                                        style="width: 100%; margin-top: 10px;"></textarea>
+                                </div>
+
+                                <div class="col-12 mt-3">
+                                    <input class="btn signupbtn" type="submit" id="submitButton" value="Send">
+                                </div>
+                            </div>
+                        </form>
+
+
+
+                    </div>
+                </div>
+
+
+            </div>
         </div>
+    </div>
 
-        <input type="submit" id="submitButton" value="Sent">
 
-    </form>
+
+
+
+
+
 
 
     <script>
@@ -176,6 +266,23 @@
             setInterval(fetchMessages, 5000);
         });
     </script>
+
+    <script src="{% static 'js/theme.js' %}"></script>
+
+    <script src="{% static 'js/Userchat.js' %}"></script>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script>
+        $(function () {
+            $('.mytoolthip').tooltip();
+        });
+    </script>
+
+
 
 </body>
 

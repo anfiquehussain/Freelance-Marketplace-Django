@@ -3,17 +3,24 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import user_passes_test
+from Home.models import UserProfile
+from Services.models import Overview
 
 # Create your views here.
 def Seller_Dashboard(request,username):
     user = get_object_or_404(User, username=username)
+    user_profile = UserProfile.objects.filter(user=user)
+    service_overview = Overview.objects.filter(user=user)
+
     current_user = request.user
     if username == current_user.username:
         pass
     else:
         return redirect('IntroHome')
     context = {
-        'user':user
+        'user':user,
+        "user_profile":user_profile,
+        "service_overview":service_overview,
     }
 
     return render(request,'seller_dashboard.html',context)

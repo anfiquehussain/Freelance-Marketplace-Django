@@ -125,6 +125,7 @@ def edit_profile(request, identifier):
                         if certification.title and certification.issuing_organization:
                             certification.user_profile = user_profile
                             certification.save()
+                            
 
                 # Save valid languages
                 for form in language_formset:
