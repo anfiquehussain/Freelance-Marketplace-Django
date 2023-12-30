@@ -16,12 +16,10 @@ from django.http import HttpResponse, HttpResponseServerError
 from django.shortcuts import redirect
 import razorpay
 from django.http import HttpResponseBadRequest
-
-client = razorpay.Client(auth=(settings.REZORPAY_PUBLISHABLE_KEY, settings.REZORPAY_SECRET_KEY))
-
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
+client = razorpay.Client(auth=(settings.REZORPAY_PUBLISHABLE_KEY, settings.REZORPAY_SECRET_KEY))
 
 @login_required
 def payments(request, overview_id,username):
@@ -149,12 +147,6 @@ def payments(request, overview_id,username):
                 service_fee=service_fee
             )
             transaction_id = transaction.id 
-
-            
-            
-
-
-
 
     print(payment['id'])
         

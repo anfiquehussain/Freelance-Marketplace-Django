@@ -9,141 +9,156 @@
     {% bootstrap_css %}
     {% bootstrap_javascript %}
 
-    <style>
-        .bill-details-container {
-            height: fit-content;
-            padding: 1rm;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
-
-
-        tr {
-            border-bottom: 1px solid gray;
-        }
-    </style>
-
     <script src="https://js.stripe.com/v3/"></script>
+
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+
+
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'css/payment.css' %}">
 </head>
 
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <h1>Order details</h1>
-                <hr>
+
+
+
+    <div class="container-fuild overflow-hidden">
+        <div class="row me-2 ms-2">
+            <div class="col">
+                <nav class="navbar navbar-light navbar-transparent">
+                    <a class="navbar-brand" href="{% url 'IntroHome' %}">
+                        <img src="{% static 'img/logo1.png' %}" width="30" height="30" alt="">
+                    </a>
+                    <button class="theme-toggle-button theme-btn">Toggle Theme</button>
+                </nav>
             </div>
-            <div class="col text-center mt-3">
-                <div class="row">
-                    <div class="col">
-                        <h5 class="fw-bold" style="color: #404145;">{{ package_name }}</h5>
-                    </div>
-                    <div class="col">
-                        <h5 class="fw-ligh" style="color: #404145;">₹{{ actual_price }}</h5>
-                    </div>
-                    <div class="col-md-12">
-                        <p>{{ package_discription }}</p>
-                    </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h1>Order details</h1>
+                    <hr>
                 </div>
-                <div class="row">
-                    <div class="col" style="background-color: #f5f5f5;">
-                        <center>
-                            <div class="bill-details-container col">
-                                <table width="100%">
-                                    <tr>
-                                        <td style="text-align: center; padding-top: 10px; padding-bottom: 10px;">Service
-                                            fee</td>
-                                        <td style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
-                                            {{ service_fee }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: center; padding-top: 10px; padding-bottom: 10px;">Package
-                                            payment</td>
-                                        <td style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
-                                            {{ actual_price }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bold"
-                                            style="text-align: center; padding-top: 10px; padding-bottom: 10px;">Total
-                                            payment</td>
-                                        <td class="fw-bold"
-                                            style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
-                                            {{ actual_price_fee_added }}
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </center>
+                <div class="col text-center mt-3">
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="fw-bold" style="color: var(--text);">{{ package_name }}</h5>
+                        </div>
+                        <div class="col">
+                            <h5 class="fw-ligh" style="color: var(--text);">₹{{ actual_price }}</h5>
+                        </div>
+                        <div class="col-md-12">
+
+                        </div>
                     </div>
-                    <div class="col-md-12 mt-3">
-                        <div class="container mt-5">
-                            <div class="row justify-content-center">
-                                <div class="col-md-6">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            Payment Information
-                                        </div>
-                                        <div class="card-body">
+                    <div class="row">
+                        <div class="col" style="background-color: var(--background);">
+                            <center>
+                                <div class="bill-details-container col">
+                                    <table width="100%">
+                                        <tr>
+                                            <td style="text-align: center; padding-top: 10px; padding-bottom: 10px;"
+                                                colspan="2">
+                                                {{ package_discription }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center; padding-top: 10px; padding-bottom: 10px;">
+                                                Service
+                                                fee</td>
+                                            <td style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
+                                                {{ service_fee }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center; padding-top: 10px; padding-bottom: 10px;">
+                                                Package payment</td>
+                                            <td style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
+                                                {{ actual_price }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold"
+                                                style="text-align: center; padding-top: 10px; padding-bottom: 10px;">
+                                                Total payment</td>
+                                            <td class="fw-bold"
+                                                style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
+                                                {{ actual_price_fee_added }}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </center>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <div class="container mt-5">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                Payment Information
+                                            </div>
+                                            <div class="card-body">
+                                            </div>
 
-
-                                        </div>
-
-
-
-                                        <form action="{% url 'success' transaction_id request.user.username %}" method="POST" id="payment-form">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="success_url" value="{% url 'success' transaction_id request.user.username %}">
-
-                                            <button id="rzp-button1">Pay with Razorpay</button>
-                                        </form>
-                                        <script src="https://checkout.razorpay.com/v2/checkout.js"></script>
-                                        <script>
-                                            var options = {
-                                                "key": "{{ API_KEY }}",  // Replace with your Razorpay API key
-                                                "amount": "{{ actual_price_fee_added }} * 100",  // Payment amount in paise
-                                                "currency": "INR",
-                                                "name": "FMP",
-                                                "description": "Test Transaction",
-                                                "image": "//www.html.am/images/html-codes/links/boracay-white-beach-sunset-300x225.jpg",
-                                                "order_id": "{{ order_id }}",  // Replace with your order ID
-                                                "handler": function (response) {
-                                                    //alert("Payment successful");
+                                            <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+                                            <script>
+                                                var options = {
+                                                    "key": "{{ API_KRY }}",
+                                                    "amount": "{{ actual_price_fee_added }} * 100",
+                                                    "currency": "INR",
+                                                    "name": "FMP",
+                                                    "description": "Test Transaction",
+                                                    "image": "https://example.com/your_logo",
+                                                    "order_id": "{{ order_id }}",  // Use the order ID from the context
+                                                    "handler": function (response) {
                                                     var successUrl = document.getElementById('payment-form').elements["success_url"].value;
                                                     window.location.href = successUrl;
-                                                },
-                                                "prefill": {
-                                                    "name": "{{ user.username }}",
-                                                    "email": "{{ user.email }}",
-                                                    "contact": "{{ user.phone }}"
-                                                },
-                                                "notes": {
-                                                    "address": "Razorpay Corporate Office"
-                                                },
-                                                "theme": {
-                                                    "color": "#3399cc"
+                                                        // Handle the payment success, e.g., update your database
+                                                    },
+                                                    "prefill": {
+                                                        "name": "{{ user.username }}",
+                                                         "email": "{{ user.email }}",
+                                                         "contact": "{{ user.phone }}"
+                                                    },
+                                                    "notes": {
+                                                        "address": "Razorpay Corporate Office"
+                                                    },
+                                                    "theme": {
+                                                        "color": "#3399cc"
+                                                    }
+                                                };
+                                                var rzp1 = new Razorpay(options);
+                                            </script>
+
+                                            <form action="{% url 'success' transaction_id request.user.username %}"
+                                                method="POST" id="payment-form">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="success_url"
+                                                    value="{% url 'success' transaction_id request.user.username %}">
+
+                                                <button id="rzp-button1">Pay with Razorpay</button>
+                                            </form>
+
+                                            <script>
+                                                document.getElementById('rzp-button1').onclick = function (e) {
+                                                    rzp1.open();
+                                                    e.preventDefault();
                                                 }
-                                            };
-                                    
-                                            var rzp1 = new Razorpay(options);
-                                            rzp1.on('payment.failed', function (response) {
-                                                alert("Payment failed");
-                                            });
-                                    
-                                            document.getElementById('rzp-button1').onclick = function (e) {
-                                                rzp1.open();
-                                                e.preventDefault();
-                                            }
-                                        </script>
+                                            </script>
 
-
-
-
-
-
-
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -152,7 +167,24 @@
                 </div>
             </div>
         </div>
-    </div>
+
+
+        <script src="{% static 'js/theme.js' %}"></script>
+
+        <script src="{% static 'js/payment.js' %}"></script>
+
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+        <script>
+            $(function () {
+                $('.mytoolthip').tooltip();
+            });
+        </script>
+
+
     </div>
 </body>
 
