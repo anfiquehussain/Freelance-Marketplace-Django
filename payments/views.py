@@ -40,7 +40,7 @@ def payments(request, overview_id,username):
     standard_packages = StandardPackage.objects.filter(overview=overview)
     premium_packages = PremiumPackage.objects.filter(overview=overview)
 
-    price = None
+    price = 0
     transaction_id = None
     package_name = ""
     package_discription = ""
@@ -55,16 +55,13 @@ def payments(request, overview_id,username):
 
             
             
-            bayer_fee = bp.Basic_price * (5/100)
-            seller_fee = bp.Basic_price * (20/100)
+            buyer_fee = bp.Basic_price * (5/100)
+            seller_fee = bp.Basic_price * (10/100)
             service_fee = buyer_fee + seller_fee
 
-           
-
-            price = (bp.Basic_price + bayer_fee)
-            
+            price = (bp.Basic_price + buyer_fee)
             actual_price = bp.Basic_price
-            actual_price_fee_added = bp.Basic_price + seller_fee
+            actual_price_fee_added = price
 
             
             data = { "amount": price * 100, "currency": "INR", "receipt": "order_rcptid_11" }
@@ -86,16 +83,17 @@ def payments(request, overview_id,username):
             transaction_id = transaction.id  
     elif additional_data2 == '2':
         for bp in standard_packages:
-            bayer_fee = bp.Standard_price * (5/100)
-            seller_fee = bp.Standard_price * (20/100)
+            buyer_fee = bp.Standard_price * (5/100)
+            seller_fee = bp.Standard_price * (10/100)
+
             service_fee = buyer_fee + seller_fee
 
            
 
-            price = (bp.Standard_price + bayer_fee)
+            price = (bp.Standard_price + buyer_fee)
             
             actual_price = bp.Standard_price
-            actual_price_fee_added = bp.Standard_price + seller_fee
+            actual_price_fee_added = bp.Standard_price + buyer_fee
 
             
             data = { "amount": price * 100, "currency": "INR", "receipt": "order_rcptid_11" }
@@ -118,16 +116,16 @@ def payments(request, overview_id,username):
 
     elif additional_data2 == '3':
         for bp in premium_packages:
-            bayer_fee = bp.Premium_price * (5/100)
-            seller_fee = bp.Premium_price * (20/100)
+            buyer_fee = bp.Premium_price * (5/100)
+            seller_fee = bp.Premium_price * (10/100)
             service_fee = buyer_fee + seller_fee
 
            
 
-            price = (bp.Premium_price + bayer_fee)
+            price = (bp.Premium_price + buyer_fee)
             
             actual_price = bp.Premium_price
-            actual_price_fee_added = bp.Premium_price + seller_fee
+            actual_price_fee_added = bp.Premium_price + buyer_fee
 
             
             data = { "amount": price * 100, "currency": "INR", "receipt": "order_rcptid_11" }
@@ -162,11 +160,13 @@ def payments(request, overview_id,username):
         'package_name' : transaction.package_name,
         'package_discription':package_discription,
         'service_fee' :  service_fee,
+        'buyer_fee':buyer_fee,
         'actual_price_fee_added':actual_price_fee_added,
         'order_id':order_id,
         'payment' : payment,
         'API_KRY' : API_KRY,
         'order_id' : order_id,
+        'price':price,
     }
     return render(request, 'payment.html', context)
 
