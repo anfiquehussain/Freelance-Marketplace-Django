@@ -177,11 +177,11 @@ def success(request, transaction_id, username):
     current_user = request.user
     seller_user = None  
     context = {} 
-
     if username == current_user.username and transaction.sender == current_user:
         pass
     else:
         return HttpResponseForbidden("Access Denied")
+        
 
     transaction.payment_status = True
     overview = transaction.overview
@@ -221,9 +221,6 @@ def success(request, transaction_id, username):
         }
 
     return render(request, 'package_selection.html', context)
-
-
-
 
 from django.contrib import messages 
 

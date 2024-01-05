@@ -161,6 +161,8 @@
                 <p>Delivary Date: {{ order.delivery_date }}</p>
                 <hr>
 
+                {% if order_requirements %}
+
                 {% for order_requirement in order_requirements %}
                 <h3>Requirements:</h3>
                 <div id="read-more" class="read-more-class">
@@ -168,9 +170,18 @@
                     <p>{{ order_requirement.description }}</p>
                     <p><i class="fa fa-circle-question"></i> Answer to the R question:</p>
                     <p>{{ order_requirement.description }}</p>
+                    <a href="{% url 'submit_requirements' order.transaction.id request.user.username %}"> Edit Requirements</a>
                 </div>
                 <p style="cursor: pointer;" onclick="myFunction()" id="myBtn">Hide</p>
                 {% endfor %}
+                {% else %}
+                <h1>No Requirements Uploaded</h1>
+                <a class="btn loginbtn" style="color: var(--text);" href="{% url 'submit_requirements' order.transaction.id request.user.username %}">Upload Your Requirements</a>
+                <p></p>
+                {% endif %}
+
+
+
                 <table class="table">
                     <thead>
                         <tr>

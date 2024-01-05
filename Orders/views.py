@@ -83,6 +83,9 @@ def Details_of_the_order(request, order_id, username):
     orders = Order.objects.filter(id=order_id)
     order = get_object_or_404(Order, id=order_id)
     delivary_item = DeliveryDetails.objects.filter(order=order)
+    # transation = Transaction.objects.filter(id=order.transaction_id)
+    # for i in transation:
+    #     print(i.id)
 
     if (order.status == 'delivered'):
         if request.method == 'POST':

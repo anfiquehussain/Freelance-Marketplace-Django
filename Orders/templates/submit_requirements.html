@@ -4,42 +4,86 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <style>
-                body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
 
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+
+
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/submit_requirements.css' %}">
 </head>
 
 <body>
-    <h1>Order management</h1>
+    <div class="container-fuild overflow-hidden">
+        <div class="row me-2 ms-2">
+            <div class="col">
+                <nav class="navbar navbar-light navbar-transparent">
+                    <a class="navbar-brand" href="{% url 'IntroHome' %}">
+                        <img src="{% static 'img/logo1.png' %}" width="30" height="30" alt="">
+                    </a>
+                    <button class="theme-toggle-button theme-btn">Toggle Theme</button>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        {% for order in orders %}
+        {% if existing_requirement_check == False %}
+        <div class="row">
+            <div class="col d-flex justify-content-center align-item-center">
+                <h1 class="fs-1 fw-bold">Order management <span class="order_id_label">#{{ order.id }}</span></h1>
+
+            </div>
+        </div>
+ 
+
+        <div class="row border">
+            <div class="col p-1"> 
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for form in forms %}
+                    <p> <i class="fa fa-dot-circle"></i> About the work you want (provide the Requirements)</p>
+                    {{ form.description }} <br>
+                    <p><i class="fa fa-dot-circle"></i> {{ service_provide_question_1 }} </p>
+                    {{ form.answer_1 }}
+                    <p><i class="fa fa-dot-circle"></i> Provide the example images{{ form.example_image.label_tag }}</p>
+                    {{ form.example_image }} <br>
+                    {% endfor %}
+                    {% else %}
+                    <h1>You alredy submitted</h1>
+                    {% endif %}
+                    {% endfor %}
+                    <div class="d-flex justify-content-center align-item-center">
+                    <button type="submit" class="btn signupbtn mt-3" style="color: white;">Submit</button>
+                    </div>
+                </form>
+                </div>
+        </div>
+    </div>
 
 
 
-    {% for order in orders %}
-    {{order.id}}
 
-    {{existing_requirement_check}}
-    {% if existing_requirement_check == False %}
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% for form in forms %}
-        <p>About the work you want (provide the Requirements)</p>
-        {{ form.description }} <br>
-        {{ service_provide_question_1 }} <br>
-        {{ form.answer_1 }}
-        <p>Provide the example images{{ form.example_image.label_tag }}</p>
-        {{ form.example_image }}
-        {% endfor %}
-        <button type="submit">Submit</button>
-    </form>
-    {% else %}
-    <h1>You alredy submitted</h1>
-    {% endif %}
+    <script src="{% static 'js/theme.js' %}"></script>
+    <script src="{% static 'js/list_all_orders.js' %}"></script>
 
-    {% endfor %}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script>
+        $(function () {
+            $('.mytoolthip').tooltip();
+        });
+    </script>
 </body>
 
 </html>

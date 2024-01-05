@@ -8,48 +8,70 @@
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
-    <style>
-        /* Custom styles */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
+    {% load static %}
 
 
-        .container {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-            text-align: center;
-        }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-        h2 {
-            color: #007bff;
-        }
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
 
-        .highlight {
-            background-color: #f2f2f2;
-            padding: 2px 4px;
-            border-radius: 4px;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/package_selection.css' %}">
 </head>
 
 <body>
-    <div class="container mt-5">
-        <h2>Successfully paid your bill</h2>
-        <p class="lead">Thank you for your payment.</p>
-        <a id="openButton" href="{% url 'submit_requirements' transaction_id request.user.username %}"
-        class="btn btn-primary btn-lg">SUBMIT REQUIREMENTS</a>
-
-        <p>Click <span class="highlight">"SUBMIT REQUIREMENTS"</span> to continue and submit your order requirements.
-            Click <span class="highlight">"Leave"</span> to go to the submit requirement page.</p>
-        <h1 class="mt-4">SUBMIT REQUIREMENTS</h1>
-        <div class="alert alert-danger">
-            <p>Do not refresh this page. Your payment transaction may be impacted.</p>
+    <div class="container-fuild overflow-hidden">
+        <div class="row me-2 ms-2">
+          <div class="col">
+            <nav class="navbar navbar-light navbar-transparent">
+              <a class="navbar-brand" href="{% url 'IntroHome' %}">
+                <img src="{% static 'img/logo1.png' %}" width="30" height="30" alt="">
+              </a>
+              <button class="theme-toggle-button theme-btn">Toggle Theme</button>
+            </nav>
+          </div>
+          <div class="col-12">
+            <div class="alert alert-warning text-center">
+              Do not refresh this page. Your payment transaction may be impacted
+            </div>
+          </div>
         </div>
-</div>
+    
+    
+    
+        <div class="container mt-5">
+          <h1 class="text-success p-5 fw-bold">Successfully paid your bill
+            <p class="text-gray fs-5 fw-lighter">Thank you for your payment.</p>
+          </h1>
+    
+    
+          <a id="openButton" href="{% url 'submit_requirements' transaction_id request.user.username %}"
+            class="btn signupbtn btn-lg mb-5" style="color: whitesmoke;">SUBMIT REQUIREMENTS</a>
+    
+          <p>Click <span class="highlight">"SUBMIT REQUIREMENTS"</span> to continue and submit your order requirements.
+            Click <span class="highlight">"Leave"</span> to go to the submit requirement page.</p>
+    
+    
+        </div>
+      </div>
+
+
+    <script src="{% static 'js/theme.js' %}"></script>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script>
+        $(function () {
+            $('.mytoolthip').tooltip();
+        });
+    </script>
+
 </body>
 
 </html>
