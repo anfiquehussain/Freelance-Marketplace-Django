@@ -11,7 +11,6 @@ from .models import Message
 def Userchat(request, order_id, username):
     user = get_object_or_404(User, username=username)
     order = get_object_or_404(Order, id=order_id)
-    
     form = MessageForm()
 
     if(user == order.seller):

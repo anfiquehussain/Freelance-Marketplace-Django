@@ -84,7 +84,7 @@
                                         Profile
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{% url 'profile' user.username %}">View
+                                        <li><a class="dropdown-item" href="{% url 'view_profile_public' user.username %}">View
                                                 Profile</a></li>
                                         <li><a class="dropdown-item" href="{% url 'edit_profile' user.username %}">Edit
                                                 Profile</a>
@@ -124,7 +124,7 @@
                                 Theme</button>
                             {% for log_user in user_profile %}
                             <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Profile"
-                                class="navbar-brand mytoolthip" href="{% url 'profile' user.username %}">
+                                class="navbar-brand mytoolthip" href="{% url 'view_profile_public' user.username %}">
                                 <img src=" {{ log_user.profile_image.url }}"
                                     style="width: 35px;height:35px;object-fit: cover;float: left;"
                                     class="rounded-circle mt-3 ms-0 ms-lg-2 mt-lg-0" alt="" width="30" height="30">
@@ -170,13 +170,16 @@
                     <p>{{ order_requirement.description }}</p>
                     <p><i class="fa fa-circle-question"></i> Answer to the R question:</p>
                     <p>{{ order_requirement.description }}</p>
-                    <a href="{% url 'submit_requirements' order.transaction.id request.user.username %}"> Edit Requirements</a>
+                    <a href="{% url 'submit_requirements' order.transaction.id request.user.username %}"> Edit
+                        Requirements</a>
                 </div>
                 <p style="cursor: pointer;" onclick="myFunction()" id="myBtn">Hide</p>
                 {% endfor %}
                 {% else %}
                 <h1>No Requirements Uploaded</h1>
-                <a class="btn loginbtn" style="color: var(--text);" href="{% url 'submit_requirements' order.transaction.id request.user.username %}">Upload Your Requirements</a>
+                <a class="btn loginbtn" style="color: var(--text);"
+                    href="{% url 'submit_requirements' order.transaction.id request.user.username %}">Upload Your
+                    Requirements</a>
                 <p></p>
                 {% endif %}
 

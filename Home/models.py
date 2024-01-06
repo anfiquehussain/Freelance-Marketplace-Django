@@ -8,8 +8,8 @@ class UserProfile(models.Model):
     state = models.CharField(max_length=50)    # For storing state information
     website_link = models.URLField(blank=True, null=True)
     about_me = models.TextField()
-    skills = models.ManyToManyField('Skill', related_name='user_profiles')
     overall_rating = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
+    skills = models.ManyToManyField('Skill', related_name='user_profiles')
 
     def __str__(self):
         return self.user.username
@@ -37,4 +37,20 @@ class Language(models.Model):
         ('proficient', 'Proficient'),
     )
     proficiency = models.CharField(max_length=12, choices=PROFICIENCY_CHOICES)
+
+class RatingSeller(models.Model):
+    review_rating = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    reviewer = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='ratings_given')
+    seller = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='ratings_received')
+    title = models.CharField(max_length=50)
+    review = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        unique_together = ['seller', 'reviewer']
+
+
+    
+
+
+
 

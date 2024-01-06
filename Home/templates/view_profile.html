@@ -407,7 +407,7 @@
                                 data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
                                 aria-hidden="true">
                                 <div class="modal-dialog">
-                                    <form>
+                                    <form action="{% url 'profile' user %}" method="get">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
@@ -415,52 +415,52 @@
                                                     aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-
                                                 <div class="mb-3">
                                                     <p for="recipient-name" class="col-form-label">Rating:</p>
                                                     <div class="wrapper">
-                                                        <input class="rating-stars" type="radio" id="r1" name="rg1"
+                                                        <input required class="rating-stars" type="radio" id="r1" name="rg1"
                                                             value="5">
                                                         <label class="rating_label" for="r1">&#9733;</label>
-                                                        <input class="rating-stars" type="radio" id="r2" name="rg1"
+                                                        <input required class="rating-stars" type="radio" id="r2" name="rg1"
                                                             value="4">
                                                         <label class="rating_label" for="r2">&#9733;</label>
-                                                        <input class="rating-stars" type="radio" id="r3" name="rg1"
+                                                        <input required class="rating-stars" type="radio" id="r3" name="rg1"
                                                             value="3">
                                                         <label class="rating_label" for="r3">&#9733;</label>
-                                                        <input class="rating-stars" type="radio" id="r4" name="rg1"
+                                                        <input required class="rating-stars" type="radio" id="r4" name="rg1"
                                                             value="2">
                                                         <label class="rating_label" for="r4">&#9733;</label>
-                                                        <input class="rating-stars" type="radio" id="r5" name="rg1"
+                                                        <input required class="rating-stars" type="radio" id="r5" name="rg1"
                                                             value="1">
                                                         <label class="rating_label" for="r5">&#9733;</label>
                                                     </div>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="recipient-name" class="col-form-label">Title:</label>
-                                                    <input style="outline: none;box-shadow: none" type="text"
-                                                        class="form-control" id="recipient-name">
+                                                    <input required style="outline: none;box-shadow: none" type="text" class="form-control" id="review_title" name="review_title">
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="message-text" class="col-form-label">Review:</label>
-                                                    <textarea style="outline: none;box-shadow: none"
-                                                        class="form-control" id="message-text"></textarea>
+                                                    <textarea required style="outline: none;box-shadow: none" class="form-control" id="review_message" name="review_message"></textarea>
                                                 </div>
 
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" onclick="submitForm()" class="btn btn-search"
+                                                <button type="submit" class="btn btn-search"
                                                     style="outline: none;box-shadow: none;color: var(--background)">Send
                                                     message</button>
                                                 <button type="button" class="btn loginbtn"
                                                     style="outline: none;box-shadow: none;"
                                                     data-bs-dismiss="modal">Close</button>
-
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                             </div>
+
+
+
+
                         </div>
                     </div>
                 </div>
@@ -559,7 +559,7 @@
         });
     </script>
 
-    <script>
+    <!-- <script>
         function submitForm() {
             // Get selected rating
             const rating = document.querySelector('input[name="rg1"]:checked');
@@ -575,7 +575,7 @@
             // Display the values (you can replace this with your desired form submission logic)
             alert(`Rating: ${rating.value}\nTitle: ${title}\nReview: ${review}`);
         }
-    </script>
+    </script> -->
 
 
 

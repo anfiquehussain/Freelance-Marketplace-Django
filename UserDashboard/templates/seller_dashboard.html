@@ -77,7 +77,7 @@
                                         Profile
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{% url 'profile' user.username %}">View
+                                        <li><a class="dropdown-item" href="{% url 'view_profile_public' user.username %}">View
                                                 Profile</a></li>
                                         <li><a class="dropdown-item" href="{% url 'edit_profile' user.username %}">Edit
                                                 Profile</a>
@@ -117,7 +117,7 @@
                                 Theme</button>
                             {% for log_user in user_profile %}
                             <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Profile"
-                                class="navbar-brand mytoolthip" href="{% url 'profile' user.username %}">
+                                class="navbar-brand mytoolthip" href="{% url 'view_profile_public' user.username %}">
                                 <img src=" {{ log_user.profile_image.url }}"
                                     style="width: 35px;height:35px;object-fit: cover;float: left;"
                                     class="rounded-circle mt-3 ms-0 ms-lg-2 mt-lg-0" alt="" width="30" height="30">
@@ -133,8 +133,6 @@
         </div>
         <hr>
     </div>
-
-
 
     <div class="container-fluid">
         <div class="row">

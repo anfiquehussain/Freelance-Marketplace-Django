@@ -76,7 +76,7 @@
                                         Profile
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{% url 'profile' user.username %}">View
+                                        <li><a class="dropdown-item" href="{% url 'view_profile_public' user.username %}">View
                                                 Profile</a></li>
                                         <li><a class="dropdown-item" href="{% url 'edit_profile' user.username %}">Edit
                                                 Profile</a>
@@ -114,9 +114,9 @@
                             <button data-bs-toggle="tooltip" data-bs-placement="bottom" title="Dark/Light Mode"
                                 class="theme-toggle-button  theme-btn mt-4 ms-0 ms-lg-2 mt-lg-0 mytoolthip">Toggle
                                 Theme</button>
-                            {% for log_user in user_profile %}
+                            {% for log_user in sender_profile %}
                             <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Profile"
-                                class="navbar-brand mytoolthip" href="{% url 'profile' user.username %}">
+                                class="navbar-brand mytoolthip" href="{% url 'view_profile_public' user.username %}">
                                 <img src=" {{ log_user.profile_image.url }}"
                                     style="width: 35px;height:35px;object-fit: cover;float: left;"
                                     class="rounded-circle mt-3 ms-0 ms-lg-2 mt-lg-0" alt="" width="30" height="30">
@@ -129,8 +129,6 @@
         </div>
         <hr>
     </div>
-
-
     <div class="container">
         <div class="row">
             <div class="col">

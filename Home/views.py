@@ -7,7 +7,7 @@ from Services.models import Overview,Category
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
-from .models import UserProfile, Certification, Language
+from .models import UserProfile, Certification, Language , RatingSeller
 from django.forms import inlineformset_factory
 
 def IntroHome(request):
@@ -27,7 +27,6 @@ def home(request, identifier):
     user_profile = UserProfile.objects.all()
     user_service_profiles = Overview.objects.all()
     category = Category.objects.all()
-    
     current_user = request.user
     if identifier == current_user.username:
         pass
@@ -147,40 +146,74 @@ def edit_profile(request, identifier):
     })
     return render(request, 'edit_profile.html', context)
 
-@login_required()
-def view_profile(request, username):
-    user = get_object_or_404(User, username=username)
-    user_profile, created = UserProfile.objects.get_or_create(user=user)
-    user_service_profiles = Overview.objects.filter(user=user)
-    user_profile_all = UserProfile.objects.all()
-    user_service_profiles = Overview.objects.all()
-    # print(user_service_profiles)
+# @login_required()
+# def view_profile(request, username):
+#     user = get_object_or_404(User, username=username)
+#     user_profile, created = UserProfile.objects.get_or_create(user=user)
+#     user_service_profiles = Overview.objects.filter(user=user)
+#     user_profile_all = UserProfile.objects.all()
+#     user_service_profiles = Overview.objects.all()
    
-    current_user = request.user
-    if username == current_user.username:
-        pass
-    else:
-        return HttpResponseForbidden("Access Denied")
+#     current_user = request.user
+#     if username == current_user.username:
+#         pass
+#     else:
+#         return HttpResponseForbidden("Access Denied")
     
-    context = {
-        'user_profile': user_profile,
-        'user_service_profiles': user_service_profiles,
-         "user_profile_all":user_profile_all
-    }
-    return render(request, 'view_profile.html', context)
+#     context = {
+#         'user_profile': user_profile,
+#         'user_service_profiles': user_service_profiles,
+#          "user_profile_all":user_profile_all
+#     }
+#     return render(request, 'view_profile.html', context)
 
 @login_required()
-def view_profile_public(request,username):
+def view_profile_public(request, username):
     user = get_object_or_404(User, username=username)
     user_profile, created = UserProfile.objects.get_or_create(user=user)
     user_service_profiles = Overview.objects.filter(user=user)
-    print(user_service_profiles)
+    seller_profile, created = UserProfile.objects.get_or_create(user=user_profile.user)
+    re_profile = UserProfile.objects.get(user=request.user)
+
+    profile_reviews = RatingSeller.objects.filter(seller=seller_profile)
+    total_review_sum = sum(review.review_rating for review in profile_reviews)
+    reviewer_profile_usr = [review.reviewer.user for review in profile_reviews]
+
+    user_profile.overall_rating = round(total_review_sum / profile_reviews.count()) if profile_reviews.count() > 0 else 0
+    user_profile.save()
+    if request.method == 'POST':
+        rating_value = request.POST.get('rg1')
+        title = request.POST.get('review_title')
+        review_text = request.POST.get('review_message')
+        existing_review = RatingSeller.objects.filter(seller=seller_profile, reviewer=re_profile).first()
+
+        if existing_review:
+            existing_review.review_rating = rating_value
+            existing_review.title = title
+            existing_review.review = review_text
+            existing_review.save()
+        else:
+            RatingSeller.objects.create(
+                seller=seller_profile,
+                reviewer=re_profile,
+                review_rating=rating_value,
+                title=title,
+                review=review_text
+            )
+    else:
+        print('No values received from the form')
+
+    profile_reviews = RatingSeller.objects.filter(seller=seller_profile)
+
     context = {
         'user_profile': user_profile,
         'user_service_profiles': user_service_profiles,
+        'profile_reviews': profile_reviews,
+        'count_review': profile_reviews.count(),
+        'reviewer_profile_usr': reviewer_profile_usr,
     }
-    print(user)
-    if request.user.is_authenticated and request.user == user:
-        return redirect('profile',username=request.user.username)
-        
-    return render(request,'view_profile_public.html',context)
+
+    return render(request, 'view_profile_public.html', context)
+
+
+

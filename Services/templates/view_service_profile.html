@@ -70,7 +70,7 @@
                     Profile
                   </a>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{% url 'profile' user.username %}">View
+                    <li><a class="dropdown-item" href="{% url 'view_profile_public' user.username %}">View
                         Profile</a></li>
                     <li><a class="dropdown-item" href="{% url 'edit_profile' user.username %}">Edit
                         Profile</a>
@@ -130,7 +130,7 @@
   </div>
   <div class="container-fluid">
 
-    
+
     <div class="row ms-1">
       <div class="col-md-6">
 
@@ -143,7 +143,7 @@
           </div>
           <div class="col mt-1">
             <span style="display: none;">
-              
+
               {{service_profile.user}}
             </span>
             <img class="rounded-circle me-1" src="{{ user_profile.profile_image.url }}"
@@ -156,7 +156,8 @@
             </a>
             {% if user == user_profile.user %}
             <a href="{% url 'edit_service' request.user.username service_profile.id %}">
-              <button type="button" class="btn ms-2" style="border: 1px solid var(--user-name-color);color: var(--text);"> <i
+              <button type="button" class="btn ms-2"
+                style="border: 1px solid var(--user-name-color);color: var(--text);"> <i
                   class="fa-regular fa-pen-to-square"></i>EDIT</button>
             </a>
             {% endif %}

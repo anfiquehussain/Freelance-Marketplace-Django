@@ -27,17 +27,22 @@ def Seller_Dashboard(request,username):
 
 def Buyer_Dashboard(request,username):
     user = get_object_or_404(User, username=username)
+    user_profile = UserProfile.objects.filter(user=user)
+    service_overview = Overview.objects.filter(user=user)
+    print(user_profile)
+    
     current_user = request.user
     if username == current_user.username:
         pass
     else:
         return redirect('IntroHome')
-
     context = {
-        'user':user
+        'user':user,
+        'user_profile':user_profile,
+        "service_overview":service_overview,
     }
         
-    return render(request,'buyer_dashboard.html')
+    return render(request,'buyer_dashboard.html',context)
 
 
 

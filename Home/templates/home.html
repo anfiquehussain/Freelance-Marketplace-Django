@@ -319,7 +319,7 @@
                                         Profile
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{% url 'profile' user.username %}">View
+                                        <li><a class="dropdown-item" href="{% url 'view_profile_public' user.username %}">View
                                                 Profile</a></li>
                                         <li><a class="dropdown-item" href="{% url 'edit_profile' user.username %}">Edit
                                                 Profile</a>
@@ -368,7 +368,7 @@
                             {% for user_profile in user_profile %}
                             {% if user_profile.user == user %}
                             <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Profile"
-                                class="navbar-brand mytoolthip" href="{% url 'profile' user.username %}">
+                                class="navbar-brand mytoolthip" href="{% url 'view_profile_public' user.username %}">
                                 <img src="{{ user_profile.profile_image.url }}"
                                     style="width: 35px;height:35px;object-fit: cover;float: left;"
                                     class="rounded-circle mt-3 ms-0 ms-lg-2 mt-lg-0" alt="" width="30" height="30">
@@ -477,7 +477,6 @@
 
             <div class="col-12">
                 <h4>IT & Networking</h4>
-
                 <div class="d-flex flex-row flex-nowrap overflow-auto">
                     {% for service_profile in user_service_profiles %}
                     {% for user_profile in user_profile %}
@@ -485,11 +484,6 @@
                     {% if user_profile.user == service_profile.user%}
 
                     {% if service_profile.category|lower == "it & networking" %}
-
-
-
-
-
                     <div class="card card-block mx-2" style="min-width: 333px;max-height: auto;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
                         {% for gallery in service_profile.gallery_set.all %}
                         {% if gallery.image1 %}
