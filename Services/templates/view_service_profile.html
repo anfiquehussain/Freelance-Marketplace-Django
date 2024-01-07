@@ -420,22 +420,30 @@
         <div class="card" style="height: 100px;">
           <div class="card-body d-flex justify-content-start">
             <div class="ms-2 d-block w-75">
-              <h1 class="fs-5 d-inline">5</h1><span class="star d-inline" style="font-size: 110%;">&#9733;</span>
-              <p>Average rating based on 2555 reviews</p>
+              <h1 class="fs-5 d-inline">{{ service_profile.overall_rating }}</h1><span class="star d-inline"
+                style="font-size: 110%;">&#9733;</span>
+              <p>Average rating based on {{ count_review }} reviews</p>
             </div>
             <div class="d-flex align-items-start justify-content-end" style="width: 30%">
 
               <!-- Button trigger modal -->
+              <!-- Button trigger modal -->
+              {% if request.user == user_profile.user %}
+              <!-- Displayed when the authenticated user is the same as the profile user -->
+              <p class="text-muted mt-3 text-end me-2">You cannot review your own profile.</p>
+              {% else %}
+              <!-- Display the "Sent Review" button when the authenticated user is not the same as the profile user -->
               <p type="button" class="btn loginbtn mt-3 text-end me-2" data-bs-toggle="modal"
                 data-bs-target="#staticBackdrop">
                 Sent Review
               </p>
+              {% endif %}
 
               <!-- Modal -->
               <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
                 tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog">
-                  <form>
+                  <form action="{% url 'view_service_profile' service_profile.id %}" method="post" id="review-form">
                     <div class="modal-content">
                       <div class="modal-header">
                         <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
@@ -445,37 +453,38 @@
                         <div class="mb-3">
                           <p for="recipient-name" class="col-form-label">Rating:</p>
                           <div class="wrapper">
-                            <input class="rating-stars" type="radio" id="r1" name="rg1" value="5">
+                            <input required class="rating-stars" type="radio" id="r1" name="rg1" value="5">
                             <label class="rating_label" for="r1">&#9733;</label>
-                            <input class="rating-stars" type="radio" id="r2" name="rg1" value="4">
+                            <input required class="rating-stars" type="radio" id="r2" name="rg1" value="4">
                             <label class="rating_label" for="r2">&#9733;</label>
-                            <input class="rating-stars" type="radio" id="r3" name="rg1" value="3">
+                            <input required class="rating-stars" type="radio" id="r3" name="rg1" value="3">
                             <label class="rating_label" for="r3">&#9733;</label>
-                            <input class="rating-stars" type="radio" id="r4" name="rg1" value="2">
+                            <input required class="rating-stars" type="radio" id="r4" name="rg1" value="2">
                             <label class="rating_label" for="r4">&#9733;</label>
-                            <input class="rating-stars" type="radio" id="r5" name="rg1" value="1">
+                            <input required class="rating-stars" type="radio" id="r5" name="rg1" value="1">
                             <label class="rating_label" for="r5">&#9733;</label>
                           </div>
                         </div>
                         <div class="mb-3">
                           <label for="recipient-name" class="col-form-label">Title:</label>
-                          <input style="outline: none;box-shadow: none" type="text" class="form-control"
-                            id="recipient-name">
+                          <input required style="outline: none;box-shadow: none" type="text" class="form-control"
+                            id="review_title" name="review_title">
+                          <p id="character-count"></p>
                         </div>
                         <div class="mb-3">
                           <label for="message-text" class="col-form-label">Review:</label>
-                          <textarea style="outline: none;box-shadow: none" class="form-control"
-                            id="message-text"></textarea>
+                          <textarea required style="outline: none;box-shadow: none" class="form-control"
+                            id="review_message" name="review_message"></textarea>
+                          <p id="review_message_character_count"></p>
                         </div>
 
                       </div>
                       <div class="modal-footer">
-                        <button type="button" onclick="submitForm()" class="btn btn-search"
+                        <button type="submit" class="btn btn-search"
                           style="outline: none;box-shadow: none;color: var(--background)">Send
                           message</button>
                         <button type="button" class="btn loginbtn" style="outline: none;box-shadow: none;"
                           data-bs-dismiss="modal">Close</button>
-
                       </div>
                     </div>
                   </form>
@@ -486,6 +495,12 @@
         </div>
       </div>
     </div>
+
+    {% for rating in rating_service %}
+
+
+
+
     <div class="row mt-2">
       <div class="col">
         <div class="card">
@@ -509,12 +524,14 @@
               <div class="row">
                 <div class="col d-flex justify-content-between">
                   <div style="width: 50%;">
-                    <img src="{% static 'img/draw2.webp' %}"
+                    <img src="{{ rating.reviewer.profile_image.url }}"
                       style="width: 30px; height: 30px; object-fit: cover; float: left;" class="rounded-circle">
-                    <p class="mt-1" style="margin-left: 6%;">@username [ Country ]</p>
+                    <p class="mt-1" style="margin-left: 6%;">@{{ rating.reviewer }} [ {{ rating.reviewer.country }} ]
+                    </p>
                   </div>
                   <div>
-                    <p class="fs-6 d-inline text-end mt-3"> 4 weeks ago | 5</p><span class="star d-inline"
+                    <p class="fs-6 d-inline text-end mt-3">
+                      {{ rating.created_at|timesince }} | {{ rating.review_rating}}</p><span class="star d-inline"
                       style="font-size: 110%;">&#9733;</span>
                   </div>
                 </div>
@@ -523,18 +540,10 @@
               <div class="row">
                 <div class="col-12 contentContainer">
                   <p class="content">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet incidunt
-                    necessitatibus, error quam debitis at nam dolore. Distinctio laboriosam
-                    voluptates
-                    saepe repudiandae natus reiciendis tenetur non ipsum culpa sunt. Commodi.
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet incidunt
-                    necessitatibus, error quam debitis at nam dolore. Distinctio laboriosam
-                    voluptates
-                    saepe repudiandae natus reiciendis tenetur non ipsum culpa sunt. Commodi.
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet incidunt
-                    necessitatibus, error quam debitis at nam dolore. Distinctio laboriosam
-                    voluptates
-                    saepe repudiandae natus reiciendis tenetur non ipsum culpa sunt. Commodi.
+                  <p class="fw-bold fs-5">{{ rating.title }}</p>
+                  <p class="content">
+                    {{ rating.review }}
+                  </p>
                   </p>
                   <strong><span class="readMoreBtn" onclick="toggleContent()">Read
                       more</span></strong>
@@ -546,7 +555,7 @@
         </div>
       </div>
     </div>
-
+    {% endfor %}
   </div>
 
   <script src="{% static 'js/theme.js' %}"></script>
@@ -564,7 +573,47 @@
     });
   </script>
 
+  <!-- Add this script at the end of your HTML body or in a separate JavaScript file -->
   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var form = document.getElementById('review-form');  // Replace with the actual form ID
+      var titleInput = document.getElementById('review_title');  // Replace with the actual input ID
+      var maxTitleLength = 50;  // Set your desired maximum length
+      var review_messageInput = document.getElementById('review_message');
+
+      // Display the initial character count
+      updateCharacterCount();
+
+      // Add an event listener for input changes on the title field
+      titleInput.addEventListener('input', function () {
+        updateCharacterCount();
+      });
+
+      review_messageInput.addEventListener('input', function () {
+        updateCharacterCount();
+      })
+
+      form.addEventListener('submit', function (event) {
+        // Validate title length
+        if (titleInput.value.trim().length > maxTitleLength) {
+          event.preventDefault();  // Prevent form submission
+          alert('The length of the title cannot exceed ' + maxTitleLength + ' characters.');
+          // You can also display the error message in a more user-friendly way (e.g., show an error div)
+        }
+      });
+
+      function updateCharacterCount() {
+        var currentLength = titleInput.value.trim().length;
+        var review_messageInput_current = review_messageInput.value.trim().length;
+        var characterCountElement = document.getElementById('character-count');
+        var review_messageInput_Count_element = document.getElementById('review_message_character_count');
+        characterCountElement.textContent = '50/' + currentLength;
+        review_messageInput_Count_element.textContent = '∞/' + review_messageInput_current
+      }
+    });
+  </script>
+
+  <!-- <script>
     function submitForm() {
       // Get selected rating
       const rating = document.querySelector('input[name="rg1"]:checked');
@@ -580,7 +629,7 @@
       // Display the values (you can replace this with your desired form submission logic)
       alert(`Rating: ${rating.value}\nTitle: ${title}\nReview: ${review}`);
     }
-  </script>
+  </script> -->
 
 
 

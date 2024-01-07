@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import OverviewForm, BasicPackageForm,StandardPackageForm,PremiumPackageForm, DescriptionForm, QuestionForm, GalleryForm
 from Home.models import UserProfile
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Overview, BasicPackage, StandardPackage, PremiumPackage, Description, Question, Gallery
+from .models import Overview, BasicPackage, StandardPackage, PremiumPackage, Description, Question, Gallery,RatingService
 from django.http import HttpResponseForbidden
 
 
@@ -187,13 +187,43 @@ def edit_service(request, username ,overview_id):
 def view_service_profile(request,overview_id):
     overview = get_object_or_404(Overview, pk=overview_id)
     user_profile = UserProfile.objects.get(user=overview.user.id)
-
     basic_packages = BasicPackage.objects.filter(overview=overview)
     standardpackage = StandardPackage.objects.filter(overview=overview)
     premiumpackage = PremiumPackage.objects.filter(overview=overview)
     description = Description.objects.filter(overview=overview)
     question = Question.objects.filter(overview=overview)
     gallery = Gallery.objects.filter(overview=overview)
+    rating_service = RatingService.objects.filter(overview=overview)
+    re_profile = UserProfile.objects.get(user=request.user)
+
+
+    total_review_sum = sum(review.review_rating for review in rating_service if review.review_rating is not None)
+    overview.overall_rating = round(total_review_sum / rating_service.count()) if rating_service.count() > 0 else 0
+    overview.save()
+
+    
+    if request.method == 'POST':
+        rating_value = request.POST.get('rg1')
+        title = request.POST.get('review_title')
+        review_text = request.POST.get('review_message')
+        existing_review = RatingService.objects.filter(overview=overview, reviewer=re_profile).first()
+        if existing_review:
+            existing_review.review_rating = rating_value
+            existing_review.title = title
+            existing_review.review = review_text
+            existing_review.save()
+        else:
+            RatingService.objects.create(
+                    overview=overview,
+                    reviewer=re_profile,
+                    review_rating=rating_value,
+                    title=title,
+                    review=review_text
+            )
+    else:
+        print('No values received from the form')
+        
+
     context = {
         'service_profile': overview,
         'basic_packages':basic_packages,
@@ -202,7 +232,10 @@ def view_service_profile(request,overview_id):
         'description':description,
         'question':question,
         'gallery':gallery,
-        'user_profile':user_profile
+        'user_profile':user_profile,
+        'rating_service':rating_service,
+        're_profile':re_profile,
+        'count_review':rating_service.count(),
 
     }
     return render(request,'view_service_profile.html',context)

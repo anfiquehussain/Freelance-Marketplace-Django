@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
+from Home.models import UserProfile
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -12,7 +13,7 @@ class Overview(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     titleOverview = models.CharField(max_length=100)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    rating = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True,default=0)
+    overall_rating = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
     search_tags = models.CharField(max_length=200)
 
     def save(self, *args, **kwargs):
@@ -120,3 +121,15 @@ class Gallery(models.Model):
     image2 = models.ImageField(upload_to='image/',blank=True, null=True)
     image3 = models.ImageField(upload_to='image/',blank=True, null=True)
     video = models.FileField(upload_to='videos/',blank=True, null=True)
+
+class RatingService(models.Model):
+    overview = models.ForeignKey(Overview, on_delete=models.CASCADE, default=None)
+    review_rating = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    reviewer = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='ratings_giver_service')
+    title = models.CharField(max_length=50)
+    review = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ['overview', 'reviewer']
+
