@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     {% load bootstrap5 %}
     {% bootstrap_css %}
@@ -15,6 +15,387 @@
     {% load static %}
 
     <link rel="stylesheet" href="{% static 'css/edit_profile.css' %}">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Montserrat:700|Lora:400');
+        @import url('https://fonts.googleapis.com/css?family=Athiti:700|Athiti:400');
+        @import url('https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css');
+
+        :root[data-theme="light"] {
+            --text: #333333;
+            --background: #ffffff;
+            --primary: #5c3da4;
+            --secondary: #d0ceda;
+            --accent: #200e71;
+            --secondary-hover: #d9d2f9;
+            --primary-hover: #7757c1;
+            --navbar-toggler-bg-color: #fffff;
+            --dropdown-bg-color: #ffff;
+            --dropdwon-bgc-hover: #E9ECEF;
+            --card-bg-color: #ffff;
+            --user-name-color: #73757d;
+            --btn-close-color-bg: #d0ceda;
+            --package-border-color: #ddd;
+            --package-header-row-active-color: #FAFAFA;
+        }
+
+        :root[data-theme="dark"] {
+            --text: #cccccc;
+            --background: #000000;
+            --primary: #7a5bc2;
+            --secondary: #272531;
+            --accent: #a08ef1;
+            --secondary-hover: #5c5874;
+            --primary-hover: #957dcf;
+            --navbar-toggler-bg-color: #333333;
+            --dropdown-bg-color: #171b27;
+            --dropdwon-bgc-hover: #556491;
+            --card-bg-color: #181A1B;
+            --user-name-color: #82848c;
+            --btn-close-color-bg: #a08ef1;
+            --package-border-color: #212121;
+            --package-header-row-active-color: #181A1B;
+        }
+
+        :root {
+            --main-font-family: 'Helvetica, Arial, sans-serif';
+            --body-font: 'Lora', serif --header-font-size: 24px;
+            --body-font-size: 16px;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            font-family: 'Athiti';
+            width: 100%;
+            height: auto;
+        }
+
+        .dropdown {
+            background-color: var(--background);
+        }
+
+        .dropdown-menu {
+            background-color: var(--dropdown-bg-color);
+            color: var(--text);
+        }
+
+        .dropdown .dropdown-menu li a {
+            color: var(--text);
+        }
+
+
+
+        .dropdown .dropdown-menu li a:hover {
+            background-color: var(--dropdwon-bgc-hover);
+            color: var(--text);
+        }
+
+        .dropdown .dropdown-menu li a:active {
+            background-color: var(--dropdown-bg-color);
+            color: var(--text);
+        }
+
+        .dropdown .dropdown-menu li a:focus {
+            background-color: var(--dropdown-bg-color);
+            color: var(--text);
+        }
+
+        .nav-btn {
+            background-color: transparent;
+            text-decoration: none;
+            color: var(--text);
+            cursor: pointer;
+            border: none;
+            margin-left: 10px;
+        }
+
+
+        .navbar-light {
+            color: var(--text);
+        }
+
+        .navbar-light .navbar-nav .nav-link {
+            color: var(--text);
+            font-size: 20px;
+        }
+
+        .navbar-light .navbar-nav .nav-link:hover {
+            color: #a48fd6;
+        }
+
+        .navbar-light .navbar-nav .nav-link:focus {
+            color: var(--text);
+        }
+
+        .navbar-light .d-flex .btn {
+            color: var(--text);
+            outline: none;
+            box-shadow: none;
+        }
+
+        .navbar-toggler {
+            border-color: rgb(119, 87, 193);
+        }
+
+        .navbar-toggler .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgb(119, 87, 193)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+        }
+
+        .navbar-toggler:active,
+        .navbar-toggler:focus {
+            background-color: var(--navbar-toggler-bg-color);
+            outline: none;
+        }
+
+
+        .loginbtn {
+            background-color: var(--secondary);
+            color: var(--text);
+        }
+
+        .loginbtn:hover {
+            background-color: var(--secondary-hover);
+        }
+
+
+        .signupbtn {
+            background-color: var(--primary);
+        }
+
+        .signupbtn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-search {
+            background-color: var(--primary);
+            outline: none;
+            box-shadow: none;
+        }
+
+        .btn-search:hover {
+            background-color: var(--primary-hover);
+        }
+
+
+        .theme-btn {
+            background-color: transparent;
+            color: var(--text);
+            cursor: pointer;
+            border: none;
+            border-radius: 100%;
+        }
+
+        .fa-moon,
+        .fa-sun {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            font-size: 1.5rem;
+        }
+
+        .fa-moon.active,
+        .fa-sun.active {
+            opacity: 1;
+        }
+
+
+
+
+        .card {
+            min-width: 90%;
+            max-height: auto;
+            color: var(--text);
+            background-color: var(--card-bg-color);
+        }
+
+        .skillcard {
+            min-width: 90%;
+            max-height: auto;
+            color: var(--text);
+            background-color: transparent;
+            border: none;
+        }
+
+        .more-about-me:focus,
+        .more-about-me:active {
+            outline: none;
+            border: none;
+        }
+
+        .user-name-card:hover {
+            text-decoration: underline;
+        }
+
+        .card-link {
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .card-link:hover {
+            text-decoration: underline;
+            color: var(--text);
+        }
+
+        .card-title:hover {
+            text-decoration: underline;
+            color: var(--text);
+        }
+
+        /* width */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 5px grey;
+            border-radius: 10px;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-hover);
+        }
+
+        .left-side-col {
+            background-color: var(--secondary-hover);
+            border-radius: 10px;
+        }
+
+        .left-sub-container {
+            background-color: var(--primary);
+            color: var(--background);
+            border-radius: 30px;
+            font-size: smaller;
+        }
+
+        .f-name,
+        .s-name {
+            color: var(--text);
+        }
+
+        .u-name {
+            color: var(--user-name-color);
+        }
+
+        .right-side-amd {
+            display: flex;
+            justify-content: center;
+        }
+
+        .right-side-bmd {
+            display: none;
+
+        }
+
+        .badge:hover {
+            box-shadow: #181A1B;
+        }
+
+        .menu-link {
+            text-decoration: none;
+            color: var(--text);
+            text-align: center;
+        }
+
+        .btncreatejob {
+            text-decoration: none;
+            color: var(--text);
+        }
+
+
+
+        form {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--user-name-color);
+            border-radius: 5px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+
+
+        /* Style for labels */
+        label {
+            font-weight: bold;
+        }
+
+        /* Style for input fields */
+        input[type="text"],
+        input[type="email"],
+        input[type="url"],
+        input[type="file"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+
+        /* Style for buttons */
+        button {
+            background-color: var(--primary);
+            color: var(--background);
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+
+
+        #current-profile-preview {
+            width: 100px;
+            border-radius: 100%;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        #new-profile-preview {
+            width: 100px;
+            border-radius: 100%;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        /* Style for add button */
+        #add-certification-btn,
+        #add-language-btn {
+            background-color: var(--secondary);
+            color: var(--text);
+        }
+
+        /* Style for forms within containers */
+        #certifications-forms,
+        #languages-forms {
+            margin-top: 10px;
+        }
+
+        .certification-form,
+        .language-form,
+        .skill-form {
+            border: 1px solid var(--user-name-color);
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+    </style>
 
 </head>
 
@@ -38,7 +419,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    
+
                 </div>
             </div>
             <div class="row">
@@ -55,7 +436,7 @@
                     {% endif %}
                 </div>
             </div>
-    
+
         </div>
 
         <div style="display: flex; gap: 20px; justify-content: center;">
@@ -73,11 +454,11 @@
             </div>
         </div>
 
-        
+
         <span style="font-weight: bold;">
             <p class="p_o">{{ user_form.profile.label }}</p>
             {{ user_form.profile_image }}
-            
+
         </span>
 
         <h2>Authentication Information</h2>
@@ -92,39 +473,42 @@
 
 
         <h2>User Profile</h2>
-        
+
 
         <span style="font-weight: bold;">
-        {{ user_form.country.label }}
-        {{ user_form.country }}
+            {{ user_form.country.label }}
+            {{ user_form.country }}
 
-        {{ user_form.state.label }}
-        {{ user_form.state }}
+            {{ user_form.state.label }}
+            {{ user_form.state }}
 
-        {{ user_form.website_link.label }}
-        {{ user_form.website_link }}
+            {{ user_form.website_link.label }}
+            {{ user_form.website_link }}
 
-        {{ user_form.about_me.label }}
-        {{ user_form.about_me }}
-    </span>
-        
+            {{ user_form.about_me.label }}
+            {{ user_form.about_me }}
+        </span>
+
 
         <div class="accordion accordion-flush" id="accordionFlushExample">
-                    <div class="accordion-item">
-                      <h2 class="accordion-header" id="flush-headingOne">
-                        <button style="color: black;" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                            {{ user_form.skills.label }}
-                        </button>
-                      </h2>
-                      <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                        <div class="accordion-body" style="background-color: var(--card-bg-color);">
-                            {{ user_form.skills }}
-                      </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingOne">
+                    <button style="color: black;" class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false"
+                        aria-controls="flush-collapseOne">
+                        {{ user_form.skills.label }}
+                    </button>
+                </h2>
+                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                    data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body" style="background-color: var(--card-bg-color);">
+                        {{ user_form.skills }}
                     </div>
                 </div>
             </div>
+        </div>
 
-        
+
 
         <h2>Certifications</h2>
         <!-- Certifications Container -->
@@ -160,35 +544,36 @@
         <button type="submit">Save Changes</button>
     </form>
 
-    
-<script src="{% static 'js/theme.js' %}"></script>
-<script src="{% static 'js/edit_profile.js' %}"></script>
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"
-    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="{% static 'js/theme.js' %}"></script>
+    <script src="{% static 'js/edit_profile.js' %}"></script>
 
-<script>
-    $(function () {
-        $('.mytoolthip').tooltip();
-    });
-</script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script>
+        $(function () {
+            $('.mytoolthip').tooltip();
+        });
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Add New Certification button
             var addCertificationButton = document.getElementById('add-certification-btn');
-    var certificationsContainer = document.getElementById('certifications-forms');
-    var certificationEmptyForm = "{{ certification_formset.empty_form|escapejs }}";
-    var certificationTotalFormsInput = document.getElementById('id_certifications-TOTAL_FORMS');
-    var certificationFormIndex = {{ certification_formset.total_form_count }};
+            var certificationsContainer = document.getElementById('certifications-forms');
+            var certificationEmptyForm = "{{ certification_formset.empty_form|escapejs }}";
+            var certificationTotalFormsInput = document.getElementById('id_certifications-TOTAL_FORMS');
+            var certificationFormIndex = {{ certification_formset.total_form_count }
+        };
 
-    addCertificationButton.addEventListener('click', function () {
-        var newCertificationForm = document.createElement('div');
-        newCertificationForm.innerHTML = certificationEmptyForm.replace(/__prefix__/g, certificationFormIndex);
-        certificationsContainer.appendChild(newCertificationForm);
-        certificationFormIndex++;
-        certificationTotalFormsInput.value = certificationFormIndex;
-    });
+        addCertificationButton.addEventListener('click', function () {
+            var newCertificationForm = document.createElement('div');
+            newCertificationForm.innerHTML = certificationEmptyForm.replace(/__prefix__/g, certificationFormIndex);
+            certificationsContainer.appendChild(newCertificationForm);
+            certificationFormIndex++;
+            certificationTotalFormsInput.value = certificationFormIndex;
+        });
 
         // Add New Language button
         var addLanguageButton = document.getElementById('add-language-btn')

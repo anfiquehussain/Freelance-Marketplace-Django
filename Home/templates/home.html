@@ -290,7 +290,7 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <div class="d-flex ms-auto">
                             <ul class="navbar-nav ">
-                                
+
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                         aria-expanded="false">
@@ -319,7 +319,8 @@
                                         Profile
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{% url 'view_profile_public' user.username %}">View
+                                        <li><a class="dropdown-item"
+                                                href="{% url 'view_profile_public' user.username %}">View
                                                 Profile</a></li>
                                         <li><a class="dropdown-item" href="{% url 'edit_profile' user.username %}">Edit
                                                 Profile</a>
@@ -384,7 +385,7 @@
                 </div>
             </nav>
         </div>
-        
+
         <hr>
         <div class="row mt-3" id="CtgListRow">
             {% for ctg in category %}
@@ -437,13 +438,16 @@
                     {% for user_profile in user_profile %}
                     {% if user_profile.profile_image %}
                     {% if user_profile.user == service_profile.user%}
-                    <div class="card card-block mx-2" style="min-width: 333px;max-height: auto;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                    <div class="card card-block mx-2"
+                        style="min-width: 333px;max-height: auto;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
                         {% for gallery in service_profile.gallery_set.all %}
                         {% if gallery.image1 %}
                         <img src="{{ gallery.image1.url }}" style="width:100%;height:160px;object-fit: cover;"
                             class="card-img-top" alt="...">
                         {% endif %}
                         {% endfor %}
+
+                        
                         <div class="card-body">
                             <div class="mt-1">
                                 <img class="rounded-circle mt-1" src="{{ user_profile.profile_image.url }}"
@@ -484,7 +488,8 @@
                     {% if user_profile.user == service_profile.user%}
 
                     {% if service_profile.category|lower == "it & networking" %}
-                    <div class="card card-block mx-2" style="min-width: 333px;max-height: auto;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                    <div class="card card-block mx-2"
+                        style="min-width: 333px;max-height: auto;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
                         {% for gallery in service_profile.gallery_set.all %}
                         {% if gallery.image1 %}
                         <img src="{{ gallery.image1.url }}" style="width:100%;height:160px;object-fit: cover;"
@@ -536,7 +541,8 @@
 
                     {% if service_profile.category|lower == "ui/ux design" %}
 
-                    <div class="card card-block mx-2" style="min-width: 333px;max-height: auto;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                    <div class="card card-block mx-2"
+                        style="min-width: 333px;max-height: auto;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
                         {% for gallery in service_profile.gallery_set.all %}
                         {% if gallery.image1 %}
                         <img src="{{ gallery.image1.url }}" style="width:100%;height:160px;object-fit: cover;"
@@ -589,7 +595,8 @@
 
                     {% if service_profile.category|lower == "writing & translation" %}
 
-                    <div class="card card-block mx-2" style="min-width: 333px;max-height: auto;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                    <div class="card card-block mx-2"
+                        style="min-width: 333px;max-height: auto;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
                         {% for gallery in service_profile.gallery_set.all %}
                         {% if gallery.image1 %}
                         <img src="{{ gallery.image1.url }}" style="width:100%;height:160px;object-fit: cover;"

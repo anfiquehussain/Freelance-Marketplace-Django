@@ -26,6 +26,7 @@ def home(request, identifier):
     user_id = [user.id for user in users]
     user_profile = UserProfile.objects.all()
     user_service_profiles = Overview.objects.all()
+    
     category = Category.objects.all()
     current_user = request.user
     if identifier == current_user.username:
@@ -173,6 +174,7 @@ def view_profile_public(request, username):
     user_profile, created = UserProfile.objects.get_or_create(user=user)
     user_service_profiles = Overview.objects.filter(user=user)
     seller_profile, created = UserProfile.objects.get_or_create(user=user_profile.user)
+    u, created = UserProfile.objects.get_or_create(user=request.user)
     re_profile = UserProfile.objects.get(user=request.user)
 
     profile_reviews = RatingSeller.objects.filter(seller=seller_profile)
