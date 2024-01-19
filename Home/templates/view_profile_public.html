@@ -704,8 +704,26 @@ body {
                         {% endfor %}
 
                     </div>
-
+                    {% if user_profile.user == request.user %}
+                    <div class="btn-group dropup">
+                        <p class="dropdown-toggle ms-3" data-bs-toggle="dropdown" aria-expanded="false">
+                            <strong>⁝</strong>
+                        </p>
+                        <ul class="dropdown-menu text-center">
+                            <li class="menu-items-links ">
+                                <a class="menu-link"
+                                    href="{% url 'delete_service' request.user.username service_profile.id  %}">Delete</a>
+                            </li>
+                            <hr>
+                            <li>
+                                <a href="{% url 'edit_service' request.user.username service_profile.id %}"
+                                    class="menu-link">Edit Service</a>
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
                 </div>
+
             </div>
             {% endfor %}
         </div>
