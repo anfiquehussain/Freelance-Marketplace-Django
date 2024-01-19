@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_image = models.ImageField(upload_to='profile_images/')
+    profile_image = models.ImageField(upload_to='profile_images/', default='profile_images/user.png')
     country = models.CharField(max_length=50)  # For storing country information
     state = models.CharField(max_length=50)    # For storing state information
     website_link = models.URLField(blank=True, null=True)

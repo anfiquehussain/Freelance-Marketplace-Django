@@ -26,7 +26,8 @@ def home(request, identifier):
     user_id = [user.id for user in users]
     user_profile = UserProfile.objects.all()
     user_service_profiles = Overview.objects.all()
-    
+    user_profile_change, created = UserProfile.objects.get_or_create(user=user)
+
     category = Category.objects.all()
     current_user = request.user
     if identifier == current_user.username:
