@@ -13,8 +13,12 @@
         <input type="text" id="amount" name="amount" required>
         <button type="submit">Submit</button>
     </form>
+    {{ accounts }}
+<br>
+<br>
+    {{ order_ids}}
 
-    <!-- Display errors if any -->
+    
     {% if messages %}
     <ul>
         {% for message in messages %}

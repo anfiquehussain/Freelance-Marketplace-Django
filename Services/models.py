@@ -21,6 +21,7 @@ class Overview(models.Model):
         tags = [tag.strip() for tag in self.search_tags.split(',')]
         self.search_tags = ','.join(tags)  # Store cleaned tags
         super().save(*args, **kwargs)
+    
 
 class BasicPackage(models.Model):
     DELIVERY_CHOICES1 = [

@@ -6,7 +6,7 @@ from django.http import HttpResponseForbidden, JsonResponse
 from django.contrib.auth.models import User
 from django.conf import settings
 import stripe
-from .models import Transaction
+from .models import Transaction,SellerAccountBalance
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from Orders.models import Order
@@ -120,8 +120,6 @@ def payments(request, overview_id,username):
             seller_fee = bp.Premium_price * (10/100)
             service_fee = buyer_fee + seller_fee
 
-           
-
             price = (bp.Premium_price + buyer_fee)
             
             actual_price = bp.Premium_price
@@ -233,26 +231,47 @@ import razorpay
 
 import requests
 
+from django.shortcuts import render
+from django.conf import settings
+from razorpay import Client
+
+
 @login_required
 def withdrawal(request, username):
-    client = razorpay.Client(auth=(settings.REZORPAY_PUBLISHABLE_KEY, settings.REZORPAY_SECRET_KEY))
-    account_data = {
-    "type": "bank_account",  # Specify the type of account (e.g., "bank_account")
-    "contact": {
-        "name": "John Doe",  # Name of the account holder
-        "email": "john.doe@example.com",  # Email address of the account holder
-        "phone": "1234567890",  # Phone number of the account holder
-    },
-    "bank_account": {
-        "account_number": "1234567890",  # Account number
-        "ifsc": "ABCD1234567",  # IFSC code of the bank branch
-        "beneficiary_name": "John Doe",  # Name of the account holder (again)
-        },
-    }
-    linked_account = client.account.create(data=account_data)
+    user = get_object_or_404(User, username=username)
+    current_user = request.user
+    account_balance_queryset = SellerAccountBalance.objects.filter(user=user)
+    seller_balance_total = 0
 
-    linked_accounts = client.account.create()
-    return render(request, "withdrawal.html")
+    orders = Order.objects.filter(seller=user)
+    for order in orders:
+        transaction = Transaction.objects.filter(order=order).first()
+        if order.status == "completed" and transaction:
+            overview = transaction.overview
+            amount_earned = transaction.amount
+            fee = amount_earned * 10 / 100
+            seller_balance_total = seller_balance_total + amount_earned - fee
+
+    if account_balance_queryset.exists():
+        # Update the existing balance
+        account_balance = account_balance_queryset.first()
+        account_balance.balance_amount = seller_balance_total
+        account_balance.save()
+    else:
+        # Create a new SellerAccountBalance for the user
+        create_account_balance = SellerAccountBalance.objects.create(
+            user=user,
+            balance_amount=seller_balance_total,
+        )
+
+    if request.method == "POST":
+        amount = int(request.POST.get('amount')) * 10
+
+    context = {}
+    return render(request, "withdrawal.html", context)
+
+
+
     
 
 

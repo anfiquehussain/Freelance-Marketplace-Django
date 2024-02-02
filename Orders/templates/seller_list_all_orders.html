@@ -565,7 +565,7 @@
                 {% for order_data in order_info %}
                 <tr class="order-item" data-status="{{ order_data.order.status }}">
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ order_data.order.buyer.user.username }}</td>
+                    <td>{{ order_data.order.buyer }} {{ order_data.order.id }}</td>
                     <td>{{ order_data.overview.titleOverview | slice:"40"}}...</td>
                     <td>{{ order_data.order.delivery_date }}</td>
                     <td>{{ order_data.transaction.package_name }}</td>
