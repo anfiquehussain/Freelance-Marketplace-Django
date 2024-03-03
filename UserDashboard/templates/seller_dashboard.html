@@ -141,14 +141,14 @@
                             <h1>₹{{ seller_balance_total }}</h1>
                         </div>
                         <div class="col d-flex align-items-center justify-content-end">
-                            <a href="{% url 'withdrawal' user.username %}"><button class="withdrawbtn text-uppercase">withdraw</button></a>
+                            <a href="{% url 'withdrawal' user.username %}"><button
+                                    class="withdrawbtn text-uppercase">withdraw</button></a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 
 
     <div class="container-fluid mt-3">
@@ -185,17 +185,17 @@
                                     <th>Total orders</th>
                                 </tr>
                                 {% for s_overview in service_overview %}
-                                    <tr>
-                                        <td>{{ s_overview.id }}</td>
-                                        <td>{{ s_overview.titleOverview | slice:":30" }}</td>
-                                        <td>{{ s_overview.amount_earned }}</td>
-                                        <td>{{ s_overview.order_completed }}</td>
-                                        <td>{{ s_overview.total_orders }}</td>
-                                    </tr>
+                                <tr>
+                                    <td>{{ s_overview.id }}</td>
+                                    <td>{{ s_overview.titleOverview | slice:":30" }}</td>
+                                    <td>{{ s_overview.amount_earned }}</td>
+                                    <td>{{ s_overview.order_completed }}</td>
+                                    <td>{{ s_overview.total_orders }}</td>
+                                </tr>
                                 {% endfor %}
                             </table>
-                            
-                            
+
+
                         </div>
                     </div>
                 </div>

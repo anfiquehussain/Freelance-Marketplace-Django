@@ -1,3 +1,8 @@
+from django.contrib.auth.decorators import user_passes_test
+from .models import Upi_id, Bank
+from .models import SellerAccountBalance, PaymentWithdrawal, PaymentMethod
+from .models import PaymentMethod
+from .models import PaymentWithdrawal
 from audioop import reverse
 from django.shortcuts import render, get_object_or_404
 from Services.models import Overview, BasicPackage, StandardPackage, PremiumPackage
@@ -6,7 +11,7 @@ from django.http import HttpResponseForbidden, JsonResponse
 from django.contrib.auth.models import User
 from django.conf import settings
 import stripe
-from .models import Transaction,SellerAccountBalance
+from .models import Transaction, SellerAccountBalance
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from Orders.models import Order
@@ -19,10 +24,12 @@ from django.http import HttpResponseBadRequest
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
-client = razorpay.Client(auth=(settings.REZORPAY_PUBLISHABLE_KEY, settings.REZORPAY_SECRET_KEY))
+client = razorpay.Client(
+    auth=(settings.REZORPAY_PUBLISHABLE_KEY, settings.REZORPAY_SECRET_KEY))
+
 
 @login_required
-def payments(request, overview_id,username):
+def payments(request, overview_id, username):
     overview = get_object_or_404(Overview, pk=overview_id)
     user = get_object_or_404(User, username=username)
 
@@ -32,7 +39,7 @@ def payments(request, overview_id,username):
         pass
     else:
         return HttpResponseForbidden("Access Denied")
-    
+
     additional_data = request.GET.get('additional_data')
     additional_data2 = request.GET.get('additional_data2')
     user_profile = UserProfile.objects.get(user=overview.user.id)
@@ -49,12 +56,9 @@ def payments(request, overview_id,username):
     service_fee = 0
     actual_price_fee_added = 0
 
-
     if additional_data2 == '1':
         for bp in basic_packages:
 
-            
-            
             buyer_fee = bp.Basic_price * (5/100)
             seller_fee = bp.Basic_price * (10/100)
             service_fee = buyer_fee + seller_fee
@@ -63,12 +67,12 @@ def payments(request, overview_id,username):
             actual_price = bp.Basic_price
             actual_price_fee_added = price
 
-            
-            data = { "amount": price * 100, "currency": "INR", "receipt": "order_rcptid_11" }
+            data = {"amount": price * 100, "currency": "INR",
+                    "receipt": "order_rcptid_11"}
             payment = client.order.create(data=data)
             API_KRY = settings.REZORPAY_PUBLISHABLE_KEY
             order_id = payment['id']
-            
+
             package_discription = bp.Basic_description
 
             transaction = Transaction.objects.create(
@@ -80,7 +84,7 @@ def payments(request, overview_id,username):
                 package_name='basic_package',
                 service_fee=service_fee
             )
-            transaction_id = transaction.id  
+            transaction_id = transaction.id
     elif additional_data2 == '2':
         for bp in standard_packages:
             buyer_fee = bp.Standard_price * (5/100)
@@ -88,19 +92,17 @@ def payments(request, overview_id,username):
 
             service_fee = buyer_fee + seller_fee
 
-           
-
             price = (bp.Standard_price + buyer_fee)
-            
+
             actual_price = bp.Standard_price
             actual_price_fee_added = bp.Standard_price + buyer_fee
 
-            
-            data = { "amount": price * 100, "currency": "INR", "receipt": "order_rcptid_11" }
+            data = {"amount": price * 100, "currency": "INR",
+                    "receipt": "order_rcptid_11"}
             payment = client.order.create(data=data)
             API_KRY = settings.REZORPAY_PUBLISHABLE_KEY
             order_id = payment['id']
-            
+
             package_discription = bp.Standard_description
 
             transaction = Transaction.objects.create(
@@ -112,7 +114,7 @@ def payments(request, overview_id,username):
                 package_name='standard_package',
                 service_fee=service_fee
             )
-            transaction_id = transaction.id  
+            transaction_id = transaction.id
 
     elif additional_data2 == '3':
         for bp in premium_packages:
@@ -121,16 +123,16 @@ def payments(request, overview_id,username):
             service_fee = buyer_fee + seller_fee
 
             price = (bp.Premium_price + buyer_fee)
-            
+
             actual_price = bp.Premium_price
             actual_price_fee_added = bp.Premium_price + buyer_fee
 
-            
-            data = { "amount": price * 100, "currency": "INR", "receipt": "order_rcptid_11" }
+            data = {"amount": price * 100, "currency": "INR",
+                    "receipt": "order_rcptid_11"}
             payment = client.order.create(data=data)
             API_KRY = settings.REZORPAY_PUBLISHABLE_KEY
             order_id = payment['id']
-            
+
             package_discription = bp.Premium_description
 
             transaction = Transaction.objects.create(
@@ -142,12 +144,12 @@ def payments(request, overview_id,username):
                 package_name='premium_package',
                 service_fee=service_fee
             )
-            transaction_id = transaction.id 
+            transaction_id = transaction.id
 
     print(payment['id'])
-        
+
     context = {
-        'user':user,
+        'user': user,
         'overview': overview,
         'key': settings.STRIPE_PUBLISHABLE_KEY,
         'actual_price': actual_price,
@@ -155,54 +157,54 @@ def payments(request, overview_id,username):
         'user_email': request.user.email,
         'user_username': request.user.username,
         'transaction_id': transaction_id,
-        'package_name' : transaction.package_name,
-        'package_discription':package_discription,
-        'service_fee' :  service_fee,
-        'buyer_fee':buyer_fee,
-        'actual_price_fee_added':actual_price_fee_added,
-        'order_id':order_id,
-        'payment' : payment,
-        'API_KRY' : API_KRY,
-        'order_id' : order_id,
-        'price':price,
+        'package_name': transaction.package_name,
+        'package_discription': package_discription,
+        'service_fee':  service_fee,
+        'buyer_fee': buyer_fee,
+        'actual_price_fee_added': actual_price_fee_added,
+        'order_id': order_id,
+        'payment': payment,
+        'API_KRY': API_KRY,
+        'order_id': order_id,
+        'price': price,
     }
     return render(request, 'payment.html', context)
+
 
 @login_required()
 def success(request, transaction_id, username):
     transaction = get_object_or_404(Transaction, id=transaction_id)
     user = get_object_or_404(User, username=username)
     current_user = request.user
-    seller_user = None  
-    context = {} 
+    seller_user = None
+    context = {}
     if username == current_user.username and transaction.sender == current_user:
         pass
     else:
         return HttpResponseForbidden("Access Denied")
-        
 
     transaction.payment_status = True
     overview = transaction.overview
     overview_id = Overview.objects.get(pk=overview)
     transaction.save()
-    
+
     if transaction.package_name == "basic_package":
         basic_package = BasicPackage.objects.get(overview=overview_id)
         Basic_delivery_time = basic_package.Basic_delivery_time
         delivery_date = timezone.now() + timedelta(days=Basic_delivery_time)
-            
+
     elif transaction.package_name == "standard_package":
         standard_package = StandardPackage.objects.get(overview=overview_id)
         Standard_delivery_time = standard_package.Standard_delivery_time
         delivery_date = timezone.now() + timedelta(days=Standard_delivery_time)
-            
+
     elif transaction.package_name == "premium_package":
-        delivery_date =None
+        delivery_date = None
         premium_package = PremiumPackage.objects.get(overview=overview_id)
         premium_delivery_time = premium_package.Premium_delivery_time
         delivery_date = timezone.now() + timedelta(days=premium_delivery_time)
 
-    seller_user = transaction.receiver 
+    seller_user = transaction.receiver
     print(delivery_date)
 
     order = Order.objects.create(
@@ -215,69 +217,153 @@ def success(request, transaction_id, username):
     )
 
     context = {
-            'transaction_id': transaction_id,
-        }
+        'transaction_id': transaction_id,
+    }
 
     return render(request, 'package_selection.html', context)
-
-from django.contrib import messages 
-
-import stripe
-from django.shortcuts import render, get_object_or_404
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-
-import razorpay
-
-import requests
-
-from django.shortcuts import render
-from django.conf import settings
-from razorpay import Client
 
 
 @login_required
 def withdrawal(request, username):
     user = get_object_or_404(User, username=username)
     current_user = request.user
-    account_balance_queryset = SellerAccountBalance.objects.filter(user=user)
-    seller_balance_total = 0
-
-    orders = Order.objects.filter(seller=user)
-    for order in orders:
-        transaction = Transaction.objects.filter(order=order).first()
-        if order.status == "completed" and transaction:
-            overview = transaction.overview
-            amount_earned = transaction.amount
-            fee = amount_earned * 10 / 100
-            seller_balance_total = seller_balance_total + amount_earned - fee
-
-    if account_balance_queryset.exists():
-        # Update the existing balance
-        account_balance = account_balance_queryset.first()
-        account_balance.balance_amount = seller_balance_total
-        account_balance.save()
-    else:
-        # Create a new SellerAccountBalance for the user
-        create_account_balance = SellerAccountBalance.objects.create(
-            user=user,
-            balance_amount=seller_balance_total,
-        )
+    account_balance = SellerAccountBalance.objects.filter(user=user)
+    withdrawal_exist = PaymentWithdrawal.objects.filter(user=user)
+    payment_method, created = PaymentMethod.objects.get_or_create(user=user)
+    upi, created = Upi_id.objects.get_or_create(user=user)
+    bank_details, created = Bank.objects.get_or_create(user=user)
 
     if request.method == "POST":
-        amount = int(request.POST.get('amount')) * 10
+        withdraw_method = request.POST.get('withdraw_method')
 
-    context = {}
+        # Handle the payment method selection form
+        if withdraw_method:
+            payment_method.withdrawal_method = withdraw_method
+            payment_method.save()
+
+        # Handle the UPI form
+        elif 'upi_id' in request.POST:
+            upi_id = request.POST.get('upi_id')
+            # Process the UPI form data as needed
+            upi_code = upi.upi = upi_id
+            upi.save()
+        # Handle the bank details form
+        elif 'account_number' in request.POST:
+            account_number = request.POST.get('account_number')
+            ifsc_code = request.POST.get('ifsc_code')
+            bank_name = request.POST.get('bank_name')
+
+            bank_details.account_number = account_number
+            bank_details.ifsc_code = ifsc_code
+            bank_details.bank_name = bank_name
+            bank_details.save()
+            print(account_number)
+
+    check_withdrawal_flag = True
+    for j in withdrawal_exist:
+        if j.status == "pending" or j.status == "processing":
+            check_withdrawal_flag = False
+        else:
+            check_withdrawal_flag = True
+
+    print(check_withdrawal_flag)
+
+    amount = 0
+    for i in account_balance:
+        amount = i.balance_amount
+
+    # if check_withdrawal_flag:
+    #     withdrawal = PaymentWithdrawal.objects.create(
+    #         user=user,
+    #         amount=amount,
+    #         withdrawal_method=payment_method.withdrawal_method,
+    #     )
+    # else:
+    #     print("withdrawal existed")
+
+    context = {
+        'payment_method': payment_method,
+        'upi': upi,
+        'bank_details': bank_details,
+        'check_withdrawal_flag': check_withdrawal_flag
+    }
     return render(request, "withdrawal.html", context)
 
 
+@login_required()
+def Conform_withdrawal(request, username):
+    user = get_object_or_404(User, username=username)
+    payment_method, created = PaymentMethod.objects.get_or_create(user=user)
+    account_balance = SellerAccountBalance.objects.filter(user=user)
+    withdrawal_exist = PaymentWithdrawal.objects.filter(user=user)
+    amount = 0
+    for i in account_balance:
+        amount = i.balance_amount
 
-    
+    check_withdrawal_flag = True
+    for j in withdrawal_exist:
+        if j.status == "pending" or j.status == "processing":
+            check_withdrawal_flag = False
+        else:
+            check_withdrawal_flag = True
+
+    print(check_withdrawal_flag)
+
+    if check_withdrawal_flag:
+        withdrawal = PaymentWithdrawal.objects.create(
+            user=user,
+            amount=amount,
+            withdrawal_method=payment_method.withdrawal_method,
+        )
+    else:
+        print("withdrawal existed")
+    return render(request, "conform_withdrawal.html")
 
 
+def is_superuser(user):
+    return user.is_superuser
 
 
+@user_passes_test(is_superuser, login_url='IntroHome')
+def List_withdrawal(request, username):
+    user = get_object_or_404(User, username=username)
+    withdrawal = PaymentWithdrawal.objects.all()
+    context = {
+        'withdrawal': withdrawal,
+    }
+    return render(request, "withdraw_list.html", context)
 
 
+@user_passes_test(is_superuser, login_url='IntroHome')
+def Details_of_withdrawal(request, username, withdrawal_id):
+    user = get_object_or_404(User, username=username)
+    withdrawal = get_object_or_404(PaymentWithdrawal, pk=withdrawal_id)
+    upi = Upi_id.objects.get(user=withdrawal.user)
+    bank_details = Bank.objects.get(user=withdrawal.user)
 
-    
+    account_balance = SellerAccountBalance.objects.get(user=withdrawal.user)
+
+    upi_bank_withdrawal_user = []
+    upi_bank_withdrawal_user.append((user, withdrawal, upi, bank_details))
+
+    if request.method == "POST":
+        status_withdraw = request.POST.get('status_withdraw')
+
+        if status_withdraw == 'accept':
+            withdrawal.status = 'processing'
+            withdrawal.save()
+        elif status_withdraw == 'completed':
+            withdrawal.status = 'completed'
+            withdrawal.save()
+            account_balance.balance_amount = 0
+            account_balance.save()
+        else:
+            withdrawal.status = 'rejected'
+            withdrawal.save()
+
+    context = {
+        'withdrawal': withdrawal,
+        'upi_bank_withdrawal_user': upi_bank_withdrawal_user
+    }
+
+    return render(request, "details_of_withdrawal.html", context)

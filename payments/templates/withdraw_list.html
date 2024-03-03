@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>withdrawal</title>
+    <title>List of Withdrawal request</title>
+
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -18,6 +20,7 @@
     {% bootstrap_css %}
     {% bootstrap_javascript %}
     {% load static %}
+
     <link rel="stylesheet" href="{% static 'css/list_all_orders.css' %}">
 
     <style>
@@ -270,40 +273,139 @@
             background: var(--primary-hover);
         }
 
-        .amount-total {
-            background-color: var(--secondary);
-            padding: 10px;
-            border-radius: 10px;
+        table th {
+            color: var(--text)
         }
 
-        .withdrawbtn {
-            color: var(--background);
-            background-color: var(--accent);
+        table,
+        th,
+        tr,
+        td {
+            color: var(--text);
+        }
+
+        .nav .nav-item .nav-link {
+            color: var(--text);
+        }
+
+        .nav .nav-item .active {
+            background-color: var(--secondary);
             border: none;
-            padding: 5px 10px 5px 10px;
-            border-radius: 10px;
+            color: var(--text);
         }
 
-        .withdrawbtn:hover {
-            background-color: var(--accent-hover);
+        .nav .nav-item .active:hover {
+            border: 1px solid var(--text);
         }
 
-        .detailsoforder {
+
+        .nav .nav-item .active:focus {
+            border: 1px solid var(--text);
+        }
+
+
+        .container {
             background-color: var(--secondary);
-            padding: 10px;
-            border-radius: 10px;
-
+            /* Set container background color */
+            padding: 20px;
+            /* Add some padding for better spacing */
+            border-radius: 8px;
+            /* Add rounded corners to the container */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* Add a subtle shadow */
         }
 
-        .modal-content {
+
+        .card {
             background-color: var(--card-bg-color);
+            border: 1px solid var(--user-name-color);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
+        .card-title {
+            font-size: 1.25rem;
+            /* Increase title font size */
+            color: var(--text)
+                /* Set title color */
+        }
+
+        .card-text {
+            font-size: 1rem;
+            /* Set text font size */
+            color: var(--text);
+            /* Set text color */
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            /* Set subtitle font size */
+            color: var(--user-name-color);
+            /* Set subtitle color */
+        }
+
+        .order-card .order-status {
+            font-weight: bold;
+        }
+
+        /* .order-status.pending {
+            color: #FFD700;
+        }
+
+
+        .order-status.completed {
+            color: #00FF00;
+
+        }
+
+
+        .order-status.return {
+            color: #0074D9;
+
+        }
+
+
+        .order-status.cancelled {
+            color: #FF4136;
+
+        }
+
+        .order-status.expired {
+            color: #FF4136;
+
+        }
+
+
+        .order-status.delivered {
+            color: #0000FF;
+
+        }
+
+
+        .order-status.in_progress {
+            color: #FFA500;
+
+        } 
+
+        .order-type.basic_package {
+            color: #27ae60;
+        }
+
+        .order-type.standard_package {
+            color: #3498db;
+        }
+
+        .order-type.premium_package {
+            color: #e74c3c;
+        }
+*/
     </style>
+
+
 </head>
 
 <body>
-
-
     <div class="container-fluid ">
         <div class="row ">
             <nav class="navbar  navbar-expand-lg navbar-light navbar-transparent ">
@@ -368,7 +470,6 @@
                                         </li>
                                         <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                                     </ul>
-
                                 </li>
                                 <!-- <li class="nav-item">
                                     <form class="d-flex me-2 ms-1">
@@ -411,137 +512,100 @@
         <hr>
     </div>
 
-    <div class="container">
+
+
+
+
+
+
+
+
+
+    <div class="container mt-5">
+        <h1 class="mb-4">List of Withdrawal request</h1>
         <div class="row">
-            <div class="col">
-                <p>Select payment method</p>
-                current saved payment method :
-                <button type="button" class="btn signupbtn" style="color: var(--background);" data-bs-toggle="modal"
-                    data-bs-target="#exampleModal">
-                    {{ payment_method.withdrawal_method }} <i class="fa-regular fa-pen-to-square"></i>
-                </button>
 
-                <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Select the withdrawal method</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <form method="post" action="{% url 'withdrawal' user.username %}">
-                                <div class="modal-body">
-                                    {% csrf_token %}
-                                    <select name="withdraw_method" class="form-select"
-                                        aria-label="Default select example">
-                                        <option value="0">Select payment method</option>
-                                        <option value="bank_transfer">Bank Tranfer</option>
-                                        <option value="upi">Upi id</option>
-                                    </select>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn signupbtn">Save changes</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#" data-status="all">ALL</a>
+                </li>
 
-            <div class="col">
-                {% if payment_method.withdrawal_method == 'upi' %}
-                <p>UPI Details</p>
-                <form method="post" action="{% url 'withdrawal' user.username %}">
-                    {% csrf_token %}
-                    <input type="text" class="form-control" value="{{ upi.upi }}" name="upi_id">
-                    <br>
-                    <button type="submit" class="btn signupbtn" style="color: var(--background);">Save UPI ID</button>
-                </form>
-                {% elif payment_method.withdrawal_method == 'bank_transfer' %}
-                <p>Bank Details</p>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-status="pending">PENDING</a>
+                </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-status="processing">PROCESSING</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-status="completed">COMPLETED</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-status="rejected">REJECTED</a>
+                </li>
+            </ul>
 
-                <form method="post" action="{% url 'withdrawal' user.username %}">
-                    {% csrf_token %}
-                    <!-- User input fields -->
-                    <label for="account_number">Account Number:</label>
-                    <input type="text" class="form-control" value="{{ bank_details.account_number }}"
-                        id="account_number" name="account_number" required>
-                    <br>
-                    <label for="ifsc_code">IFSC Code:</label>
-                    <input type="text" value="{{ bank_details.ifsc_code }}" class="form-control" id="ifsc_code"
-                        name="ifsc_code" required>
-                    <br>
-                    <label for="bank_name">Bank Name:</label>
-                    <input type="text" value="{{ bank_details.bank_name }}" class="form-control" id="bank_name"
-                        name="bank_name" required>
-                    <br>
-                    <button type="submit" class="btn signupbtn" style="color: var(--background);">Save Bank
-                        Details</button>
-                </form>
-                {% endif %}
-            </div>
-        </div>
-        <div class="row mt-5">
-            <div class="col">
-                <div class="d-flex justify-content-center">
-                    {% if check_withdrawal_flag == False %}
-                    <button type="button" class="btn signupbtn disabled" style="color: var(--background);">
-                        A withdrawal request is pending
-                    </button>
-                    {% else %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Freelancer</th>
+                        <th scope="col">Created_at</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">view</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for withdraw in withdrawal %}
+                    <tr class="order-item" data-status="{{ withdraw.status }}">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ withdraw.user.username }}</td>
+                        <td>{{ withdraw.created_at }}</td>
+                        <td>{{ withdraw.amount }}</td>
+                        <td>{{ withdraw.status }}</td>
+                        <td>
+                            <a href="{% url 'details_of_withdrawal' user.username withdraw.id %}" class="btn signupbtn"
+                                style="color: whitesmoke;">View</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7">
+                            <h3>No orders found for this user.</h3>
+                        </td>
+                    </tr>
+                    {% endfor %}
 
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn signupbtn" style="color: var(--background);" data-bs-toggle="modal"
-                        data-bs-target="#staticBackdrop">
-                        Conform
-                    </button>
-
-                    <!-- Modal -->
-                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
-                        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="staticBackdropLabel">Conform Withdrwal</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p class="confirmation-message">Are you sure you want to confirm the withdrawal?</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Close</button>
-                                    <a href="{% url 'conform_withdrawal' user.username %}"><button type="submit"
-                                            class="btn signupbtn" style="color: var(--background);">
-                                            Confirm Withdrawal
-                                        </button>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {% endif %}
-                </div>
-
-            </div>
+                </tbody>
+            </table>
         </div>
     </div>
 
 
-
-
-
-
-
     <script src="{% static 'js/theme.js' %}"></script>
-    <script src="{% static 'js/list_all_orders.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const orderItems = document.querySelectorAll('.order-item');
+
+            navLinks.forEach(function (link) {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const status = this.getAttribute('data-status');
+
+                    orderItems.forEach(function (item) {
+                        const itemStatus = item.getAttribute('data-status');
+                        if (status === 'all' || itemStatus === status) {
+                            item.style.display = 'table-row';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -551,6 +615,7 @@
             $('.mytoolthip').tooltip();
         });
     </script>
+
 
 </body>
 
