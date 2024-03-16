@@ -324,6 +324,9 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <div class="d-flex ms-auto">
                             <ul class="navbar-nav ">
+                                <li class="nav-item ">
+                                    <a class="nav-link" href="{% url 'seller_widrawal_list' user %}">withdrawal Status</a>
+                                </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                         aria-expanded="false">
@@ -492,6 +495,10 @@
                     {% if check_withdrawal_flag == False %}
                     <button type="button" class="btn signupbtn disabled" style="color: var(--background);">
                         A withdrawal request is pending
+                    </button> 
+                    {% elif  amount  == 0 %}
+                    <button type="button" class="btn signupbtn disabled" style="color: var(--background);">
+                        Account Balance is Zero
                     </button>
                     {% else %}
 
@@ -533,7 +540,7 @@
             </div>
         </div>
     </div>
-
+   
 
 
 

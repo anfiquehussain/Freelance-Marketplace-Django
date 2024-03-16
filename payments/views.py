@@ -1,26 +1,18 @@
-from django.contrib.auth.decorators import user_passes_test
-from .models import Upi_id, Bank
-from .models import SellerAccountBalance, PaymentWithdrawal, PaymentMethod
-from .models import PaymentMethod
-from .models import PaymentWithdrawal
-from audioop import reverse
-from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import user_passes_test, login_required
+from django.contrib.auth.models import User
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponseForbidden, JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseBadRequest
+from django.conf import settings
+from django.utils import timezone
+from datetime import timedelta
+import stripe
+import razorpay
+
+from .models import Upi_id, Bank, SellerAccountBalance, PaymentWithdrawal, PaymentMethod, Transaction ,Refund_details
 from Services.models import Overview, BasicPackage, StandardPackage, PremiumPackage
 from Home.models import UserProfile
-from django.http import HttpResponseForbidden, JsonResponse
-from django.contrib.auth.models import User
-from django.conf import settings
-import stripe
-from .models import Transaction, SellerAccountBalance
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
 from Orders.models import Order
-from datetime import timedelta
-from django.utils import timezone
-from django.http import HttpResponse, HttpResponseServerError
-from django.shortcuts import redirect
-import razorpay
-from django.http import HttpResponseBadRequest
+
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
@@ -192,7 +184,6 @@ def success(request, transaction_id, username):
         basic_package = BasicPackage.objects.get(overview=overview_id)
         Basic_delivery_time = basic_package.Basic_delivery_time
         delivery_date = timezone.now() + timedelta(days=Basic_delivery_time)
-
     elif transaction.package_name == "standard_package":
         standard_package = StandardPackage.objects.get(overview=overview_id)
         Standard_delivery_time = standard_package.Standard_delivery_time
@@ -223,7 +214,7 @@ def success(request, transaction_id, username):
     return render(request, 'package_selection.html', context)
 
 
-@login_required
+@login_required()
 def withdrawal(request, username):
     user = get_object_or_404(User, username=username)
     current_user = request.user
@@ -272,6 +263,7 @@ def withdrawal(request, username):
     for i in account_balance:
         amount = i.balance_amount
 
+
     # if check_withdrawal_flag:
     #     withdrawal = PaymentWithdrawal.objects.create(
     #         user=user,
@@ -284,7 +276,9 @@ def withdrawal(request, username):
     context = {
         'payment_method': payment_method,
         'upi': upi,
+        'user':user,
         'bank_details': bank_details,
+        'amount':amount,
         'check_withdrawal_flag': check_withdrawal_flag
     }
     return render(request, "withdrawal.html", context)
@@ -348,7 +342,6 @@ def Details_of_withdrawal(request, username, withdrawal_id):
 
     if request.method == "POST":
         status_withdraw = request.POST.get('status_withdraw')
-
         if status_withdraw == 'accept':
             withdrawal.status = 'processing'
             withdrawal.save()
@@ -367,3 +360,124 @@ def Details_of_withdrawal(request, username, withdrawal_id):
     }
 
     return render(request, "details_of_withdrawal.html", context)
+
+@login_required()
+def Seller_list_withdrawal(request, username):
+    user = get_object_or_404(User, username=username)
+    current_user = request.user
+    withdrawal = PaymentWithdrawal.objects.filter(user=current_user)
+    context = {
+        'withdrawal': withdrawal,
+    }
+    return render(request, "seller_widrawal_list.html", context)
+
+
+
+
+@login_required()
+def Save_payement_method(request, username):
+    user = get_object_or_404(User, username=username)
+    current_user = request.user
+    payment_method, created = PaymentMethod.objects.get_or_create(user=user)
+    upi, created = Upi_id.objects.get_or_create(user=user)
+    bank_details, created = Bank.objects.get_or_create(user=user)
+    if request.method == "POST":
+        withdraw_method = request.POST.get('withdraw_method')
+
+        # Handle the payment method selection form
+        if withdraw_method:
+            payment_method.withdrawal_method = withdraw_method
+            payment_method.save()
+
+        # Handle the UPI form
+        elif 'upi_id' in request.POST:
+            upi_id = request.POST.get('upi_id')
+            # Process the UPI form data as needed
+            upi_code = upi.upi = upi_id
+            upi.save()
+        # Handle the bank details form
+        elif 'account_number' in request.POST:
+            account_number = request.POST.get('account_number')
+            ifsc_code = request.POST.get('ifsc_code')
+            bank_name = request.POST.get('bank_name')
+
+            bank_details.account_number = account_number
+            bank_details.ifsc_code = ifsc_code
+            bank_details.bank_name = bank_name
+            bank_details.save()
+            print(account_number)
+
+
+
+
+    context = {
+        'payment_method': payment_method,
+        'upi': upi,
+        'user':user,
+        'bank_details': bank_details,
+    }
+    return render(request, "save_payement_method.html", context)
+
+
+
+@login_required()
+def Refund(request, username):
+    user = get_object_or_404(User, username=username)
+    orders = Order.objects.filter(buyer=user)
+    refund_created = []  # Initialize as list to handle multiple refunds
+
+    for index, order in enumerate(orders, start=1):
+        if order.status == 'cancelled' or order.status == 'expired':
+            refund, created = Refund_details.objects.get_or_create(
+                user=user,
+                order=order
+            )
+            refund_created.append({
+                'counter': index,
+                'user': refund.user.username,
+                'created_at': refund.created_at,
+                'amount': refund.order.transaction.amount,
+                'order_status': refund.order.status,
+                'order_id': refund.order.id,
+                'refund_status': refund.status,
+                'payment_id':refund.order.transaction.payment_id,
+            })
+
+    context = {
+        'refund_created': refund_created,
+    }
+    return render(request, "refund.html", context)
+
+@user_passes_test(is_superuser, login_url='IntroHome')
+def List_refunds(request, username):
+    user = get_object_or_404(User, username=username)
+    refunds = Refund_details.objects.all()
+    context = {
+        'refund_created': refunds,
+    }
+    return render(request, "list_refunds.html", context)
+
+@user_passes_test(is_superuser, login_url='IntroHome')
+def Details_of_refund(request, username,refund_id):
+    user = get_object_or_404(User, username=username)
+    refund = get_object_or_404(Refund_details, pk=refund_id)
+    upi = Upi_id.objects.get(user=refund.user)
+    bank_details = Bank.objects.get(user=refund.user)
+    if request.method == "POST":
+        status_withdraw = request.POST.get('status_withdraw')
+        if status_withdraw == 'accept':
+            refund.status = 'processing'
+            refund.save()
+        elif status_withdraw == 'completed':
+            refund.status = 'completed'
+            refund.save()
+        else:
+            refund.status = 'rejected'
+            refund.save()
+    context = {
+        'refund': refund,
+        'upi':upi,
+        'bank_details': bank_details
+    }
+
+    return render(request, "details_of_refund.html", context)

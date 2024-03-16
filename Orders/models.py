@@ -14,11 +14,6 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     delivery_date = models.DateField(null=True, blank=True)
 
-
-
-    def __str__(self):
-        return f"Order #{self.pk} - {self.service.title}"
-
 class Order_Requirements(models.Model):
     order = models.OneToOneField(Order, on_delete=models.CASCADE)
     description = models.TextField()

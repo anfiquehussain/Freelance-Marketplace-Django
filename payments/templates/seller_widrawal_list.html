@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>List of Withdrawal request</title>
+
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
@@ -20,7 +21,7 @@
     {% bootstrap_javascript %}
     {% load static %}
 
-    <link rel="stylesheet" href="{% static 'css/seller_dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/list_all_orders.css' %}">
 
     <style>
         @import url('https://fonts.googleapis.com/css?family=Montserrat:700|Lora:400');
@@ -272,35 +273,139 @@
             background: var(--primary-hover);
         }
 
-        .amount-total {
-            background-color: var(--secondary);
-            padding: 10px;
-            border-radius: 10px;
+        table th {
+            color: var(--text)
         }
 
-        .withdrawbtn {
-            color: var(--background);
-            background-color: var(--accent);
+        table,
+        th,
+        tr,
+        td {
+            color: var(--text);
+        }
+
+        .nav .nav-item .nav-link {
+            color: var(--text);
+        }
+
+        .nav .nav-item .active {
+            background-color: var(--secondary);
             border: none;
-            padding: 5px 10px 5px 10px;
-            border-radius: 10px;
+            color: var(--text);
         }
 
-        .withdrawbtn:hover {
-            background-color: var(--accent-hover);
+        .nav .nav-item .active:hover {
+            border: 1px solid var(--text);
         }
 
-        .detailsoforder {
+
+        .nav .nav-item .active:focus {
+            border: 1px solid var(--text);
+        }
+
+
+        .container {
             background-color: var(--secondary);
-            padding: 10px;
-            border-radius: 10px;
+            /* Set container background color */
+            padding: 20px;
+            /* Add some padding for better spacing */
+            border-radius: 8px;
+            /* Add rounded corners to the container */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* Add a subtle shadow */
+        }
+
+
+        .card {
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--user-name-color);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            /* Increase title font size */
+            color: var(--text)
+                /* Set title color */
+        }
+
+        .card-text {
+            font-size: 1rem;
+            /* Set text font size */
+            color: var(--text);
+            /* Set text color */
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            /* Set subtitle font size */
+            color: var(--user-name-color);
+            /* Set subtitle color */
+        }
+
+        .order-card .order-status {
+            font-weight: bold;
+        }
+
+        /* .order-status.pending {
+            color: #FFD700;
+        }
+
+
+        .order-status.completed {
+            color: #00FF00;
 
         }
+
+
+        .order-status.return {
+            color: #0074D9;
+
+        }
+
+
+        .order-status.cancelled {
+            color: #FF4136;
+
+        }
+
+        .order-status.expired {
+            color: #FF4136;
+
+        }
+
+
+        .order-status.delivered {
+            color: #0000FF;
+
+        }
+
+
+        .order-status.in_progress {
+            color: #FFA500;
+
+        } 
+
+        .order-type.basic_package {
+            color: #27ae60;
+        }
+
+        .order-type.standard_package {
+            color: #3498db;
+        }
+
+        .order-type.premium_package {
+            color: #e74c3c;
+        }
+*/
     </style>
+
+
 </head>
 
 <body>
-
     <div class="container-fluid ">
         <div class="row ">
             <nav class="navbar  navbar-expand-lg navbar-light navbar-transparent ">
@@ -321,16 +426,6 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <div class="d-flex ms-auto">
                             <ul class="navbar-nav ">
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="{% url 'save_payement_method' user.username %}">Payment method</a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="{% url 'refund' user.username %}">Refund</a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="{% url 'list_all_the_order' user.username %}">My
-                                        Purchases</a>
-                                </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                         aria-expanded="false">
@@ -375,7 +470,6 @@
                                         </li>
                                         <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                                     </ul>
-
                                 </li>
                                 <!-- <li class="nav-item">
                                     <form class="d-flex me-2 ms-1">
@@ -418,96 +512,100 @@
         <hr>
     </div>
 
-    <!-- <div class="container-fluid">
+
+
+
+
+
+
+
+
+
+    <div class="container mt-5">
+        <h1 class="mb-4">List of Withdrawal request</h1>
         <div class="row">
-            <div class="col-12">
-                <div class="amount-total">
-                    <div class="row">
-                        <div class="col">
-                            <p>amount total earned</p>
-                            <h1>₹102323</h1>
-                        </div>
-                        <div class="col d-flex align-items-center justify-content-end">
-                            <a href=""><button class="withdrawbtn text-uppercase">withdraw</button></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
 
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#" data-status="all">ALL</a>
+                </li>
 
-    <div class="container-fluid mt-3">
-        <div class="row">
-            <div class="col-12 col-sm-12 col-md-4 col-lg-3">
-                <div class="detailsoforder">
-                    <div class="row">
-                        <div class="col">
-                            <h1 class="text-center">Order Details</h1>
-                            <div class="order-details ">
-                                <p>ALL ORDERS: {{ order_counts.all_count }}</p>
-                                <p>PENDING ORDERS: {{ order_counts.pending_count }}</p>
-                                <p>ACTIVE ORDERS: {{ order_counts.active_count }}</p>
-                                <p>RETURN ORDERS: {{ order_counts.return_count }}</p>
-                                <p>EXPIRED ORDERS: {{ order_counts.expired_count }}</p>
-                                <p>DELIVERED ORDERS: {{ order_counts.delivered_count }}</p>
-                                <p>COMPLETED ORDERS: {{ order_counts.completed_count }}</p>
-                                <p>CANCELLED ORDERS: {{ order_counts.cancelled_count }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-11 col-sm-11 col-md-7 col-lg-8 detailsoforder mt-3 mt-md-0  ms-3 ms-md-0 me-lg-3">
-                <div class="container">
-                    <div class="row">
-                        <div class="col">
-                            <table class="table text-center" style="width:100%;color: var(--text);">
-                                <tr>
-                                    <th>Package name</th>
-                                    <th>Seller name</th>
-                                    <th>delivary date</th>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-status="pending">PENDING</a>
+                </li>
 
-                                    <th>Package</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
-                                </tr>
-                                {% for order, service, transactions in orders_services_transactions %}
-                                <tr>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-status="processing">PROCESSING</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-status="completed">COMPLETED</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-status="rejected">REJECTED</a>
+                </li>
+            </ul>
 
-                                    <td>
-                                        {{ service.titleOverview | slice:"40"}}... 
-                                    </td>
-                                    <td>{{order.seller}}</td>
-                                    <td>{{ order.delivery_date }}</td>
-                                    {% for transaction in transactions %}
-                                    {% if transaction.id == order.transaction_id %}
-                                    <td class="order-type {{ transaction.package_name }}">{{ transaction.package_name }}</td>
-                                    <td>{{ transaction.amount }}</td>
-                                    {% endif %}
-                                    {% endfor %}
-                                    <td>{{order.status}}</td>
-                                </tr>
-                                {% endfor %}
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Freelancer</th>
+                        <th scope="col">Created_at</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Status</th>
+                        <!-- <th scope="col">view</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for withdraw in withdrawal %}
+                    <tr class="order-item" data-status="{{ withdraw.status }}">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ withdraw.user.username }}</td>
+                        <td>{{ withdraw.created_at }}</td>
+                        <td>{{ withdraw.amount }}</td>
+                        <td>{{ withdraw.status }}</td>
+                        <!-- <td>
+                            <a href="{% url 'details_of_withdrawal' user.username withdraw.id %}" class="btn signupbtn"
+                                style="color: whitesmoke;">View</a>
+                        </td> -->
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7">
+                            <h3>No orders found for this user.</h3>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
         </div>
     </div>
 
 
-    <!-- <ol>
-        <li><a href="{% url 'seller_list_all_order' user %}">orders</a></li>
-        <li><a href="{% url 'withdrawal' user %}"> earnings</a></li>
-    </ol> -->
-
-
-
-
     <script src="{% static 'js/theme.js' %}"></script>
-    <script src="{% static 'js/seller_dashboard.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const orderItems = document.querySelectorAll('.order-item');
+
+            navLinks.forEach(function (link) {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const status = this.getAttribute('data-status');
+
+                    orderItems.forEach(function (item) {
+                        const itemStatus = item.getAttribute('data-status');
+                        if (status === 'all' || itemStatus === status) {
+                            item.style.display = 'table-row';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>

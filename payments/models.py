@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+
 class Transaction(models.Model):
     overview = models.IntegerField(blank=True, null=True)
     sender = models.ForeignKey(
@@ -62,6 +63,16 @@ class Bank(models.Model):
     ifsc_code = models.CharField(max_length=20)
     bank_name = models.CharField(max_length=255)
 
-
+class Refund_details(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    order = models.OneToOneField('Orders.Order', on_delete=models.SET_NULL, blank=True, null=True)
+    status = models.CharField(max_length=20, choices=[
+        ('pending', 'Pending'),
+        ('processing', 'Processing'),
+        ('completed', 'Completed'),
+        ('rejected', 'Rejected'),
+    ], default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 

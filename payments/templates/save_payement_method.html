@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-
+    <title>Save Payment method</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -19,8 +18,7 @@
     {% bootstrap_css %}
     {% bootstrap_javascript %}
     {% load static %}
-
-    <link rel="stylesheet" href="{% static 'css/seller_dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/list_all_orders.css' %}">
 
     <style>
         @import url('https://fonts.googleapis.com/css?family=Montserrat:700|Lora:400');
@@ -296,10 +294,14 @@
             border-radius: 10px;
 
         }
+
+        .modal-content {
+            background-color: var(--card-bg-color);
+        }
     </style>
 </head>
 
-<body>
+
 
     <div class="container-fluid ">
         <div class="row ">
@@ -321,16 +323,6 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <div class="d-flex ms-auto">
                             <ul class="navbar-nav ">
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="{% url 'save_payement_method' user.username %}">Payment method</a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="{% url 'refund' user.username %}">Refund</a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="{% url 'list_all_the_order' user.username %}">My
-                                        Purchases</a>
-                                </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                         aria-expanded="false">
@@ -418,96 +410,105 @@
         <hr>
     </div>
 
-    <!-- <div class="container-fluid">
+    <div class="container">
         <div class="row">
-            <div class="col-12">
-                <div class="amount-total">
-                    <div class="row">
-                        <div class="col">
-                            <p>amount total earned</p>
-                            <h1>₹102323</h1>
-                        </div>
-                        <div class="col d-flex align-items-center justify-content-end">
-                            <a href=""><button class="withdrawbtn text-uppercase">withdraw</button></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
+            <div class="col">
+                <p>Select payment method</p>
+                current saved payment method :
+                <button type="button" class="btn signupbtn" style="color: var(--background);" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal">
+                    {{ payment_method.withdrawal_method }} <i class="fa-regular fa-pen-to-square"></i>
+                </button>
 
-
-    <div class="container-fluid mt-3">
-        <div class="row">
-            <div class="col-12 col-sm-12 col-md-4 col-lg-3">
-                <div class="detailsoforder">
-                    <div class="row">
-                        <div class="col">
-                            <h1 class="text-center">Order Details</h1>
-                            <div class="order-details ">
-                                <p>ALL ORDERS: {{ order_counts.all_count }}</p>
-                                <p>PENDING ORDERS: {{ order_counts.pending_count }}</p>
-                                <p>ACTIVE ORDERS: {{ order_counts.active_count }}</p>
-                                <p>RETURN ORDERS: {{ order_counts.return_count }}</p>
-                                <p>EXPIRED ORDERS: {{ order_counts.expired_count }}</p>
-                                <p>DELIVERED ORDERS: {{ order_counts.delivered_count }}</p>
-                                <p>COMPLETED ORDERS: {{ order_counts.completed_count }}</p>
-                                <p>CANCELLED ORDERS: {{ order_counts.cancelled_count }}</p>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Select the withdrawal method</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
+                            <form method="post" action="{% url 'save_payement_method' user.username %}">
+                                <div class="modal-body">
+                                    {% csrf_token %}
+                                    <select name="withdraw_method" class="form-select"
+                                        aria-label="Default select example">
+                                        <option value="0">Select payment method</option>
+                                        <option value="bank_transfer">Bank Tranfer</option>
+                                        <option value="upi">Upi id</option>
+                                    </select>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn signupbtn">Save changes</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-11 col-sm-11 col-md-7 col-lg-8 detailsoforder mt-3 mt-md-0  ms-3 ms-md-0 me-lg-3">
-                <div class="container">
-                    <div class="row">
-                        <div class="col">
-                            <table class="table text-center" style="width:100%;color: var(--text);">
-                                <tr>
-                                    <th>Package name</th>
-                                    <th>Seller name</th>
-                                    <th>delivary date</th>
 
-                                    <th>Package</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
-                                </tr>
-                                {% for order, service, transactions in orders_services_transactions %}
-                                <tr>
+            <div class="col">
+                {% if payment_method.withdrawal_method == 'upi' %}
+                <p>UPI Details</p>
+                <form method="post" action="{% url 'save_payement_method' user.username %}">
+                    {% csrf_token %}
+                    <input type="text" class="form-control" value="{{ upi.upi }}" name="upi_id">
+                    <br>
+                    <button type="submit" class="btn signupbtn" style="color: var(--background);">Save UPI ID</button>
+                </form>
+                {% elif payment_method.withdrawal_method == 'bank_transfer' %}
+                <p>Bank Details</p>
 
-                                    <td>
-                                        {{ service.titleOverview | slice:"40"}}... 
-                                    </td>
-                                    <td>{{order.seller}}</td>
-                                    <td>{{ order.delivery_date }}</td>
-                                    {% for transaction in transactions %}
-                                    {% if transaction.id == order.transaction_id %}
-                                    <td class="order-type {{ transaction.package_name }}">{{ transaction.package_name }}</td>
-                                    <td>{{ transaction.amount }}</td>
-                                    {% endif %}
-                                    {% endfor %}
-                                    <td>{{order.status}}</td>
-                                </tr>
-                                {% endfor %}
-                            </table>
-                        </div>
-                    </div>
-                </div>
+
+                <form method="post" action="{% url 'save_payement_method' user.username %}">
+                    {% csrf_token %}
+                    <!-- User input fields -->
+                    <label for="account_number">Account Number:</label>
+                    <input type="text" class="form-control" value="{{ bank_details.account_number }}"
+                        id="account_number" name="account_number" required>
+                    <br>
+                    <label for="ifsc_code">IFSC Code:</label>
+                    <input type="text" value="{{ bank_details.ifsc_code }}" class="form-control" id="ifsc_code"
+                        name="ifsc_code" required>
+                    <br>
+                    <label for="bank_name">Bank Name:</label>
+                    <input type="text" value="{{ bank_details.bank_name }}" class="form-control" id="bank_name"
+                        name="bank_name" required>
+                    <br>
+                    <button type="submit" class="btn signupbtn" style="color: var(--background);">Save Bank
+                        Details</button>
+                </form>
+                {% endif %}
             </div>
         </div>
-    </div>
+        <div class="row mt-5">
+            <div class="col">
+                <div class="d-flex justify-content-center">
+                    
+                   <a href="{% url 'buyer_dashboard' user.username %}"><button type="button" class="btn signupbtn" style="color: var(--background);" >
+Go back to Dashboard
+                    </button></a> 
 
 
-    <!-- <ol>
-        <li><a href="{% url 'seller_list_all_order' user %}">orders</a></li>
-        <li><a href="{% url 'withdrawal' user %}"> earnings</a></li>
-    </ol> -->
+                </div>
+
+            </div>
+        </div>
+        </div>
+    
+   
+
+
 
 
 
 
     <script src="{% static 'js/theme.js' %}"></script>
-    <script src="{% static 'js/seller_dashboard.js' %}"></script>
+    <script src="{% static 'js/list_all_orders.js' %}"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -517,7 +518,6 @@
             $('.mytoolthip').tooltip();
         });
     </script>
-
 
 </body>
 

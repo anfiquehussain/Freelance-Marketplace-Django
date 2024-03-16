@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -20,7 +21,7 @@
     {% bootstrap_javascript %}
     {% load static %}
 
-    <link rel="stylesheet" href="{% static 'css/seller_dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/seller_detials_of_order.css' %}">
 
     <style>
         @import url('https://fonts.googleapis.com/css?family=Montserrat:700|Lora:400');
@@ -249,68 +250,131 @@
             color: var(--text);
         }
 
-        /* width */
+
         ::-webkit-scrollbar {
             width: 5px;
             height: 5px;
         }
 
-        /* Track */
         ::-webkit-scrollbar-track {
             box-shadow: inset 0 0 5px grey;
             border-radius: 10px;
         }
 
-        /* Handle */
+
         ::-webkit-scrollbar-thumb {
             background: var(--primary);
             border-radius: 10px;
         }
 
-        /* Handle on hover */
         ::-webkit-scrollbar-thumb:hover {
             background: var(--primary-hover);
         }
 
-        .amount-total {
-            background-color: var(--secondary);
-            padding: 10px;
-            border-radius: 10px;
+        .col-md-3 {
+            margin-left: 5rem;
         }
 
-        .withdrawbtn {
-            color: var(--background);
-            background-color: var(--accent);
-            border: none;
-            padding: 5px 10px 5px 10px;
-            border-radius: 10px;
+        .timer-container {
+            text-align: center;
+            margin-top: 20px;
         }
 
-        .withdrawbtn:hover {
-            background-color: var(--accent-hover);
+        h6 {
+            font-size: 18px;
+            color: var(--text);
+            margin-bottom: 10px;
         }
 
-        .detailsoforder {
-            background-color: var(--secondary);
-            padding: 10px;
-            border-radius: 10px;
+        #timer {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent);
+        }
 
+        .btn-close {
+            background-color: var(--btn-close-color-bg);
+        }
+
+        .chat-btn {
+            text-decoration: none;
+            color: var(--primary);
+        }
+
+        table th {
+            color: var(--text)
+        }
+
+        table,
+        th,
+        tr,
+        td {
+            color: var(--text);
+        }
+
+
+        #read-more {
+            color: var(--text);
+        }
+
+        #myBtn {
+            color: var(--accent);
+        }
+
+
+
+
+
+
+        .modal-content {
+            background-color: var(--card-bg-color);
+        }
+
+        .copy-text {
+            color: var(--accent);
+            cursor: pointer;
+        }
+
+        .copy-text:hover {
+            color: var(--accent);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .toast {
+            background-color: var(--card-bg-color);
+            color: var(--text);
+        }
+
+        .toast-header {
+            background-color: var(--card-bg-color);
+            color: var(--text);
+        }
+
+
+
+        @media (max-width: 767px) {
+            .col-md-3 {
+                margin-left: 0;
+            }
         }
     </style>
+
+
+
 </head>
 
 <body>
+
 
     <div class="container-fluid ">
         <div class="row ">
             <nav class="navbar  navbar-expand-lg navbar-light navbar-transparent ">
                 <div class="container-fluid">
-                    <!-- Navbar Brand (Logo) -->
                     <a class="navbar-brand" href="{% url 'IntroHome' %}">
                         <img src="{% static 'img/logo1.png' %}" alt="" width="30" height="30">
                     </a>
 
-                    <!-- Navbar Toggler for small screens (moved to the right) -->
                     <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
                         aria-label="Toggle navigation">
@@ -321,16 +385,7 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <div class="d-flex ms-auto">
                             <ul class="navbar-nav ">
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="{% url 'save_payement_method' user.username %}">Payment method</a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="{% url 'refund' user.username %}">Refund</a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="{% url 'list_all_the_order' user.username %}">My
-                                        Purchases</a>
-                                </li>
+
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                         aria-expanded="false">
@@ -408,9 +463,6 @@
                             </a>
                             {% endfor %}
                         </div>
-
-
-
                     </div>
                 </div>
             </nav>
@@ -418,96 +470,139 @@
         <hr>
     </div>
 
-    <!-- <div class="container-fluid">
+    <div class="container">
         <div class="row">
-            <div class="col-12">
-                <div class="amount-total">
-                    <div class="row">
-                        <div class="col">
-                            <p>amount total earned</p>
-                            <h1>₹102323</h1>
-                        </div>
-                        <div class="col d-flex align-items-center justify-content-end">
-                            <a href=""><button class="withdrawbtn text-uppercase">withdraw</button></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
+            <div class="col-md-7">
 
-
-    <div class="container-fluid mt-3">
-        <div class="row">
-            <div class="col-12 col-sm-12 col-md-4 col-lg-3">
-                <div class="detailsoforder">
-                    <div class="row">
-                        <div class="col">
-                            <h1 class="text-center">Order Details</h1>
-                            <div class="order-details ">
-                                <p>ALL ORDERS: {{ order_counts.all_count }}</p>
-                                <p>PENDING ORDERS: {{ order_counts.pending_count }}</p>
-                                <p>ACTIVE ORDERS: {{ order_counts.active_count }}</p>
-                                <p>RETURN ORDERS: {{ order_counts.return_count }}</p>
-                                <p>EXPIRED ORDERS: {{ order_counts.expired_count }}</p>
-                                <p>DELIVERED ORDERS: {{ order_counts.delivered_count }}</p>
-                                <p>COMPLETED ORDERS: {{ order_counts.completed_count }}</p>
-                                <p>CANCELLED ORDERS: {{ order_counts.cancelled_count }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-11 col-sm-11 col-md-7 col-lg-8 detailsoforder mt-3 mt-md-0  ms-3 ms-md-0 me-lg-3">
+                <h1>Refund #{{ refund.id }}</h1>
+                <p style="float: left;" class="me-2"><strong>Freelancer</strong> : <a class="text-muted"
+                        style="text-decoration: none;cursor: pointer;"
+                        href="{% url 'view_profile_public' refund.user  %}">@{{ refund.user }}</a></p>
+                <p class="text-muted ms-2 me-2" style="float: left;">View History</p>
+                <br>
+                <hr>
+                <h3>refund Details </h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">id</th>
+                            <th scope="col">Created_at</th>
+                            <th scope="col">Order status</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">payment id</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ refund.id }}</td>
+                            <th>{{ refund.created_at }}</th>
+                            <th>{{ refund.order.status }}</th>
+                            <th>{{ refund.order.transaction.amount }}</th>
+                            <th class="copy-text" id="payment_id" onclick="copyText('payment_id')">{{ refund.order.transaction.payment_id }}</th>
+                        </tr>
+                    </tbody>
+                </table>
                 <div class="container">
                     <div class="row">
-                        <div class="col">
-                            <table class="table text-center" style="width:100%;color: var(--text);">
-                                <tr>
-                                    <th>Package name</th>
-                                    <th>Seller name</th>
-                                    <th>delivary date</th>
+                        <div class="col-md-6">
+                            <h4>UPI ID</h4>
+                            <p id="upiId" class="copy-text" onclick="copyText('upiId')">{{ upi.upi }} </p>
+                        </div>
 
-                                    <th>Package</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
-                                </tr>
-                                {% for order, service, transactions in orders_services_transactions %}
-                                <tr>
-
-                                    <td>
-                                        {{ service.titleOverview | slice:"40"}}... 
-                                    </td>
-                                    <td>{{order.seller}}</td>
-                                    <td>{{ order.delivery_date }}</td>
-                                    {% for transaction in transactions %}
-                                    {% if transaction.id == order.transaction_id %}
-                                    <td class="order-type {{ transaction.package_name }}">{{ transaction.package_name }}</td>
-                                    <td>{{ transaction.amount }}</td>
-                                    {% endif %}
-                                    {% endfor %}
-                                    <td>{{order.status}}</td>
-                                </tr>
-                                {% endfor %}
-                            </table>
+                        <div class="col-md-6">
+                            <h4>Bank details</h4>
+                            <p>Bank Name : <span class="copy-text" id="bankName" onclick="copyText('bankName')">
+                                    {{ bank_details.bank_name }}</span></p>
+                            <p>Account Number : <span class="copy-text" id="accountNumber"
+                                    onclick="copyText('accountNumber')">
+                                    {{ bank_details.account_number }}</span></p>
+                            <p>IFSC CODE : <span class="copy-text" id="ifscCode" onclick="copyText('ifscCode')">
+                                    {{ bank_details.ifsc_code }}</span></p>
                         </div>
                     </div>
                 </div>
+
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+                    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jRTxBr0ulxwcjtQ34oYTTCTfbwuWFO"
+                    crossorigin="anonymous"></script>
+
+                <script>
+                    function copyText(elementId) {
+                        var textToCopy = document.getElementById(elementId);
+                        var textArea = document.createElement("textarea");
+                        textArea.value = textToCopy.textContent;
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textArea);
+
+                        // Create and show toast notification
+                        var toastLiveExample = document.getElementById('liveToast');
+                        var toast = new bootstrap.Toast(toastLiveExample);
+                        toast.show();
+                    }
+                </script>
+
+                <div class="position-fixed bottom-0 right-0 p-3" style="z-index: 11">
+                    <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-body">
+                            <i class="fa-regular fa-clipboard"></i> Text successfully copied to your clipboard.
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-md-4">
+                <form action="" method="POST" class="mt-5">
+                    {% if refund.status == 'pending' %}
+                    <center>
+                        <p class="alert alert-secondary m-1">
+                            <i class="fas fa-exclamation-triangle"></i> This refund is <strong>pending</strong>
+                        </p>
+                        <br>
+                        <button type="submit" name="status_withdraw" value="accept" class="btn signupbtn"
+                            style="color: whitesmoke;">
+                            <i class="fas fa-check"></i> Accept
+                        </button>
+                        <button type="submit" name="status_withdraw" value="cancel" class="btn btn-danger">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </center>
+                    {% elif refund.status == 'processing' %}
+                    <center>
+                        <p class="alert alert-warning m-1">
+                            <i class="fas fa-exclamation-triangle"></i> This refund is <strong>processing</strong>
+                        </p>
+                        <br>
+                        <button type="submit" name="status_withdraw" value="completed" class="btn btn-success"
+                            style="color: whitesmoke;">
+                            <i class="fas fa-check"></i> Complete
+                        </button>
+                        <button type="submit" name="status_withdraw" value="cancel" class="btn btn-danger">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </center>
+                    {% elif refund.status == 'rejected' %}
+                    <p class="alert alert-danger m-1">
+                        <i class="fas fa-exclamation-triangle"></i> This refund is <strong>rejected</strong>
+                    </p>
+                    {% elif refund.status == 'completed' %}
+                    <p class="alert alert-success m-1">
+                        <i class="fas fa-check-circle"></i> This refund is <strong>completed</strong>
+                    </p>
+                    {% endif %}
+                </form>
             </div>
         </div>
     </div>
 
 
-    <!-- <ol>
-        <li><a href="{% url 'seller_list_all_order' user %}">orders</a></li>
-        <li><a href="{% url 'withdrawal' user %}"> earnings</a></li>
-    </ol> -->
-
 
 
 
     <script src="{% static 'js/theme.js' %}"></script>
-    <script src="{% static 'js/seller_dashboard.js' %}"></script>
+    <script src="{% static 'js/seller_detials_of_order.js' %}"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -517,8 +612,6 @@
             $('.mytoolthip').tooltip();
         });
     </script>
-
-
 </body>
 
 </html>

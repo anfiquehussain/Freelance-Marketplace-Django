@@ -83,11 +83,7 @@ def Seller_Dashboard(request, username):
     # Subtract the withdrawal amount from the earned amount outside the loop
     withdrawal_total = sum(withdrawal.filter(status='completed').values_list('amount', flat=True))
     seller_balance_total -= withdrawal_total
-    print(withdrawal_total)
-
-
-    print(seller_balance_total)
-
+    
     # Update the seller's balance in the database
     if account_balance_queryset.exists():
         account_balance = account_balance_queryset.first()
