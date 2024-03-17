@@ -1,10 +1,12 @@
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import user_passes_test
 from Home.models import UserProfile
-from payments.models import Transaction, SellerAccountBalance, PaymentWithdrawal
+from payments.models import Transaction, SellerAccountBalance, PaymentWithdrawal, Refund_details, PaymentWithdrawal
 from Orders.models import Order
 from Services.models import Overview
 from django.db.models import Count
@@ -81,9 +83,10 @@ def Seller_Dashboard(request, username):
             seller_balance_total = seller_balance_total + amount_earned - fee
 
     # Subtract the withdrawal amount from the earned amount outside the loop
-    withdrawal_total = sum(withdrawal.filter(status='completed').values_list('amount', flat=True))
+    withdrawal_total = sum(withdrawal.filter(
+        status='completed').values_list('amount', flat=True))
     seller_balance_total -= withdrawal_total
-    
+
     # Update the seller's balance in the database
     if account_balance_queryset.exists():
         account_balance = account_balance_queryset.first()
@@ -151,10 +154,81 @@ def is_superuser(user):
     return user.is_superuser
 
 
+def is_superuser(user):
+    return user.is_superuser
+
+
+# Add this decorator to restrict access to superusers only
+
+
 @user_passes_test(is_superuser, login_url='IntroHome')
 def Admin_Dashboard(request, username):
     user = get_object_or_404(User, username=username)
+    all_user = User.objects.all()
+    all_services = Overview.objects.all()
+    all_order = Order.objects.all()
+    pending_orders_count = all_order.filter(status='pending').count()
+    active_orders_count = all_order.filter(status='in_progress').count()
+    return_orders_count = all_order.filter(status='return').count()
+    expired_orders_count = all_order.filter(status='expired').count()
+    delivered_orders_count = all_order.filter(status='delivered').count()
+    completed_orders_count = all_order.filter(status='completed').count()
+    cancelled_orders_count = all_order.filter(status='cancelled').count()
+
+    all_refund = Refund_details.objects.all()
+    all_refunds_count = all_refund.count()
+    pending_refunds_count = all_refund.filter(status='pending').count()
+    approved_refunds_count = all_refund.filter(status='processing').count()
+    rejected_refunds_count = all_refund.filter(status='rejected').count()
+    refunded_refunds_count = all_refund.filter(status='refunded').count()
+
+    all_withdrawals = PaymentWithdrawal.objects.all()
+
+    # Get counts for each withdrawal status
+    all_withdrawals_count = all_withdrawals.count()
+    pending_withdrawals_count = all_withdrawals.filter(
+        status='pending').count()
+    approved_withdrawals_count = all_withdrawals.filter(
+        status='processing').count()
+    rejected_withdrawals_count = all_withdrawals.filter(
+        status='rejected').count()
+    completed_withdrawals_count = all_withdrawals.filter(
+        status='completed').count()
+
+    search_results = None
+    if request.method == 'POST':
+        if 'search_user' in request.POST:
+            search_query = request.POST.get('search_query')
+            if search_query:
+                search_results = User.objects.filter(
+                    Q(username__icontains=search_query))
+            else:
+                pass
+
     context = {
-        'user': user
+        'user': user,
+        'all_user': all_user,
+        'search_results': search_results,
+        'all_services': all_services,
+        'all_order': all_order,
+        'pending_orders_count': pending_orders_count,
+        'active_orders_count': active_orders_count,
+        'return_orders_count': return_orders_count,
+        'expired_orders_count': expired_orders_count,
+        'delivered_orders_count': delivered_orders_count,
+        'completed_orders_count': completed_orders_count,
+        'cancelled_orders_count': cancelled_orders_count,
+        'all_refund': all_refund,
+        'all_refunds_count': all_refunds_count,
+        'pending_refunds_count': pending_refunds_count,
+        'approved_refunds_count': approved_refunds_count,
+        'rejected_refunds_count': rejected_refunds_count,
+        'refunded_refunds_count': refunded_refunds_count,
+        'all_withdrawals': all_withdrawals,
+        'all_withdrawals_count': all_withdrawals_count,
+        'pending_withdrawals_count': pending_withdrawals_count,
+        'approved_withdrawals_count': approved_withdrawals_count,
+        'rejected_withdrawals_count': rejected_withdrawals_count,
+        'completed_withdrawals_count': completed_withdrawals_count,
     }
     return render(request, 'admin_dashboard.html', context)

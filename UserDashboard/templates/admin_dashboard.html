@@ -296,6 +296,22 @@
             border-radius: 10px;
 
         }
+
+        .left-side {
+            background-color: var(--secondary);
+            padding: 10px;
+            border-radius: 10px;
+            margin-left: 5px;
+        }
+
+
+        .userlink {
+            color: var(--text);
+        }
+
+        .userlink:hover {
+            color: var(--primary);
+        }
     </style>
 </head>
 
@@ -411,8 +427,67 @@
 
     <div class="container">
         <div class="row">
-            <div class="col">
-                <a href="{% url 'withdraw_list' user.username %}">Go To Withdrawal List</a>
+            <div class="col-3 left-side">
+                <div style="display: inline;">
+                    <form method="post" class="d-flex me-2 ms-1">
+                        <input class="form-control me-2" style="outline: none;box-shadow: none;" aria-label="Search"
+                            type="text" name="search_query" placeholder="Search for a user">
+                        <button type="submit" style="color: var(--background);  outline: none;box-shadow: none;"
+                            class="btn signupbtn" name="search_user">Search</button>
+                    </form>
+                </div>
+                {% if search_results %}
+                <h2>Search Results:</h2>
+                <ol>
+                    {% for result in search_results %}
+                    <a class="userlink" href="{% url 'view_profile_public' result %}">
+                        <li>{{ result.username }} [{% if result.is_superuser %} Admin {% else %} User {% endif %}]</li>
+                    </a>
+                    {% endfor %}
+                </ol>
+                {% else %}
+                <p>No search results found.</p>
+                {% endif %}
+                {% if all_user %}
+                <h2>All Users:</h2>
+                <ol>
+                    {% for user in all_user %}
+                    <a class="userlink" href="{% url 'view_profile_public' user %}">
+                        <li>{{ user.username }} [{% if user.is_superuser %} Admin {% else %} User {% endif %}]</li>
+                    </a>
+                    {% endfor %}
+                </ol>
+                {% endif %}
+            </div>
+            <div class="col col-3 left-side">
+                <h3 style="text-decoration: underline;">USERS</h3>
+                <p>Total number of User:{{ all_user.count }}</p>
+                <p>Total number of Service profiles:{{ all_services.count }}</p>
+                <h3 style="text-decoration: underline;">ORDERS</h3>
+                <p>ALL ORDERS: {{ all_order.count }}</p>
+                <p>PENDING ORDERS: {{ pending_orders_count }}</p>
+                <p>ACTIVE ORDERS: {{ active_orders_count }}</p>
+                <p>RETURN ORDERS: {{ return_orders_count }}</p>
+                <p>EXPIRED ORDERS: {{ expired_orders_count }}</p>
+                <p>DELIVERED ORDERS: {{ delivered_orders_count }}</p>
+                <p>COMPLETED ORDERS: {{ completed_orders_count }}</p>
+                <p>CANCELLED ORDERS: {{ cancelled_orders_count }}</p>
+            </div>
+            <div class="col col-3 left-side">
+                <h3 style="text-decoration: underline;">Refund</h3>
+                <p>ALL REFUNDS: {{ all_refunds_count }}</p>
+                <p>PENDING REFUNDS: {{ pending_refunds_count }}</p>
+                <p>PROCCESSING REFUNDS: {{ approved_refunds_count }}</p>
+                <p>REJECTED REFUNDS: {{ rejected_refunds_count }}</p>
+                <p>REFUNDED REFUNDS: {{ refunded_refunds_count }}</p>
+                <h3 style="text-decoration: underline;">WITHDRAWALS</h3>
+                <p>ALL WITHDRAWALS: {{ all_withdrawals_count }}</p>
+                <p>PENDING WITHDRAWALS: {{ pending_withdrawals_count }}</p>
+                <p>PROCCESSING WITHDRAWALS: {{ approved_withdrawals_count }}</p>
+                <p>REJECTED WITHDRAWALS: {{ rejected_withdrawals_count }}</p>
+                <p>COMPLETED WITHDRAWALS: {{ completed_withdrawals_count }}</p>
+
+
             </div>
         </div>
     </div>
