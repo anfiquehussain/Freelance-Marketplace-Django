@@ -490,6 +490,8 @@
                             <th scope="col">Order status</th>
                             <th scope="col">Amount</th>
                             <th scope="col">payment id</th>
+                            <th>Rezorpay status</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -497,8 +499,9 @@
                             <td>{{ refund.id }}</td>
                             <th>{{ refund.created_at }}</th>
                             <th>{{ refund.order.status }}</th>
-                            <th>{{ refund.order.transaction.amount }}</th>
+                            <th>{{ with_fee }}</th>
                             <th class="copy-text" id="payment_id" onclick="copyText('payment_id')">{{ refund.order.transaction.payment_id }}</th>
+                       <th>{{  refund_status_cehck }}</th>
                         </tr>
                     </tbody>
                 </table>

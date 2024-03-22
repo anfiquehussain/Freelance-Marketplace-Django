@@ -548,6 +548,7 @@
                 <thead>
                     <tr>
                         <th>Counter</th>
+                        <th>Refund id</th>
                         <th>Order id</th>
                         <th>User</th>
                         <th>Created At</th>
@@ -561,6 +562,7 @@
                     {% for refund in refund_created %}
                     <tr class="order-item" data-status="{{ refund.status }}">
                         <td>{{ forloop.counter }}</td>
+                        <td>#{{ refund.id }}</td>
                         <td>#{{ refund.order_id }}</td>
                         <td>{{ refund.user.username }}</td>
                         <td>{{ refund.created_at }}</td>

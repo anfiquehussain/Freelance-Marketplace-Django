@@ -86,11 +86,17 @@ def Details_of_the_order(request, order_id, username):
     # transation = Transaction.objects.filter(id=order.transaction_id)
     # for i in transation:
     #     print(i.id)
+    if (order.status == "pending"):
+        if request.method == "POST":
+            cencel = request.POST.get("status_order")
+            order.status = "cancelled"
+            order.save()
 
     if (order.status == 'delivered'):
         if request.method == 'POST':
             ok = request.POST.get('ok')
             no = request.POST.get('no')
+
             if (ok == 'yes,appove the delivary'):
                 for item in delivary_item:
                     item. delivery_status  = "completed"

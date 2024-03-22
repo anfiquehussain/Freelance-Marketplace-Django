@@ -457,15 +457,47 @@ def List_refunds(request, username):
     }
     return render(request, "list_refunds.html", context)
 
+
+
+from decimal import Decimal
+from django.shortcuts import get_object_or_404, render
+from django.contrib.auth.decorators import user_passes_test
+from .models import Refund_details, Upi_id, Bank
+from datetime import datetime
+
+# Assuming is_superuser is defined somewhere
+# Assuming client is imported from somewhere
+
 @user_passes_test(is_superuser, login_url='IntroHome')
-def Details_of_refund(request, username,refund_id):
+def Details_of_refund(request, username, refund_id):
     user = get_object_or_404(User, username=username)
     refund = get_object_or_404(Refund_details, pk=refund_id)
     upi = Upi_id.objects.get(user=refund.user)
+    ord = client.order.payments(refund.order.transaction.payment_id)
+    refund_this = client.refund.all(refund.refund_id)
+    for item in refund_this['items']:
+        refund_status_cehck = item['status']
+    payid = ord['items'][0]['id']
+    with_fee = refund.order.transaction.amount + refund.order.transaction.amount * Decimal('0.05')
     bank_details = Bank.objects.get(user=refund.user)
     if request.method == "POST":
         status_withdraw = request.POST.get('status_withdraw')
         if status_withdraw == 'accept':
+            with_fee_int = int(with_fee * 100)  # Convert to integer before passing to refund function
+            # Generate a unique receipt ID based on refund ID and current timestamp
+            receipt_id = f"Receipt-{refund_id}-{datetime.now().strftime('%Y%m%d%H%M%S')}"
+            ref = client.payment.refund(payid, {
+                "amount": with_fee_int,
+                "currency": "INR",
+                "speed": "normal",
+                "notes": {
+                    "notes_key_1": "Beam me up Scotty.",
+                    "notes_key_2": "Engage"
+                },
+                "receipt": receipt_id  # Use the generated unique receipt ID
+            })
+            print(ref)
+            refund.refund_id = ref['id']
             refund.status = 'processing'
             refund.save()
         elif status_withdraw == 'completed':
@@ -474,10 +506,13 @@ def Details_of_refund(request, username,refund_id):
         else:
             refund.status = 'rejected'
             refund.save()
+    
     context = {
         'refund': refund,
-        'upi':upi,
-        'bank_details': bank_details
+        'upi': upi,
+        'bank_details': bank_details,
+        'with_fee':with_fee,
+        'refund_status_cehck': refund_status_cehck
     }
 
     return render(request, "details_of_refund.html", context)
