@@ -149,20 +149,19 @@ def Buyer_Dashboard(request, username):
 
     return render(request, 'buyer_dashboard.html', context)
 
-
+# Function to check if the user is a superuser
 def is_superuser(user):
     return user.is_superuser
 
-
-def is_superuser(user):
-    return user.is_superuser
 
 
 # Add this decorator to restrict access to superusers only
-
-
 @user_passes_test(is_superuser, login_url='IntroHome')
 def Admin_Dashboard(request, username):
+    """
+    View for displaying the buyer dashboard.
+    Access is restricted to superusers.
+    """
     user = get_object_or_404(User, username=username)
     all_user = User.objects.all()
     all_services = Overview.objects.all()

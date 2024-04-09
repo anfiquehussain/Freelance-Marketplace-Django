@@ -17,6 +17,7 @@ from payments.models import Transaction
 from Services.models import Question
 
 
+# View function for submitting requirements for an order
 @login_required
 def submit_requirements(request, transaction_id, username):
     transaction = get_object_or_404(Transaction, id=transaction_id)
@@ -47,6 +48,7 @@ def submit_requirements(request, transaction_id, username):
     # Questions = Question.objects.filter(overview=orders.service)
     # print(Questions)
 
+# Fetching questions related to the service
     for ord in orders:
         questions = Question.objects.filter(overview=ord.service)
         # print("Service:", ord.service)
@@ -77,8 +79,10 @@ def submit_requirements(request, transaction_id, username):
     return render(request, 'submit_requirements.html', context)
 
 
+# View function for displaying details of an order
 @login_required()
 def Details_of_the_order(request, order_id, username):
+    # Retrieving user and order objects
     user = get_object_or_404(User, username=username)
     orders = Order.objects.filter(id=order_id)
     order = get_object_or_404(Order, id=order_id)
@@ -86,12 +90,13 @@ def Details_of_the_order(request, order_id, username):
     # transation = Transaction.objects.filter(id=order.transaction_id)
     # for i in transation:
     #     print(i.id)
+    # Handling cancellation of pending orders
     if (order.status == "pending"):
         if request.method == "POST":
             cencel = request.POST.get("status_order")
             order.status = "cancelled"
             order.save()
-
+ # Handling actions upon order delivery
     if (order.status == 'delivered'):
         if request.method == 'POST':
             ok = request.POST.get('ok')
@@ -99,13 +104,13 @@ def Details_of_the_order(request, order_id, username):
 
             if (ok == 'yes,appove the delivary'):
                 for item in delivary_item:
-                    item. delivery_status  = "completed"
+                    item. delivery_status = "completed"
                     item.save()
                 order.status = "completed"
                 order.save()
             elif (no == 'i am not ready of yet'):
                 for item in delivary_item:
-                    item. delivery_status  = "return"
+                    item. delivery_status = "return"
                     item.save()
                 order.status = "return"
                 order.save()
@@ -156,7 +161,9 @@ def Details_of_the_order(request, order_id, username):
     return render(request, 'details_of_the_order.html', context)
 
 
+# View function for displaying all orders of a user
 def List_all_orders(request, username):
+    # Retrieving user and associated orders
     user = get_object_or_404(User, username=username)
     orders = Order.objects.filter(buyer=user)
 
@@ -182,6 +189,7 @@ def List_all_orders(request, username):
     return render(request, 'list_all_orders.html', context)
 
 
+# View function for displaying all orders of a seller
 def Seller_List_all_orders(request, username):
     user = get_object_or_404(User, username=username)
     orders = Order.objects.filter(seller=user)
@@ -221,13 +229,12 @@ def Seller_List_all_orders(request, username):
     return render(request, 'seller_list_all_orders.html', context)
 
 
+# View function for displaying details of an order for a seller
 @login_required
 def Seller_Details_of_the_order(request, order_id, username):
     user = get_object_or_404(User, username=username)
     order = get_object_or_404(Order, id=order_id)
     delivary_item = DeliveryDetails.objects.filter(order=order)
-
-
 
     if username != request.user.username or order.seller != user:
         return HttpResponseForbidden("Access Denied")
@@ -236,7 +243,6 @@ def Seller_Details_of_the_order(request, order_id, username):
         order=order).first()
     order_requirements = Order_Requirements.objects.filter(order=order)
 
-    
     if request.method == 'POST':
         form = DeliveryDetailsForm(
             request.POST, request.FILES, instance=existing_delivery_details)
@@ -248,7 +254,7 @@ def Seller_Details_of_the_order(request, order_id, username):
             delivery_details.save()
             order.status = 'delivered'
             order.save()
-            
+
     else:
         if existing_delivery_details:
             form = DeliveryDetailsForm(instance=existing_delivery_details)
@@ -280,105 +286,3 @@ def Seller_Details_of_the_order(request, order_id, username):
         'order_requirements': order_requirements
     }
     return render(request, 'seller_detials_of_order.html', context)
-
-
-# from .forms import DeliveryDetailsForm
-# @login_required()
-# def Seller_Details_of_the_order(request,order_id,username):
-#     user = get_object_or_404(User, username=username)
-#     orders = Order.objects.filter(id=order_id)
-#     order = get_object_or_404(Order, id=order_id)
-#     order_requirements = Order_Requirements.objects.all()
-
-
-#     current_user = request.user
-#     if username == current_user.username and order.seller == user:
-#         pass
-#     else:
-#         return HttpResponseForbidden("Access Denied")
-
-
-#     order_requirements_check = 0
-
-#     order_requirements = Order_Requirements.objects.filter(order=order_id)
-
-#     orders_services_transactions = []
-#     note_delivary = ""
-#     delivary_item = None
-
-#     existing_delivery_details = DeliveryDetails.objects.filter(order=order)
-
-#     if existing_delivery_details:
-#         if request.method == 'POST':
-#             note_delivary = request.POST.get('note_delivary')
-
-#             delivary_item = request.FILES.get('delivary_item')
-
-#             for item in existing_delivery_details:
-#                 item.delivery_status = "delivered"
-#                 item.delivery_notes = note_delivary
-#                 item.order_delivered_date = timezone.now()
-
-#                 # Set the delivery_file field to the uploaded file
-#                 if delivary_item:
-#                     item.delivery_file = delivary_item
-
-#                 item.save()
-#                 order.status = 'delivered'
-#                 order.save()
-#     else:
-#         if request.method == 'POST':
-#                 form = DeliveryDetailsForm(request.POST, request.FILES)
-#                 if (form.is_valid()):
-#                     devivary=form.save(commit=False)
-#                     devivary.delivery_status = 'delivered'
-#                     devivary.order_delivered_date = timezone.now()
-#                     delivery.order = order
-#                     devivary.save()
-#                     order.status = 'delivered'
-#                     order.save()
-#                     return redirect('seller_details_of_order', order_id=order.id, username=request.user.username)
-#                 else:
-#                     form = DeliveryDetailsForm()
-
-#     accept_order_value = ""
-#     if request.method == 'POST':
-#         order_status_value = request.POST.get('status_order')
-#         if(order_status_value == 'accept'):
-#             order.status = "in_progress"
-#             order.save()
-#         elif(order_status_value == 'cancel'):
-
-#             order.status = "cancelled"
-#             order.save()
-
-#     context = {
-#         'user': user,
-#         'order':order,
-#         "order_requirements":order_requirements,
-#         'form':form
-#     }
-
-#     return render(request, 'seller_detials_of_order.html', context)
-
-# def Upload_delivery(request,order_id,username):
-#     user = get_object_or_404(User, username=username)
-#     orders = Order.objects.filter(id=order_id)
-#     order = get_object_or_404(Order, id=order_id)
-#     order_requirements = Order_Requirements.objects.all()
-
-#     current_user = request.user
-#     if username == current_user.username and order.seller == user:
-#         pass
-#     else:
-#         return HttpResponseForbidden("Access Denied")
-
-#     if request.method == 'POST':
-#         form = DeliveryDetailsForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('success_page')
-#     else:
-#         form = DeliveryDetailsForm()
-
-#     return render(request, 'upload_delivery.html', {'form': form})

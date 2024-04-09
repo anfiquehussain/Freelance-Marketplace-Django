@@ -16,9 +16,9 @@
     --card-bg-color: #ffff;
     --user-name-color: #73757d;
     --btn-close-color-bg: #d0ceda;
-    --package-border-color:#ddd;
-    --package-header-row-active-color:#FAFAFA;
-    --accent-hover:#2d149f;
+    --package-border-color: #ddd;
+    --package-header-row-active-color: #FAFAFA;
+    --accent-hover: #2d149f;
 }
 
 :root[data-theme="dark"] {
@@ -35,9 +35,9 @@
     --card-bg-color: #181A1B;
     --user-name-color: #82848c;
     --btn-close-color-bg: #a08ef1;
-    --package-border-color:#212121;
-    --package-header-row-active-color:#181A1B;
-    --accent-hover:#b3a4f4;
+    --package-border-color: #212121;
+    --package-header-row-active-color: #181A1B;
+    --accent-hover: #b3a4f4;
 }
 
 :root {
@@ -270,23 +270,28 @@ h6 {
     background-color: var(--btn-close-color-bg);
 }
 
-.chat-btn{
+.chat-btn {
     text-decoration: none;
     color: var(--primary);
 }
 
-table th{
+table th {
     color: var(--text)
 }
-table,th,tr,td{
+
+table,
+th,
+tr,
+td {
     color: var(--text);
 }
 
 
-#read-more{
+#read-more {
     color: var(--text);
 }
-#myBtn{
+
+#myBtn {
     color: var(--accent);
 }
 
@@ -295,7 +300,7 @@ table,th,tr,td{
 
 
 
-.modal-content{
+.modal-content {
     background-color: var(--card-bg-color);
 }
 

@@ -16,9 +16,9 @@
     --card-bg-color: #ffff;
     --user-name-color: #73757d;
     --btn-close-color-bg: #d0ceda;
-    --package-border-color:#ddd;
-    --package-header-row-active-color:#FAFAFA;
-    --accent-hover:#2d149f;
+    --package-border-color: #ddd;
+    --package-header-row-active-color: #FAFAFA;
+    --accent-hover: #2d149f;
 }
 
 :root[data-theme="dark"] {
@@ -35,9 +35,9 @@
     --card-bg-color: #181A1B;
     --user-name-color: #82848c;
     --btn-close-color-bg: #a08ef1;
-    --package-border-color:#212121;
-    --package-header-row-active-color:#181A1B;
-    --accent-hover:#b3a4f4;
+    --package-border-color: #212121;
+    --package-header-row-active-color: #181A1B;
+    --accent-hover: #b3a4f4;
 }
 
 :root {
@@ -247,25 +247,43 @@ body {
     background: var(--primary-hover);
 }
 
-.amount-total{
+.amount-total {
     background-color: var(--secondary);
     padding: 10px;
     border-radius: 10px;
 }
-.withdrawbtn{
+
+.withdrawbtn {
     color: var(--background);
     background-color: var(--accent);
     border: none;
-    padding:5px 10px 5px 10px;
+    padding: 5px 10px 5px 10px;
     border-radius: 10px;
 }
-.withdrawbtn:hover{
+
+.withdrawbtn:hover {
     background-color: var(--accent-hover);
 }
 
-.detailsoforder{
+.detailsoforder {
     background-color: var(--secondary);
     padding: 10px;
     border-radius: 10px;
 
+}
+
+.left-side {
+    background-color: var(--secondary);
+    padding: 10px;
+    border-radius: 10px;
+    margin-left: 5px;
+}
+
+
+.userlink {
+    color: var(--text);
+}
+
+.userlink:hover {
+    color: var(--primary);
 }

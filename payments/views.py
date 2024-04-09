@@ -1,3 +1,4 @@
+# Import necessary decorators and modules from Django
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
@@ -5,40 +6,50 @@ from django.http import HttpResponseForbidden, JsonResponse, HttpResponse, HttpR
 from django.conf import settings
 from django.utils import timezone
 from datetime import timedelta
+
+# Import Stripe and Razorpay for payment processing
 import stripe
 import razorpay
 
-from .models import Upi_id, Bank, SellerAccountBalance, PaymentWithdrawal, PaymentMethod, Transaction ,Refund_details
+# Import models from the current app and other related apps
+from .models import Upi_id, Bank, SellerAccountBalance, PaymentWithdrawal, PaymentMethod, Transaction, Refund_details
 from Services.models import Overview, BasicPackage, StandardPackage, PremiumPackage
 from Home.models import UserProfile
 from Orders.models import Order
 
+# Set Stripe API key from Django settings
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-
+# Configure Razorpay client with API keys from Django settings
 client = razorpay.Client(
     auth=(settings.REZORPAY_PUBLISHABLE_KEY, settings.REZORPAY_SECRET_KEY))
 
 
+# View function for handling payments
 @login_required
 def payments(request, overview_id, username):
+    # Retrieve overview and user objects from the database
     overview = get_object_or_404(Overview, pk=overview_id)
     user = get_object_or_404(User, username=username)
 
+# Retrieve the current user
     current_user = request.user
-
+# Check if the requested username matches the current user's username
     if username == current_user.username:
         pass
     else:
         return HttpResponseForbidden("Access Denied")
 
+# Retrieve additional data from the request URL
     additional_data = request.GET.get('additional_data')
     additional_data2 = request.GET.get('additional_data2')
+    # Retrieve user profile and packages associated with the overview
     user_profile = UserProfile.objects.get(user=overview.user.id)
     basic_packages = BasicPackage.objects.filter(overview=overview)
     standard_packages = StandardPackage.objects.filter(overview=overview)
     premium_packages = PremiumPackage.objects.filter(overview=overview)
 
+# Initialize variables for pricing and transaction details
     price = 0
     transaction_id = None
     package_name = ""
@@ -48,9 +59,11 @@ def payments(request, overview_id, username):
     service_fee = 0
     actual_price_fee_added = 0
 
+# Handle different additional data scenarios
     if additional_data2 == '1':
         for bp in basic_packages:
 
+         # Calculate fees and price for basic package
             buyer_fee = bp.Basic_price * (5/100)
             seller_fee = bp.Basic_price * (10/100)
             service_fee = buyer_fee + seller_fee
@@ -59,6 +72,7 @@ def payments(request, overview_id, username):
             actual_price = bp.Basic_price
             actual_price_fee_added = price
 
+            # Create Razorpay order for payment
             data = {"amount": price * 100, "currency": "INR",
                     "receipt": "order_rcptid_11"}
             payment = client.order.create(data=data)
@@ -66,7 +80,7 @@ def payments(request, overview_id, username):
             order_id = payment['id']
 
             package_discription = bp.Basic_description
-
+            # Create transaction record
             transaction = Transaction.objects.create(
                 overview=overview.id,
                 sender=request.user,
@@ -163,13 +177,16 @@ def payments(request, overview_id, username):
     return render(request, 'payment.html', context)
 
 
+# Decorator to ensure that the user is logged in to access this view
 @login_required()
 def success(request, transaction_id, username):
+    # Retrieving the Transaction and User objects based on provided IDs
     transaction = get_object_or_404(Transaction, id=transaction_id)
     user = get_object_or_404(User, username=username)
     current_user = request.user
     seller_user = None
     context = {}
+    # Checking if the logged-in user matches the provided username and is the sender of the transaction
     if username == current_user.username and transaction.sender == current_user:
         pass
     else:
@@ -180,6 +197,7 @@ def success(request, transaction_id, username):
     overview_id = Overview.objects.get(pk=overview)
     transaction.save()
 
+    # Determining the delivery date based on the package name in the transaction
     if transaction.package_name == "basic_package":
         basic_package = BasicPackage.objects.get(overview=overview_id)
         Basic_delivery_time = basic_package.Basic_delivery_time
@@ -194,10 +212,10 @@ def success(request, transaction_id, username):
         premium_package = PremiumPackage.objects.get(overview=overview_id)
         premium_delivery_time = premium_package.Premium_delivery_time
         delivery_date = timezone.now() + timedelta(days=premium_delivery_time)
-
+    # Getting the seller user from the transaction
     seller_user = transaction.receiver
     print(delivery_date)
-
+    # Creating an Order object with the provided details
     order = Order.objects.create(
         buyer=current_user,
         service=overview_id,
@@ -216,6 +234,7 @@ def success(request, transaction_id, username):
 
 @login_required()
 def withdrawal(request, username):
+
     user = get_object_or_404(User, username=username)
     current_user = request.user
     account_balance = SellerAccountBalance.objects.filter(user=user)
@@ -263,7 +282,6 @@ def withdrawal(request, username):
     for i in account_balance:
         amount = i.balance_amount
 
-
     # if check_withdrawal_flag:
     #     withdrawal = PaymentWithdrawal.objects.create(
     #         user=user,
@@ -276,9 +294,9 @@ def withdrawal(request, username):
     context = {
         'payment_method': payment_method,
         'upi': upi,
-        'user':user,
+        'user': user,
         'bank_details': bank_details,
-        'amount':amount,
+        'amount': amount,
         'check_withdrawal_flag': check_withdrawal_flag
     }
     return render(request, "withdrawal.html", context)
@@ -286,6 +304,18 @@ def withdrawal(request, username):
 
 @login_required()
 def Conform_withdrawal(request, username):
+    """
+    View for confirming withdrawal requests.
+        Checks if there are any pending or processing withdrawals for the user. If not, creates a new withdrawal request.
+
+        Args:
+        - request: HttpRequest object
+        - username: Username of the user making the request
+
+        Returns:
+        - Rendered HTML template with confirmation message
+    """
+
     user = get_object_or_404(User, username=username)
     payment_method, created = PaymentMethod.objects.get_or_create(user=user)
     account_balance = SellerAccountBalance.objects.filter(user=user)
@@ -315,11 +345,33 @@ def Conform_withdrawal(request, username):
 
 
 def is_superuser(user):
+    """
+    Function to check if a user is a superuser.
+
+    Args:
+    - user: User object to check
+
+    Returns:
+    - True if the user is a superuser, False otherwise
+    """
     return user.is_superuser
 
 
+# View for handling withdrawal requests
 @user_passes_test(is_superuser, login_url='IntroHome')
 def List_withdrawal(request, username):
+    """
+    Render a list of all withdrawal requests.
+
+    Only accessible by superusers.
+
+    Args:
+        request: HttpRequest object
+        username: Username of the current user
+
+    Returns:
+        Rendered HTML template with withdrawal list and relevant context data
+    """
     user = get_object_or_404(User, username=username)
     withdrawal = PaymentWithdrawal.objects.all()
     context = {
@@ -327,9 +379,24 @@ def List_withdrawal(request, username):
     }
     return render(request, "withdraw_list.html", context)
 
+# View for displaying details of a specific withdrawal request
+
 
 @user_passes_test(is_superuser, login_url='IntroHome')
 def Details_of_withdrawal(request, username, withdrawal_id):
+    """
+    Render details of a specific withdrawal request.
+
+    Only accessible by superusers.
+
+    Args:
+        request: HttpRequest object
+        username: Username of the current user
+        withdrawal_id: ID of the withdrawal request
+
+    Returns:
+        Rendered HTML template with withdrawal details and relevant context data
+    """
     user = get_object_or_404(User, username=username)
     withdrawal = get_object_or_404(PaymentWithdrawal, pk=withdrawal_id)
     upi = Upi_id.objects.get(user=withdrawal.user)
@@ -361,8 +428,20 @@ def Details_of_withdrawal(request, username, withdrawal_id):
 
     return render(request, "details_of_withdrawal.html", context)
 
+
 @login_required()
 def Seller_list_withdrawal(request, username):
+    """
+    Render a list of withdrawal requests for the current user.
+
+    Args:
+        request: HttpRequest object
+        username: Username of the current user
+
+    Returns:
+        Rendered HTML template with withdrawal list for the current user and relevant context data
+    """
+
     user = get_object_or_404(User, username=username)
     current_user = request.user
     withdrawal = PaymentWithdrawal.objects.filter(user=current_user)
@@ -370,8 +449,6 @@ def Seller_list_withdrawal(request, username):
         'withdrawal': withdrawal,
     }
     return render(request, "seller_widrawal_list.html", context)
-
-
 
 
 @login_required()
@@ -407,17 +484,13 @@ def Save_payement_method(request, username):
             bank_details.save()
             print(account_number)
 
-
-
-
     context = {
         'payment_method': payment_method,
         'upi': upi,
-        'user':user,
+        'user': user,
         'bank_details': bank_details,
     }
     return render(request, "save_payement_method.html", context)
-
 
 
 @login_required()
@@ -440,13 +513,14 @@ def Refund(request, username):
                 'order_status': refund.order.status,
                 'order_id': refund.order.id,
                 'refund_status': refund.status,
-                'payment_id':refund.order.transaction.payment_id,
+                'payment_id': refund.order.transaction.payment_id,
             })
 
     context = {
         'refund_created': refund_created,
     }
     return render(request, "refund.html", context)
+
 
 @user_passes_test(is_superuser, login_url='IntroHome')
 def List_refunds(request, username):
@@ -458,15 +532,9 @@ def List_refunds(request, username):
     return render(request, "list_refunds.html", context)
 
 
-
-from decimal import Decimal
-from django.shortcuts import get_object_or_404, render
-from django.contrib.auth.decorators import user_passes_test
-from .models import Refund_details, Upi_id, Bank
-from datetime import datetime
-
 # Assuming is_superuser is defined somewhere
 # Assuming client is imported from somewhere
+
 
 @user_passes_test(is_superuser, login_url='IntroHome')
 def Details_of_refund(request, username, refund_id):
@@ -478,12 +546,14 @@ def Details_of_refund(request, username, refund_id):
     for item in refund_this['items']:
         refund_status_cehck = item['status']
     payid = ord['items'][0]['id']
-    with_fee = refund.order.transaction.amount + refund.order.transaction.amount * Decimal('0.05')
+    with_fee = refund.order.transaction.amount + \
+        refund.order.transaction.amount * Decimal('0.05')
     bank_details = Bank.objects.get(user=refund.user)
     if request.method == "POST":
         status_withdraw = request.POST.get('status_withdraw')
         if status_withdraw == 'accept':
-            with_fee_int = int(with_fee * 100)  # Convert to integer before passing to refund function
+            # Convert to integer before passing to refund function
+            with_fee_int = int(with_fee * 100)
             # Generate a unique receipt ID based on refund ID and current timestamp
             receipt_id = f"Receipt-{refund_id}-{datetime.now().strftime('%Y%m%d%H%M%S')}"
             ref = client.payment.refund(payid, {
@@ -506,12 +576,12 @@ def Details_of_refund(request, username, refund_id):
         else:
             refund.status = 'rejected'
             refund.save()
-    
+
     context = {
         'refund': refund,
         'upi': upi,
         'bank_details': bank_details,
-        'with_fee':with_fee,
+        'with_fee': with_fee,
         'refund_status_cehck': refund_status_cehck
     }
 

@@ -182,6 +182,48 @@ body {
 }
 
 
+
+
+.card {
+    min-width: 90%;
+    max-height: auto;
+    color: var(--text);
+    background-color: var(--card-bg-color);
+}
+
+.skillcard {
+    min-width: 90%;
+    max-height: auto;
+    color: var(--text);
+    background-color: transparent;
+    border: none;
+}
+
+.more-about-me:focus,
+.more-about-me:active {
+    outline: none;
+    border: none;
+}
+
+.user-name-card:hover {
+    text-decoration: underline;
+}
+
+.card-link {
+    text-decoration: none;
+    color: var(--text);
+}
+
+.card-link:hover {
+    text-decoration: underline;
+    color: var(--text);
+}
+
+.card-title:hover {
+    text-decoration: underline;
+    color: var(--text);
+}
+
 /* width */
 ::-webkit-scrollbar {
     width: 5px;
@@ -205,36 +247,130 @@ body {
     background: var(--primary-hover);
 }
 
-.bill-details-container {
-    height: fit-content;
-    padding: 1rm;
+table th {
+    color: var(--text)
+}
+
+table,
+th,
+tr,
+td {
+    color: var(--text);
+}
+
+.nav .nav-item .nav-link {
+    color: var(--text);
+}
+
+.nav .nav-item .active {
+    background-color: var(--secondary);
+    border: none;
+    color: var(--text);
+}
+
+.nav .nav-item .active:hover {
+    border: 1px solid var(--text);
 }
 
 
-tr {
-    border-bottom: 1px solid gray;
+.nav .nav-item .active:focus {
+    border: 1px solid var(--text);
 }
+
+
+.container {
+    background-color: var(--secondary);
+    /* Set container background color */
+    padding: 20px;
+    /* Add some padding for better spacing */
+    border-radius: 8px;
+    /* Add rounded corners to the container */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Add a subtle shadow */
+}
+
 
 .card {
-    background-color: var(--secondary);
-    border: none;
-    outline: none;
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--user-name-color);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.card-header {
-    background-color: var(--secondary);
+.card-title {
+    font-size: 1.25rem;
+    /* Increase title font size */
+    color: var(--text)
+        /* Set title color */
 }
 
-#rzp-button1 {
-    color: var(--background);
-    padding: 10px;
-    border-radius: 10px;
-    border: none;
-    background-color: var(--primary);
-    cursor: pointer;
-    margin-bottom: 5%;
+.card-text {
+    font-size: 1rem;
+    /* Set text font size */
+    color: var(--text);
+    /* Set text color */
 }
 
-#rzp-button1:hover {
-    background-color: var(--primary-hover);
+.card-subtitle {
+    font-size: 0.9rem;
+    /* Set subtitle font size */
+    color: var(--user-name-color);
+    /* Set subtitle color */
 }
+
+.order-card .order-status {
+    font-weight: bold;
+}
+
+/* .order-status.pending {
+    color: #FFD700;
+}
+
+
+.order-status.completed {
+    color: #00FF00;
+
+}
+
+
+.order-status.return {
+    color: #0074D9;
+
+}
+
+
+.order-status.cancelled {
+    color: #FF4136;
+
+}
+
+.order-status.expired {
+    color: #FF4136;
+
+}
+
+
+.order-status.delivered {
+    color: #0000FF;
+
+}
+
+
+.order-status.in_progress {
+    color: #FFA500;
+
+} 
+
+.order-type.basic_package {
+    color: #27ae60;
+}
+
+.order-type.standard_package {
+    color: #3498db;
+}
+
+.order-type.premium_package {
+    color: #e74c3c;
+}
+*/

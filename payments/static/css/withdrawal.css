@@ -182,6 +182,48 @@ body {
 }
 
 
+
+
+.card {
+    min-width: 90%;
+    max-height: auto;
+    color: var(--text);
+    background-color: var(--card-bg-color);
+}
+
+.skillcard {
+    min-width: 90%;
+    max-height: auto;
+    color: var(--text);
+    background-color: transparent;
+    border: none;
+}
+
+.more-about-me:focus,
+.more-about-me:active {
+    outline: none;
+    border: none;
+}
+
+.user-name-card:hover {
+    text-decoration: underline;
+}
+
+.card-link {
+    text-decoration: none;
+    color: var(--text);
+}
+
+.card-link:hover {
+    text-decoration: underline;
+    color: var(--text);
+}
+
+.card-title:hover {
+    text-decoration: underline;
+    color: var(--text);
+}
+
 /* width */
 ::-webkit-scrollbar {
     width: 5px;
@@ -205,36 +247,31 @@ body {
     background: var(--primary-hover);
 }
 
-.bill-details-container {
-    height: fit-content;
-    padding: 1rm;
-}
-
-
-tr {
-    border-bottom: 1px solid gray;
-}
-
-.card {
+.amount-total {
     background-color: var(--secondary);
-    border: none;
-    outline: none;
-}
-
-.card-header {
-    background-color: var(--secondary);
-}
-
-#rzp-button1 {
-    color: var(--background);
     padding: 10px;
     border-radius: 10px;
-    border: none;
-    background-color: var(--primary);
-    cursor: pointer;
-    margin-bottom: 5%;
 }
 
-#rzp-button1:hover {
-    background-color: var(--primary-hover);
+.withdrawbtn {
+    color: var(--background);
+    background-color: var(--accent);
+    border: none;
+    padding: 5px 10px 5px 10px;
+    border-radius: 10px;
+}
+
+.withdrawbtn:hover {
+    background-color: var(--accent-hover);
+}
+
+.detailsoforder {
+    background-color: var(--secondary);
+    padding: 10px;
+    border-radius: 10px;
+
+}
+
+.modal-content {
+    background-color: var(--card-bg-color);
 }

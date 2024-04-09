@@ -16,9 +16,9 @@
     --card-bg-color: #ffff;
     --user-name-color: #73757d;
     --btn-close-color-bg: #d0ceda;
-    --package-border-color:#ddd;
-    --package-header-row-active-color:#FAFAFA;
-    --accent-hover:#2d149f;
+    --package-border-color: #ddd;
+    --package-header-row-active-color: #FAFAFA;
+    --accent-hover: #2d149f;
 }
 
 :root[data-theme="dark"] {
@@ -35,9 +35,9 @@
     --card-bg-color: #181A1B;
     --user-name-color: #82848c;
     --btn-close-color-bg: #a08ef1;
-    --package-border-color:#212121;
-    --package-header-row-active-color:#181A1B;
-    --accent-hover:#b3a4f4;
+    --package-border-color: #212121;
+    --package-header-row-active-color: #181A1B;
+    --accent-hover: #b3a4f4;
 }
 
 :root {
@@ -206,89 +206,88 @@ body {
 }
 
 #messageContainer {
-  margin: 0 auto;
-  padding: 20px;
-  border-radius: 10px 10px 0px 0px;
-  overflow-y: auto;
-  height: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px 10px 0px 0px;
+    overflow-y: auto;
+    height: 400px;
 }
 
 .message {
-  background-color: var(--accent);
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
+    background-color: var(--accent);
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
 }
 
 /* Form styling */
 #myForm {
-  margin: 0px auto;
-  padding: 20px;
-  color: var(--text);
-  border-radius: 0px 0px 10px 10px;
-  margin-bottom: 10px;
+    margin: 0px auto;
+    padding: 20px;
+    color: var(--text);
+    border-radius: 0px 0px 10px 10px;
+    margin-bottom: 10px;
 }
 
-.user-name-card{
+.user-name-card {
     text-decoration: none;
     color: var(--user-name-color);
 }
-.user-name-card:hover{
+
+.user-name-card:hover {
     color: var(--primary);
 }
 
 label {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 input[type="file"] {
-  width: 50%;
-  padding: 10px;
-  margin-top: 5px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+    width: 50%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
-textarea{
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 #submitButton {
-  color: var(--text);
-  cursor: pointer;
+    color: var(--text);
+    cursor: pointer;
 }
 
 .message {
-  max-width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  word-wrap: break-word;
+    max-width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    word-wrap: break-word;
 }
 
 .sender {
-    background-color:var(--accent);
+    background-color: var(--accent);
     color: var(--background);
 
-  align-self: flex-start;
-  text-align: right;
+    align-self: flex-start;
+    text-align: right;
 }
 
 .receiver {
-    background-color: var(--secondary); 
+    background-color: var(--secondary);
     color: var(--text);
-  align-self: flex-end;
-  text-align: left;
+    align-self: flex-end;
+    text-align: left;
 }
 
 .username {
-  font-family: "Courier New", Courier, monospace;
-  font-size: 0.5em;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 0.5em;
 }
-
-
