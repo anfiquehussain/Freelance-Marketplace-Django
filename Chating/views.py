@@ -5,6 +5,8 @@ from django.shortcuts import get_object_or_404, render, redirect  # Importing ne
 from .forms import MessageForm  # Importing MessageForm from current directory
 from Home.models import UserProfile  # Importing UserProfile model from Home app
 from .models import Message  # Importing Message model from current directory
+from django.http import JsonResponse
+import datetime
 
 # View function for handling user chat
 def Userchat(request, order_id, username):
