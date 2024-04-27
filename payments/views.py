@@ -6,20 +6,18 @@ from django.http import HttpResponseForbidden, JsonResponse, HttpResponse, HttpR
 from django.conf import settings
 from django.utils import timezone
 from datetime import timedelta
-
+from decimal import Decimal
+from datetime import datetime 
 # Import Stripe and Razorpay for payment processing
 import stripe
 import razorpay
-
 # Import models from the current app and other related apps
 from .models import Upi_id, Bank, SellerAccountBalance, PaymentWithdrawal, PaymentMethod, Transaction, Refund_details
 from Services.models import Overview, BasicPackage, StandardPackage, PremiumPackage
 from Home.models import UserProfile
 from Orders.models import Order
-
 # Set Stripe API key from Django settings
 stripe.api_key = settings.STRIPE_SECRET_KEY
-
 # Configure Razorpay client with API keys from Django settings
 client = razorpay.Client(
     auth=(settings.REZORPAY_PUBLISHABLE_KEY, settings.REZORPAY_SECRET_KEY))
@@ -242,6 +240,12 @@ def withdrawal(request, username):
     payment_method, created = PaymentMethod.objects.get_or_create(user=user)
     upi, created = Upi_id.objects.get_or_create(user=user)
     bank_details, created = Bank.objects.get_or_create(user=user)
+    current_user = request.user
+    if username == current_user.username:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
+    
 
     if request.method == "POST":
         withdraw_method = request.POST.get('withdraw_method')
@@ -316,11 +320,18 @@ def Conform_withdrawal(request, username):
         - Rendered HTML template with confirmation message
     """
 
+
+
     user = get_object_or_404(User, username=username)
     payment_method, created = PaymentMethod.objects.get_or_create(user=user)
     account_balance = SellerAccountBalance.objects.filter(user=user)
     withdrawal_exist = PaymentWithdrawal.objects.filter(user=user)
     amount = 0
+    current_user = request.user
+    if username == current_user.username:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
     for i in account_balance:
         amount = i.balance_amount
 
@@ -402,6 +413,11 @@ def Details_of_withdrawal(request, username, withdrawal_id):
     upi = Upi_id.objects.get(user=withdrawal.user)
     bank_details = Bank.objects.get(user=withdrawal.user)
 
+    current_user = request.user
+    if username == current_user.username:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
     account_balance = SellerAccountBalance.objects.get(user=withdrawal.user)
 
     upi_bank_withdrawal_user = []
@@ -445,6 +461,11 @@ def Seller_list_withdrawal(request, username):
     user = get_object_or_404(User, username=username)
     current_user = request.user
     withdrawal = PaymentWithdrawal.objects.filter(user=current_user)
+    current_user = request.user
+    if username == current_user.username:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
     context = {
         'withdrawal': withdrawal,
     }
@@ -458,6 +479,11 @@ def Save_payement_method(request, username):
     payment_method, created = PaymentMethod.objects.get_or_create(user=user)
     upi, created = Upi_id.objects.get_or_create(user=user)
     bank_details, created = Bank.objects.get_or_create(user=user)
+    current_user = request.user
+    if username == current_user.username:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
     if request.method == "POST":
         withdraw_method = request.POST.get('withdraw_method')
 
@@ -498,6 +524,11 @@ def Refund(request, username):
     user = get_object_or_404(User, username=username)
     orders = Order.objects.filter(buyer=user)
     refund_created = []  # Initialize as list to handle multiple refunds
+    current_user = request.user
+    if username == current_user.username:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
 
     for index, order in enumerate(orders, start=1):
         if order.status == 'cancelled' or order.status == 'expired':
@@ -526,6 +557,11 @@ def Refund(request, username):
 def List_refunds(request, username):
     user = get_object_or_404(User, username=username)
     refunds = Refund_details.objects.all()
+    current_user = request.user
+    if username == current_user.username:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
     context = {
         'refund_created': refunds,
     }
@@ -535,7 +571,6 @@ def List_refunds(request, username):
 # Assuming is_superuser is defined somewhere
 # Assuming client is imported from somewhere
 
-
 @user_passes_test(is_superuser, login_url='IntroHome')
 def Details_of_refund(request, username, refund_id):
     user = get_object_or_404(User, username=username)
@@ -543,6 +578,11 @@ def Details_of_refund(request, username, refund_id):
     upi = Upi_id.objects.get(user=refund.user)
     ord = client.order.payments(refund.order.transaction.payment_id)
     refund_this = client.refund.all(refund.refund_id)
+    current_user = request.user
+    if username == current_user.username:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
     for item in refund_this['items']:
         refund_status_cehck = item['status']
     payid = ord['items'][0]['id']

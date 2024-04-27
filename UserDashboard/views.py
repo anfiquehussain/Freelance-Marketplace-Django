@@ -20,6 +20,11 @@ def Seller_Dashboard(request, username):
     service_overview = Overview.objects.filter(user=user)
     orders = Order.objects.filter(seller=user)
     withdrawal = PaymentWithdrawal.objects.filter(user=user)
+    current_user = request.user
+    if username == current_user.username:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
 
     current_user = request.user
     if username != current_user.username:
@@ -115,6 +120,8 @@ def Buyer_Dashboard(request, username):
     service_overview = Overview.objects.filter(user=user)
     orders = Order.objects.filter(buyer=user)
 
+
+
     current_user = request.user
     if username == current_user.username:
         pass
@@ -173,6 +180,12 @@ def Admin_Dashboard(request, username):
     delivered_orders_count = all_order.filter(status='delivered').count()
     completed_orders_count = all_order.filter(status='completed').count()
     cancelled_orders_count = all_order.filter(status='cancelled').count()
+    
+    current_user = request.user
+    if username == current_user.username:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")    
 
     all_refund = Refund_details.objects.all()
     all_refunds_count = all_refund.count()

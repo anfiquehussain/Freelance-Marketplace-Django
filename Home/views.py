@@ -157,6 +157,7 @@ def view_profile_public(request, username):
     profile_reviews = RatingSeller.objects.filter(seller=seller_profile)
     total_review_sum = sum(review.review_rating for review in profile_reviews)
     reviewer_profile_usr = [review.reviewer.user for review in profile_reviews]
+    
 
     # Calculating overall rating for the seller profile
     user_profile.overall_rating = round(total_review_sum / profile_reviews.count()) if profile_reviews.count() > 0 else 0

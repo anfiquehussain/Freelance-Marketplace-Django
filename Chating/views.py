@@ -14,6 +14,11 @@ def Userchat(request, order_id, username):
     user = get_object_or_404(User, username=username)
     order = get_object_or_404(Order, id=order_id)
     form = MessageForm()  # Creating a MessageForm instance
+    current_user = request.user
+    if username == current_user.username:
+        pass
+    else:
+        return HttpResponseForbidden("Access Denied")
 
     # Determining the receiver based on the order and user roles
     if user == order.seller:

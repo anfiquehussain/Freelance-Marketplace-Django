@@ -206,7 +206,8 @@ def view_service_profile(request, overview_id):
     re_profile = UserProfile.objects.get(user=request.user)
 
 
-     # Calculating the overall rating of the service
+
+    #  # Calculating the overall rating of the service
     total_review_sum = sum(review.review_rating for review in rating_service if review.review_rating is not None)
     overview.overall_rating = round(total_review_sum / rating_service.count()) if rating_service.count() > 0 else 0
     overview.save()
