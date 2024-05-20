@@ -7,10 +7,16 @@
 - [Technology Stack](#technology-stack)
 - [Installation](#installation)
 - [Configuration](#configuration)
+  - [Database Configuration](#database-configuration)
+  - [Razorpay Integration](#razorpay-integration)
+  - [Static and Media Files](#static-and-media-files)
+  - [Additional Configuration](#additional-configuration)
 - [Usage](#usage)
 - [Contributing](#contributing)
+- [Testing](#testing)
 - [License](#license)
 - [Contact](#contact)
+
 
 ## Overview
 
@@ -30,12 +36,26 @@ Freelance Marketplace Django is a powerful platform built on Django, facilitatin
 
 - **Backend**: Django, Python
 - **Frontend**: HTML, CSS, JavaScript
-- **Database**: SQLite (development), PostgreSQL (production)
-- **Others**: Celery for asynchronous task processing, Redis for caching
+- **Database**: PostgreSQL (production) 
+- **Others**: Celery for asynchronous task processing, Redis for caching, Bootstrap 5 for frontend styling
+
+### Razorpay Integration
+
+This project utilizes Razorpay for payment gateway integration. Razorpay is a leading payment gateway provider in India, offering secure and seamless payment processing solutions.
+
+### Bootstrap 5
+
+Bootstrap 5 is used for frontend styling and layout. It provides a comprehensive set of responsive design components and utilities, making it easier to build modern and mobile-friendly web interfaces.
+
 
 ## Installation
 
-Ensure you have Python 3.8+ and pip installed on your system.
+### Prerequisites
+
+Before getting started, ensure you have the following prerequisites installed on your system:
+
+- Python 3.8+
+- pip (Python package installer)
 
 ```bash
 git clone https://github.com/anfiquehussain/Freelance-Marketplace-Django.git
@@ -73,6 +93,44 @@ pip install -r requirements.txt
 ## Configuration
 Before running the application, configure the environment variables as per your setup by creating a `.env` file in the project root with the necessary values.
 
+
+### Database Configuration
+
+In the `settings.py` file, configure the database settings according to your setup:
+
+```python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'your_database_name',
+        'USER': 'your_database_user',
+        'PASSWORD': 'your_database_password',
+        'HOST': 'localhost',  # Or your PostgreSQL server's address
+        'PORT': '5432',       # Default PostgreSQL port
+    }
+}
+```
+
+#### Razorpay Integration
+For Razorpay integration, provide your Razorpay publishable and secret keys:
+```
+REZORPAY_PUBLISHABLE_KEY = 'your_razorpay_publishable_key'
+REZORPAY_SECRET_KEY = 'your_razorpay_secret_key'
+```
+
+### Static and Media Files
+Configure the settings for static and media files:
+```
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+```
+Ensure that you have proper file permissions and directory structures set up for media file uploads.
+
+### Additional Configuration
+You may need to configure other settings based on your project's requirements, such as email configuration, security settings, and third-party API integration.
+
+
+
 ## Usage
 To run the development server:
 
@@ -82,12 +140,26 @@ python manage.py runserver
 
 Visit [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser to access the application.
 
+
+
 ## Contributing
 Contributions are welcome! Please follow these steps to contribute:
 1. Fork the repository.
 2. Create a new branch for your feature or fix.
 3. Commit your changes with meaningful commit messages.
 4. Push your branch and open a pull request.
+
+## Testing
+### Running Tests
+To run tests for the project, use the following command:
+```
+python manage.py test
+```
+
+This command will execute all the test cases defined in the project and provide feedback on their success or failure.
+
+Testing Framework
+The project uses the Django testing framework for unit tests, integration tests, and functional tests. It provides a comprehensive set of tools for writing and running tests to ensure
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
