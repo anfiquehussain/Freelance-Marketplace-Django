@@ -8,16 +8,12 @@ from django.utils import timezone
 from datetime import timedelta
 from decimal import Decimal
 from datetime import datetime 
-# Import Stripe and Razorpay for payment processing
-import stripe
 import razorpay
 # Import models from the current app and other related apps
 from .models import Upi_id, Bank, SellerAccountBalance, PaymentWithdrawal, PaymentMethod, Transaction, Refund_details
 from Services.models import Overview, BasicPackage, StandardPackage, PremiumPackage
 from Home.models import UserProfile
 from Orders.models import Order
-# Set Stripe API key from Django settings
-stripe.api_key = settings.STRIPE_SECRET_KEY
 # Configure Razorpay client with API keys from Django settings
 client = razorpay.Client(
     auth=(settings.REZORPAY_PUBLISHABLE_KEY, settings.REZORPAY_SECRET_KEY))
