@@ -11,6 +11,7 @@
   - [Razorpay Integration](#razorpay-integration)
   - [Static and Media Files](#static-and-media-files)
   - [Additional Configuration](#additional-configuration)
+- [Migrations](#migrations)
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [Testing](#testing)
@@ -89,7 +90,6 @@ cd Freelance-Marketplace-Django
 pip install -r requirements.txt
 ```
 
-
 ## Configuration
 Before running the application, configure the environment variables as per your setup by creating a `.env` file in the project root with the necessary values.
 
@@ -130,6 +130,60 @@ Ensure that you have proper file permissions and directory structures set up for
 You may need to configure other settings based on your project's requirements, such as email configuration, security settings, and third-party API integration.
 
 
+## Migrations
+
+Before running the application, you need to apply the migrations to set up the database schema. Follow these steps:
+
+1. **Navigate to the project directory:**
+
+    ```bash
+    cd Freelance-Marketplace-Django
+    ```
+
+2. **Activate the virtual environment (if not already activated):**
+
+    - On Windows:
+      ```bash
+      env\Scripts\activate
+      ```
+    - On Unix or MacOS:
+      ```bash
+      source env/bin/activate
+      ```
+
+3. **Check for Missing Migrations (Optional):**
+
+    It's a good practice to check if there are any new migrations that need to be created. Run the following command to generate new migrations based on model changes:
+
+    ```bash
+    python manage.py makemigrations
+    ```
+
+    This command will inspect the models and create new migration files if any changes are detected. Review the changes and migrate them if necessary.
+
+4. **Apply Migrations:**
+
+    Run the following command to apply migrations:
+
+    ```bash
+    python manage.py migrate
+    ```
+
+    This command will create the necessary tables in the database based on the models defined in the Django app.
+
+5. **Create Superuser (Optional):**
+
+    If you want to access the Django admin interface, you can create a superuser using the following command:
+
+    ```bash
+    python manage.py createsuperuser
+    ```
+
+    Follow the prompts to create a superuser account.
+
+Now, your database schema is set up, and you're ready to run the application.
+
+
 
 ## Usage
 To run the development server:
@@ -141,13 +195,13 @@ python manage.py runserver
 Visit [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser to access the application.
 
 
-
 ## Contributing
 Contributions are welcome! Please follow these steps to contribute:
 1. Fork the repository.
 2. Create a new branch for your feature or fix.
 3. Commit your changes with meaningful commit messages.
 4. Push your branch and open a pull request.
+
 
 ## Testing
 ### Running Tests
@@ -161,9 +215,10 @@ This command will execute all the test cases defined in the project and provide 
 Testing Framework
 The project uses the Django testing framework for unit tests, integration tests, and functional tests. It provides a comprehensive set of tools for writing and running tests to ensure
 
+
 ## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
+
 
 ## Contact
-For any queries or further assistance, please contact [Anfique Hussain](mailto:anfiquehussain1@example.com).
-
+For any queries or further assistance, please contact [Anfique Hussain V](mailto:anfiquehussain1@example.com).
