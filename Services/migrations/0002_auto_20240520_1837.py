@@ -40,7 +40,7 @@ def populate_categories(apps, schema_editor):
         "Magento development",
         "Customer service",
         "Order processing",
-        'UI/UX Design'
+        'UI/UX Design',
         "Market research",
         "Financial modeling",
         "Business consulting",
