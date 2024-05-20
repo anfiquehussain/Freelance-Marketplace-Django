@@ -130,18 +130,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'testtable',
-        'USER': 'postgres',
-        'PASSWORD': 'anfique',
+        'NAME': 'your_database_name',  # Replace with your actual database name
+        'USER': 'your_database_user',  # Replace with your database username
+        'PASSWORD': 'your_database_password',  # Replace with your database password
         'HOST': 'localhost',  # Or your PostgreSQL server's address
         'PORT': '5432',       # Default PostgreSQL port
     }
 }
 
-STRIPE_PUBLISHABLE_KEY = 'pk_test_51Nl4VZSBLWrgjYEWsPiOujDVOlKrNp7ZrlF6cvWTK812IKjkJnXJL6Oe4UXLJxgv7Yvf6y6ZhpjBPNsRMFdppzfu00aWXZf4v9'
-STRIPE_SECRET_KEY = 'sk_test_51Nl4VZSBLWrgjYEWhH4tEplRz5T2A22c7XGtwT3bvO5e7LHmBCdWYyMIVVYjZbzMYxFkK5B35tN95gRf5SQpMuNt00eM0gD4ef'
 
-# rezorpay api
+# rezorpay api (replace with your api)
 REZORPAY_PUBLISHABLE_KEY = 'rzp_test_HCvc3q3BZPRcGl'
 REZORPAY_SECRET_KEY = 'qXUVJmb7GlPdcdR3JuwJlHnN'
 
