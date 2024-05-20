@@ -130,7 +130,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'JobNest',
+        'NAME': 'testtable',
         'USER': 'postgres',
         'PASSWORD': 'anfique',
         'HOST': 'localhost',  # Or your PostgreSQL server's address
