@@ -57,6 +57,7 @@ Before getting started, ensure you have the following prerequisites installed on
 
 - Python 3.8+
 - pip (Python package installer)
+- PostgreSQL
 
 ```bash
 git clone https://github.com/anfiquehussain/Freelance-Marketplace-Django.git
