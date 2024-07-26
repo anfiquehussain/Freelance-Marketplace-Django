@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,7 +26,7 @@ SECRET_KEY = 'django-insecure-36^+27+m=m5qow@cit20@)m3-t35hq9x-3g==e%x5&xtvn+#s5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app']
 
 
 # Application definition
@@ -127,17 +126,31 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+# Add these at the top of your settings.py
+from os import getenv
+from dotenv import load_dotenv
+load_dotenv()
+# Replace the DATABASES section of your settings.py with this
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'your_database_name',  # Replace with your actual database name
-        'USER': 'your_database_user',  # Replace with your database username
-        'PASSWORD': 'your_database_password',  # Replace with your database password
-        'HOST': 'localhost',  # Or your PostgreSQL server's address
-        'PORT': '5432',       # Default PostgreSQL port
+        'NAME': os.getenv('PGDATABASE'),
+        'USER': os.getenv('PGUSER'),
+        'PASSWORD': os.getenv('PGPASSWORD'),
+        'HOST': os.getenv('PGHOST'),
+        'PORT': os.getenv('PGPORT', 5432),
+        'OPTIONS': {
+            'sslmode': 'require',
+        },
     }
 }
-
 
 # rezorpay api (replace with your api)
 REZORPAY_PUBLISHABLE_KEY = 'rzp_test_HCvc3q3BZPRcGl'

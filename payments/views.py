@@ -18,7 +18,6 @@ from Orders.models import Order
 client = razorpay.Client(
     auth=(settings.REZORPAY_PUBLISHABLE_KEY, settings.REZORPAY_SECRET_KEY))
 
-
 # View function for handling payments
 @login_required
 def payments(request, overview_id, username):
@@ -151,7 +150,6 @@ def payments(request, overview_id, username):
     context = {
         'user': user,
         'overview': overview,
-        'key': settings.STRIPE_PUBLISHABLE_KEY,
         'actual_price': actual_price,
         'package_price': price,
         'user_email': request.user.email,
