@@ -16,5 +16,5 @@
       "PYTHONPATH": "."
     }
   },
-  "buildCommand": "pip install -r requirements.txt && python manage.py collectstatic --noinput"
+  "buildCommand": "pip install -r requirements.txt && pip install psycopg2-binary==2.9.6 && python manage.py collectstatic --noinput"
 }
