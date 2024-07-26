@@ -16,7 +16,7 @@ def IntroHome(request):
         username = request.user.username
         return redirect('home', username)
     else:
-        return render(request, 'introHome.html')
+        return render(request, 'index.html')
 
 # View function for the user's home page
 @login_required()  # Requiring login for access
