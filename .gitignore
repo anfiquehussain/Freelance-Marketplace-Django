@@ -5,6 +5,7 @@
 __pycache__/
 db.sqlite3
 media/
+staticfiles/
 *.bak 
 
 # If you are using PyCharm # 
@@ -14,7 +15,7 @@ media/
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
-staticfiles
+
 
 
 # AWS User-specific
