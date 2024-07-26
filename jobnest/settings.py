@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from os import getenv
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,13 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-36^+27+m=m5qow@cit20@)m3-t35hq9x-3g==e%x5&xtvn+#s5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = os.getenv('DEBUG'),
 
-ALLOWED_HOSTS = ['.vercel.app', 'localhost', '127.0.0.1']
-
-# Only allow DEBUG to be True if not in production
-if os.environ.get('VERCEL_ENV') == 'production':
-    DEBUG = False
+ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app']
 
 
 # Application definition
@@ -60,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'jobnest.urls'
@@ -138,9 +138,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # }
 
 # Add these at the top of your settings.py
-from os import getenv
-from dotenv import load_dotenv
-load_dotenv()
+
 # Replace the DATABASES section of your settings.py with this
 DATABASES = {
     'default': {
@@ -172,8 +170,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-# Simplified static file serving for Vercel
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # Default primary key field type
