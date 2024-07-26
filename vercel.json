@@ -11,10 +11,5 @@
       "dest": "jobnest/wsgi.py"
     }
   ],
-  "build": {
-    "env": {
-      "PYTHONPATH": "."
-    }
-  },
   "buildCommand": "pip install -r requirements.txt && pip install psycopg2-binary==2.9.6 && python manage.py collectstatic --noinput"
 }
