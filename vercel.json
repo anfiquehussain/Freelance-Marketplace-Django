@@ -10,5 +10,11 @@
       "src": "/(.*)",
       "dest": "jobnest/wsgi.py"
     }
-  ]
+  ],
+  "build": {
+    "env": {
+      "PYTHONPATH": "."
+    }
+  },
+  "buildCommand": "pip install -r requirements.txt && python manage.py collectstatic --noinput"
 }

@@ -15,6 +15,6 @@ stripe==6.6.0
 typing_extensions==4.7.1
 tzdata==2023.3
 urllib3==2.0.4
-psycopg2
+psycopg2-binary==2.9.6 
 setuptools
-python-dotenv
+python-dotenv==1.0.0
