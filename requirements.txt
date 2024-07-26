@@ -17,4 +17,4 @@ tzdata==2023.3
 urllib3==2.0.4
 psycopg2
 setuptools
-
+python-dotenv
