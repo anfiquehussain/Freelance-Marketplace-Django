@@ -1,4 +1,10 @@
 {
+  "builds": [
+    {
+      "src": "jobnest/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
   "routes": [
     {
       "src": "/(.*)",
