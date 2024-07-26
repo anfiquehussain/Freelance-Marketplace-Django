@@ -14,7 +14,7 @@ media/
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
-statistics
+staticfiles
 
 
 # AWS User-specific
