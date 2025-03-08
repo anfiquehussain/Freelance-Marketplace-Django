@@ -37,8 +37,8 @@ Freelance Marketplace Django is a powerful platform built on Django, facilitatin
 
 - **Backend**: Django, Python
 - **Frontend**: HTML, CSS, JavaScript
-- **Database**: PostgreSQL (production) 
-- **Others**: Celery for asynchronous task processing, Redis for caching, Bootstrap 5 for frontend styling
+- **Database**: SQLite3 (Defult)
+- **Others**: Bootstrap 5 for frontend styling
 
 ### Razorpay Integration
 
@@ -95,22 +95,34 @@ pip install -r requirements.txt
 Before running the application, configure the environment variables as per your setup by creating a `.env` file in the project root with the necessary values.
 
 
-### Database Configuration
+Here’s the refined `README.md` database configuration section without examples:  
 
-In the `settings.py` file, configure the database settings according to your setup:
+---  
 
-```python
-DATABASES = {
+### Database Configuration  
+
+By default, this project uses **SQLite3**, which requires no additional setup. However, you can configure it to use other databases like PostgreSQL or MySQL by updating the `DATABASES` setting in `settings.py`.  
+
+- **SQLite3** (default, lightweight, no extra setup required)  
+  - *The default configuration uses SQLite3*
+```
+  DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'your_database_name',
-        'USER': 'your_database_user',
-        'PASSWORD': 'your_database_password',
-        'HOST': 'localhost',  # Or your PostgreSQL server's address
-        'PORT': '5432',       # Default PostgreSQL port
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / "db.sqlite3",
     }
 }
 ```
+- **PostgreSQL** (Recommended for production) - [Docs](https://docs.djangoproject.com/en/stable/ref/databases/#postgresql-notes)  
+- **MySQL** (Popular for web applications) - [Docs](https://docs.djangoproject.com/en/stable/ref/databases/#mysql-notes)  
+- **MariaDB** (MySQL-compatible, open-source) - [Docs](https://docs.djangoproject.com/en/stable/ref/databases/#mariadb-notes)  
+- **Oracle** (Enterprise-level database) - [Docs](https://docs.djangoproject.com/en/stable/ref/databases/#oracle-notes)  
+- **Microsoft SQL Server** (Requires third-party backend) - [Docs](https://pypi.org/project/mssql-django/)  
+- **CockroachDB** (Distributed SQL database) - [Docs](https://www.cockroachlabs.com/docs/stable/build-a-python-app-with-cockroachdb-django)  
+- **Amazon Aurora** (MySQL/PostgreSQL-compatible cloud database) - [Docs](https://docs.aws.amazon.com/aurora-dsql/latest/userguide/SECTION_program-with-django.html)  
+- **Google Cloud Spanner** (Cloud-native distributed SQL) - [Docs](https://cloud.google.com/blog/topics/developers-practitioners/introducing-django-cloud-spanner-database)
+
+Ensure you install the necessary database drivers before switching databases.
 
 #### Razorpay Integration
 For Razorpay integration, provide your Razorpay publishable and secret keys:
