@@ -30,7 +30,8 @@ SECRET_KEY = 'django-insecure-36^+27+m=m5qow@cit20@)m3-t35hq9x-3g==e%x5&xtvn+#s5
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app']
+# ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app']
+ALLOWED_HOSTS = ['*']  # or add your Railway domain later
 
 
 # Application definition
@@ -170,6 +171,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 
